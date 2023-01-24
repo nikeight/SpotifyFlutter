@@ -6,11 +6,11 @@ import 'package:praxis_flutter/l10n/l10n.dart';
 import 'package:praxis_flutter/presentation/core/widgets/abstract_plaform_widget.dart';
 import 'package:praxis_flutter/routing/routes.dart';
 
-class PraxisApp extends AbstractPlatformWidget<CupertinoApp, MaterialApp> {
+class SpotifyApp extends AbstractPlatformWidget<CupertinoApp, MaterialApp> {
   /// Platform dependent app widget (CupertinoApp for iOS, MaterialApp for android)
   final String title;
 
-  const PraxisApp({Key? key, this.title = 'Praxis'}) : super(key: key);
+  const SpotifyApp({Key? key, this.title = 'Spotify'}) : super(key: key);
 
   @override
   CupertinoApp buildCupertino(BuildContext context) {

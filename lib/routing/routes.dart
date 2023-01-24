@@ -3,6 +3,7 @@ import 'package:praxis_flutter/features/home/home_page.dart';
 import 'package:praxis_flutter/features/joke_list/joke_list_page.dart';
 import 'package:praxis_flutter/features/login/login_page.dart';
 import 'package:praxis_flutter/features/splash/splash_page.dart';
+import 'package:praxis_flutter/features/spotify_home/spotify_home_screen.dart';
 
 const loginRoute = '/login';
 const jokeListRoute = "/jokesList";
@@ -42,6 +43,6 @@ GoRoute loginPageRoute() {
 GoRoute splashRoute() {
   return GoRoute(
     path: rootRoute,
-    builder: (context, state) => const SplashPage(),
+    builder: (context, state) => const SpotifyHomeScreen(),
   );
 }
