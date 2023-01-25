@@ -32,11 +32,11 @@ class SearchComponent extends StatelessWidget {
 
 class MySearchCustomDelegate extends SearchDelegate {
   List<String> searchResult = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E ",
+    "Mera Yaar",
+    "The Search",
+    "Miss the Rage",
+    "Jane woh Kaise log the",
+    "Aao Chalein",
   ];
 
   @override

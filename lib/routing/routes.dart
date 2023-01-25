@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/features/home/home_page.dart';
 import 'package:praxis_flutter/features/joke_list/joke_list_page.dart';
 import 'package:praxis_flutter/features/login/login_page.dart';
+import 'package:praxis_flutter/features/song_play/song_play_screen.dart';
 import 'package:praxis_flutter/features/splash/splash_page.dart';
 import 'package:praxis_flutter/features/spotify_home/spotify_home_screen.dart';
 
@@ -10,12 +11,16 @@ const jokeListRoute = "/jokesList";
 const homeRoute = '/home';
 const rootRoute = '/';
 
+// Shopify
+const songPlayRoute = "/songPlay";
+
 final praxisRoutes = GoRouter(
   routes: [
     splashRoute(),
     loginPageRoute(),
     homePageRoute(),
-    jokeListRoutePage()
+    jokeListRoutePage(),
+    songPlayedRoute()
   ],
 );
 
@@ -44,5 +49,12 @@ GoRoute splashRoute() {
   return GoRoute(
     path: rootRoute,
     builder: (context, state) => const SpotifyHomeScreen(),
+  );
+}
+
+GoRoute songPlayedRoute() {
+  return GoRoute(
+    path: songPlayRoute,
+    builder: (context, state) => const SongPlayScreen(),
   );
 }
