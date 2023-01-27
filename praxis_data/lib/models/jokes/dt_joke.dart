@@ -1,3 +1,5 @@
+
+// Todo : This Const should be at Database File
 const String jokesTable = "jokesTable";
 
 class JokeFields {
