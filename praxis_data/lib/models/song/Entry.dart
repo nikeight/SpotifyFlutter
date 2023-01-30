@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'Artist.dart';
 import 'Image.dart';
 import 'ItemCount.dart';
@@ -27,6 +29,8 @@ class Entry {
       json['im:image'].forEach((v) {
         imimage?.add(Image.fromJson(v));
       });
+    }else {
+      null;
     }
     imitemCount = json['im:itemCount'] != null ? ItemCount.fromJson(json['im:itemCount']) : null;
     imprice = json['im:price'] != null ? Price.fromJson(json['im:price']) : null;

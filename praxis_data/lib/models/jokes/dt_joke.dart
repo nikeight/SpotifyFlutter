@@ -13,6 +13,7 @@ class DTJoke {
 
   DTJoke(this.id, this.value);
 
+  // Todo : Use constants here instead of the static ids at the Key
   DTJoke.fromJson(Map<String, dynamic> map)
       : id = map['id'],
         value = map['value'];

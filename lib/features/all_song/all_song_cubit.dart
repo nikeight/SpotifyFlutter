@@ -16,20 +16,44 @@ class AllSongCubit extends Cubit<UiState<UiSongsList>> {
   }
 
   void loadAlbums() {
-    getTopRandomAlbumsUseCase.perform(handleResponse, onError, complete);
+    emit(Loading());
+    getTopRandomAlbumsUseCase.perform((response) {
+      final useCaseResponseAlbums = response?.randomSongList;
+      if (useCaseResponseAlbums == null) {
+        print("Failure as List is empty");
+        emit(Failure(exception: Exception("Couldn't fetch Albums!")));
+      } else {
+        if (useCaseResponseAlbums is api_response.Failure) {
+          print("Failure With Exception");
+          emit(Failure(
+              exception: (useCaseResponseAlbums as api_response.Failure).error));
+        } else if (useCaseResponseAlbums is api_response.Success) {
+          var albums = (useCaseResponseAlbums as api_response.Success);
+          final uiAlbums = domainMapper.mapToPresentation(albums.data);
+          print("Success Here");
+          emit(Success(data: uiAlbums));
+        }
+      }
+    }, onError, () {
+
+    });
+    // getTopRandomAlbumsUseCase.perform(handleResponse, onError, complete);
   }
 
   void handleResponse(GetRandomSongListResponse? response) {
     final useCaseResponseAlbums = response?.randomSongList;
     if (useCaseResponseAlbums == null) {
+      print("Failure as List is empty");
       emit(Failure(exception: Exception("Couldn't fetch Albums!")));
     } else {
       if (useCaseResponseAlbums is api_response.Failure) {
+        print("Failure With Exception");
         emit(Failure(
             exception: (useCaseResponseAlbums as api_response.Failure).error));
       } else if (useCaseResponseAlbums is api_response.Success) {
         var albums = (useCaseResponseAlbums as api_response.Success);
         final uiAlbums = domainMapper.mapToPresentation(albums.data);
+        print("Success Here");
         emit(Success(data: uiAlbums));
       }
     }

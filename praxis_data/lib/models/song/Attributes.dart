@@ -11,7 +11,7 @@ class Attributes {
     scheme = json['scheme'];
     label = json['label'];
   }
-  String? imid = '';
+  int? imid = 0;
   String? term = '';
   String? scheme = '';
   String? label = '';

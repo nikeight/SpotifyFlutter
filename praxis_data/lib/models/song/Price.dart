@@ -13,5 +13,4 @@ class Price {
     map['label'] = label;
     return map;
   }
-
 }

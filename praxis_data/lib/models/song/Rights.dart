@@ -12,5 +12,4 @@ class Rights {
     map['label'] = label;
     return map;
   }
-
 }

@@ -18,6 +18,8 @@ class Feed {
       json['im:image'].forEach((v) {
         entry?.add(Entry.fromJson(v));
       });
+    } else {
+      null;
     }
     updated =
         json['updated'] != null ? Updated.fromJson(json['updated']) : null;

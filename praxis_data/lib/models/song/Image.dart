@@ -13,5 +13,4 @@ class Image {
     map['label'] = label;
     return map;
   }
-
 }

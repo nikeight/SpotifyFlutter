@@ -11,11 +11,17 @@ class AllSongScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Calling Build method");
     return BlocProvider(
       create: (_) => AllSongCubit(),
       child: BlocListener<AllSongCubit, UiState<UiSongsList>>(
         child: const AllSongScreenWidget(),
-        listener: (context, state) {},
+        listener: (context, state) {
+          print("$context $state");
+          state is Loading ? const Text("Something here") : Container(
+            color: Colors.red,
+          );
+        },
       ),
     );
   }
@@ -28,7 +34,7 @@ class AllSongScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AllSongCubit, UiState<UiSongsList>>(
         builder: (context, state) {
-      return Stack(children: [
+      return Stack(alignment: Alignment.center, children: [
         state is Loading
             ? const Text("Loading")
             : state is Failure
@@ -59,7 +65,9 @@ class AllSongScreenWidget extends StatelessWidget {
                           ],
                         ),
                       )
-                    : Container()
+                    : const Center(
+                        child: Text("This is a Container Center Text"),
+                      )
       ]);
     });
   }

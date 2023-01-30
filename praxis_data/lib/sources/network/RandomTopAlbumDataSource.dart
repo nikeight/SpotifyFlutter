@@ -15,14 +15,17 @@ class RandomTopAlbumDataSource {
       DtSongList dtSongList = DtSongList(null);
       final apiResponse = await httpDioClient.get(URL.iTunesTopAlbumsUrl);
       if (apiResponse.data != null) {
+        print(apiResponse.data);
         TopAlbumResponse albumResponse =
             TopAlbumResponse.fromJson(apiResponse.data);
+        print(albumResponse.feed?.entry);
         albumResponse.feed?.entry?.forEach((element) {
-          var dtSongObject = DtSong(element?.imname?.label,
-              element?.imimage?[0].label, element?.imartist?.label);
+          var dtSongObject = DtSong("", element?.imname?.label,
+              element?.imartist?.label, element?.imimage?[0].label, false);
 
           dtSongList.add(dtSongObject);
         });
+        // dtSongList.add(DtSong("AlbumIdOne", "AlbumName", "AuthorName", "ImageUrlForAlbum", false));
       }
       return Success(data: dtSongList);
     } on Exception catch (e, _) {

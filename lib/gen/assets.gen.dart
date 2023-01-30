@@ -7,8 +7,18 @@
 
 import 'package:flutter/widgets.dart';
 
+class $ImagesGen {
+  const $ImagesGen();
+
+  /// File path: images/spotify_clone_card_bg_img.jpeg
+  AssetGenImage get spotifyCloneCardBgImg =>
+      const AssetGenImage('images/spotify_clone_card_bg_img.jpeg');
+}
+
 class Assets {
   Assets._();
+
+  static const $ImagesGen images = $ImagesGen();
 }
 
 class AssetGenImage extends AssetImage {

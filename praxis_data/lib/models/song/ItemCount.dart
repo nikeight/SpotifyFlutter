@@ -6,7 +6,7 @@ class ItemCount {
     label = json['label'];
   }
   
-  String? label;
+  int? label;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

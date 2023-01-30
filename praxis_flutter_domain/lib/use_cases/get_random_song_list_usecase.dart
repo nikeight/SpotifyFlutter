@@ -15,16 +15,17 @@ class GetRandomSongListUseCase
   GetRandomSongListUseCase(this.songsRepository);
 
   @override
-  Future<Stream<GetRandomSongListResponse?>> buildUseCaseStream(
+  Future<Stream<GetRandomSongListResponse>> buildUseCaseStream(
       void params) async {
-    final StreamController<GetRandomSongListResponse> controller =
-        StreamController();
+    final  controller = StreamController<GetRandomSongListResponse>();
     try {
       final songList = await songsRepository.getRandomSongList();
       controller.add(GetRandomSongListResponse(randomSongList: songList));
+      print("Success API Call");
       logger.finest('Successful API Call done');
       controller.close();
     } catch (e) {
+      print("Failure API Call $e");
       logger.finest('Failed API Call');
       controller.addError(e);
     }
