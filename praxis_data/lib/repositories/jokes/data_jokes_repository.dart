@@ -28,6 +28,9 @@ class DataJokesRepository implements JokesRepository {
       try {
         final networkResponse = await _jokesApi.getFiveRandomJokes();
         if (networkResponse is Success) {
+          // Todo : Return DataModel only from the Data Layer
+          // And Push it to the database
+          // And Return fresh data from the Database as List<DomainModel>
           await _praxisDatabase.deleteAllJokes();
           final networkJokes = (networkResponse as Success).data as JokesListWithType;
           final jokes = mapper.mapToData(networkJokes);

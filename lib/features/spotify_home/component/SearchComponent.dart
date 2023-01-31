@@ -31,6 +31,10 @@ class SearchComponent extends StatelessWidget {
 }
 
 class MySearchCustomDelegate extends SearchDelegate {
+  /*
+  This List contains recent viewed items and other random Suggestions
+  We can use it to display last 5 played Albums or Search Text
+   */
   List<String> searchResult = [
     "Mera Yaar",
     "The Search",
@@ -75,6 +79,10 @@ class MySearchCustomDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    /*
+      Here we have to pass the list [ It can be from Database or API ]
+      We match the elements here and show to the View.
+     */
     List<String> suggestions = searchResult.where((element) {
       final String result = element.toLowerCase();
       final String input = query.toLowerCase();

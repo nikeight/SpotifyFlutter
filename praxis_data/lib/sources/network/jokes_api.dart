@@ -23,6 +23,7 @@ class JokesApi {
       final networkResponse = await dio.get(URL.fiveRandomJokesUrl);
       if (networkResponse.data != null) {
         final parsedDataResponse = DTJokeList.fromJson(networkResponse.data);
+        // Todo : Returning DomainModel It should be DataModels?
         final parsedDomainResponse = _mapper.mapToDomain(parsedDataResponse);
         return Success(data: parsedDomainResponse);
       } else {
