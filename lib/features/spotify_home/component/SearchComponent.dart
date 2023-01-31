@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:praxis_flutter/models/SuggestionsUiModel.dart';
 
+/*
+   Search Component : Delegates the work for a Search Screen
+   Takes two Parameters :
+   Param One : List of recent searches
+   Param Two : Recent fetched Song List title.
+   Todo : OnTouch Method on ListTitle to Open the `PlaySong` Screen.
+   Todo : BetterWay of passing Data to the `Search Delegates`
+   Todo : Improve Search Filter and usage of `FetchedSongTitleList`
+ */
+
 class SearchComponent extends StatelessWidget {
-  const SearchComponent({Key? key}) : super(key: key);
+  final List<String>? recentSearchedCachedList;
+  final List<String> fetchedSongTitleList;
+
+  const SearchComponent(
+      {Key? key,
+      this.recentSearchedCachedList,
+      required this.fetchedSongTitleList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        showSearch(context: context, delegate: MySearchCustomDelegate());
+        showSearch(
+            context: context,
+            delegate: MySearchCustomDelegate(
+                recentSearchedCachedList, fetchedSongTitleList));
       },
       child: Container(
         padding: const EdgeInsets.all(8),
@@ -31,17 +51,11 @@ class SearchComponent extends StatelessWidget {
 }
 
 class MySearchCustomDelegate extends SearchDelegate {
-  /*
-  This List contains recent viewed items and other random Suggestions
-  We can use it to display last 5 played Albums or Search Text
-   */
-  List<String> searchResult = [
-    "Mera Yaar",
-    "The Search",
-    "Miss the Rage",
-    "Jane woh Kaise log the",
-    "Aao Chalein",
-  ];
+  final List<String>? recentSearchedCachedList;
+  final List<String> fetchedSongTitleList;
+
+  MySearchCustomDelegate(
+      this.recentSearchedCachedList, this.fetchedSongTitleList);
 
   @override
   Widget? buildLeading(BuildContext context) {
@@ -79,11 +93,7 @@ class MySearchCustomDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    /*
-      Here we have to pass the list [ It can be from Database or API ]
-      We match the elements here and show to the View.
-     */
-    List<String> suggestions = searchResult.where((element) {
+    List<String> suggestions = recentSearchedCachedList!.where((element) {
       final String result = element.toLowerCase();
       final String input = query.toLowerCase();
       return result.contains(input);
