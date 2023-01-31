@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:praxis_data/models/song/model/dt_song.dart';
 import 'package:praxis_data/models/song/model/dt_song_list.dart';
 import 'package:praxis_data/sources/network/RandomTopAlbumDataSource.dart';
 import 'package:praxis_flutter_domain/entities/api_response.dart';
@@ -29,6 +30,9 @@ class DataAlbumRepository extends SongsRepository {
 
   @override
   Future<ApiResponse<SongsWithListType>> getAllCachedFavSongs() async {
+    var dummyData =
+        DtSong("1", "AlbumName", "ArtistName", "a_dummy_img_url", false);
+    albumDatabase.insertToSpotifyDb(dummyData);
     final cachedData = await albumDatabase.getAllAlbums();
     if (cachedData.isNotEmpty) {
       return Success(data: mapper.mapToDomain(DtSongList(cachedData)));

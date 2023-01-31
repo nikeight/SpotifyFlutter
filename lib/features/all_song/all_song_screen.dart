@@ -18,9 +18,11 @@ class AllSongScreen extends StatelessWidget {
         child: const AllSongScreenWidget(),
         listener: (context, state) {
           print("$context $state");
-          state is Loading ? const Text("Something here") : Container(
-            color: Colors.red,
-          );
+          state is Loading
+              ? const Text("Something here")
+              : Container(
+                  color: Colors.red,
+                );
         },
       ),
     );
