@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
-import 'package:praxis_data/models/song/model/dt_song.dart';
-import 'package:praxis_data/models/song/model/dt_song_list.dart';
+import 'package:praxis_data/models/album/model/dt_song.dart';
+import 'package:praxis_data/models/album/model/dt_song_list.dart';
 import 'package:praxis_data/sources/network/RandomTopAlbumDataSource.dart';
 import 'package:praxis_flutter_domain/entities/api_response.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song.dart';

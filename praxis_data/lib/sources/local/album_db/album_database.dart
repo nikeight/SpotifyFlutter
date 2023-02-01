@@ -1,5 +1,5 @@
 import 'package:injectable/injectable.dart';
-import 'package:praxis_data/models/song/model/dt_song.dart';
+import 'package:praxis_data/models/album/model/dt_song.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
