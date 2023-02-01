@@ -10,12 +10,13 @@ class FavSongScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => FavAlbumsCubit(),
-      child: BlocListener<FavAlbumsCubit, UiState<UiSongsList>>(
-        child: const AllFavSongScreenWidget(),
-        listener: (context, state) {},
-      ),
-    );
+    return const Text("Fav Screen");
+    //   BlocProvider(
+    //   create: (_) => FavAlbumsCubit(),
+    //   child: BlocListener<FavAlbumsCubit, UiState<UiSongsList>>(
+    //     child: const AllFavSongScreenWidget(),
+    //     listener: (context, state) {},
+    //   ),
+    // );
   }
 }

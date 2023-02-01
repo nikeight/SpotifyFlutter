@@ -12,6 +12,7 @@ const String genericApiFailMsg = "Unexpected API response!";
 
 @injectable
 class JokesApi {
+  // Todo Inject all this fields.
   final _logger = Logger('jokesApi');
   final dio = Dio();
   final JokesListMapper _mapper;

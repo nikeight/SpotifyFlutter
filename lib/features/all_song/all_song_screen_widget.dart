@@ -23,15 +23,17 @@ class AllSongScreenWidget extends StatelessWidget {
                         padding: const EdgeInsets.all(8),
                         child: ListView(
                           scrollDirection: Axis.vertical,
-                          children: const [
-                            SearchComponent(
+                          children: [
+                            const SearchComponent(
                               recentSearchedCachedList: [],
                               fetchedSongTitleList: [],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
-                            GridSongCardWidget(songList: [])
+                            GridSongCardWidget(
+                                songList: (state as Success).data.songsList
+                            )
                           ],
                         ),
                       )
