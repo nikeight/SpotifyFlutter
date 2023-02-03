@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:praxis_flutter/features/song_play/song_detail_screen.dart';
 import 'package:praxis_flutter/features/song_play/song_detail_widget.dart';
+import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 class SongPlayScreen extends StatelessWidget {
   final String songName;
@@ -23,7 +25,7 @@ class SongPlayScreen extends StatelessWidget {
           print("At Index $index");
         },
         itemBuilder: (BuildContext context, int index) {
-          return const SongPlayDetailWidget();
+          return const SongDetailScreen();
         },
       ),
     );

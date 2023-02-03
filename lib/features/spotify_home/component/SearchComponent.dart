@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:praxis_flutter/features/song_play/song_detail_widget.dart';
+import 'package:praxis_flutter/features/song_play/song_play_screen.dart';
 import 'package:praxis_flutter/models/SuggestionsUiModel.dart';
+import 'package:praxis_flutter/routing/routes.dart';
+import 'package:praxis_flutter/ui/model/song/ui_song.dart';
+import 'package:praxis_flutter_domain/entities/song/dm_song.dart';
 
 /*
    Search Component : Delegates the work for a Search Screen
@@ -86,14 +92,12 @@ class MySearchCustomDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Text(
-      query,
-    );
+    return const SongPlayScreen();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = recentSearchedCachedList!.where((element) {
+    List<String> suggestions = fetchedSongTitleList!.where((element) {
       final String result = element.toLowerCase();
       final String input = query.toLowerCase();
       return result.contains(input);

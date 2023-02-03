@@ -18,8 +18,9 @@ class UISongsListMapper extends UiModelMapper<SongsWithListType, UiSongsList> {
   UiSongsList mapToPresentation(SongsWithListType model) {
     return UiSongsList(model.songList
         .map((domainModel) => SongUiModel(
-            domainModel.songName, domainModel.songAuthor,
-            songPosterUrl: domainModel.songPosterImgUrl))
+            songPosterUrl: domainModel.songPosterImgUrl,
+            songName: domainModel.songName,
+            songAuthor: domainModel.songAuthor))
         .toList());
   }
 }

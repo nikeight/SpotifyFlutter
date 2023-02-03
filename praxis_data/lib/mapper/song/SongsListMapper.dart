@@ -31,8 +31,7 @@ class SongsListMapper extends EntityMapper<SongsWithListType, DtSongList> {
 class DataSongModelMapper extends EntityMapper<Song, DtSong> {
   @override
   DtSong mapToData(Song model) {
-    return DtSong(
-        "", model.songName, model.songAuthor, model.songPosterImgUrl, false);
+    return DtSong(0, model.songName, model.songAuthor, model.songPosterImgUrl, false);
   }
 
   @override

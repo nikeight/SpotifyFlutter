@@ -17,7 +17,7 @@ class AllFavSongScreenWidget extends StatelessWidget {
         state is Loading
             ? const Text("Loading")
             : state is Failure
-                ? const Text("Failure")
+                ? Text("Failure ${(state as Failure).exception.toString()}")
                 : state is Success
                     ? Padding(
                         padding: const EdgeInsets.all(8),
@@ -31,6 +31,7 @@ class AllFavSongScreenWidget extends StatelessWidget {
                             SizedBox(
                               height: 8,
                             ),
+                            // GridSongCardWidget(songList: (state as Success).data.songsList)
                             GridSongCardWidget(songList: [])
                           ],
                         ),

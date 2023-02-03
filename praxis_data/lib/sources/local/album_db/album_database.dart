@@ -20,18 +20,18 @@ class AlbumDatabase {
   }
 
   Future _createAlbumDatabase(Database database, int version) async {
-    const primaryId = "TEXT PRIMARY KEY";
+    const primaryId = "INTEGER PRIMARY KEY";
     const albumName = "TEXT NOT NULL";
     const albumTitle = "TEXT NOT NULL";
     const albumSongUrl = "TEXT NOT NULL";
-    const albumIsFav = "BOOLEAN NOT NULL";
+    const albumIsFav = "INTEGER NOT NULL";
     await database.execute("""
       CREATE TABLE $_albumTableName (
-      ${SpotifyDbSongsField.album_primary_id} $primaryId,
+      ${SpotifyDbSongsField.album_primary_id} integer primary key autoincrement,
       ${SpotifyDbSongsField.album_name} $albumName,
       ${SpotifyDbSongsField.album_title} $albumTitle,
       ${SpotifyDbSongsField.album_image_url} $albumSongUrl,
-      ${SpotifyDbSongsField.album_is_fav} $albumIsFav,
+      ${SpotifyDbSongsField.album_is_fav} $albumIsFav
       )
       """);
   }
@@ -44,7 +44,7 @@ class AlbumDatabase {
 
   Future<bool> insertToSpotifyDb(DtSong song) async {
     final db = await database;
-    return await db.insert(_albumTableName, song.toJson(),
+    return await db.insert(_albumTableName, song.toMap(),
             conflictAlgorithm: ConflictAlgorithm.replace) >
         0;
   }
@@ -57,9 +57,8 @@ class AlbumDatabase {
   Future<List<DtSong>> getAllAlbums() async {
     final db = await database;
     final albumMapList = await db.query(_albumTableName);
-    final List<DtSong> jokeList =
-        albumMapList.map((jokeMap) => DtSong.dtSongFromJson(jokeMap)).toList();
-    return jokeList;
+    final jokeList = albumMapList.map((jokeMap) => DtSong.fromMap(jokeMap));
+    return jokeList.toList();
   }
 
   Future close() async {

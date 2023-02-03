@@ -33,11 +33,17 @@ class DataAlbumRepository extends SongsRepository {
   @override
   Future<SongsWithListType?> getAllCachedFavSongs() async {
     var dummyData =
-        DtSong("1", "AlbumName", "ArtistName", "a_dummy_img_url", false);
-    albumDatabase.insertToSpotifyDb(dummyData);
-    final cachedData = await albumDatabase.getAllAlbums();
-    if (cachedData.isNotEmpty) {
-      return mapper.mapToDomain(DtSongList(cachedData));
+        DtSong(1, "AlbumName", "ArtistName", "a_dummy_img_url", false);
+    var isItemInsertedSuccessfully =
+        await albumDatabase.insertToSpotifyDb(dummyData);
+    if (isItemInsertedSuccessfully) {
+      final cachedData = await albumDatabase.getAllAlbums();
+      print("Repo Method called $cachedData");
+      if (cachedData.isNotEmpty) {
+        return mapper.mapToDomain(DtSongList(cachedData));
+      } else {
+        return null;
+      }
     } else {
       return null;
     }

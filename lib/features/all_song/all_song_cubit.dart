@@ -7,12 +7,26 @@ import '../../ui/model/song/ui_songs_mapper.dart';
 import 'package:praxis_flutter_domain/entities/api_response.dart'
     as api_response;
 
-class AllSongCubit extends Cubit<UiState<UiSongsList>> {
+class AllSongCubit extends Cubit<UiState<AllSongUiStateDataClass>> {
   final getTopRandomAlbumsUseCase = GetIt.I.get<GetRandomSongListUseCase>();
   final domainMapper = GetIt.I.get<UISongsListMapper>();
 
+  List<String> topAlbumList = [];
+  List<String> recentSearchedItemList = [];
+
   AllSongCubit() : super(Initial()) {
     loadAlbums();
+  }
+
+  List<String> getTopAlbumList() {
+    return topAlbumList;
+  }
+
+  List<String> getRecentSearchedList() {
+    topAlbumList.take(5).forEach((element) {
+      recentSearchedItemList.add(element);
+    });
+    return recentSearchedItemList;
   }
 
   void loadAlbums() {
@@ -23,18 +37,20 @@ class AllSongCubit extends Cubit<UiState<UiSongsList>> {
   void handleResponse(GetRandomSongListResponse? response) {
     final useCaseResponseAlbums = response?.randomSongList;
     if (useCaseResponseAlbums == null) {
-      print("Failure as List is empty");
       emit(Failure(exception: Exception("Couldn't fetch Albums!")));
     } else {
       if (useCaseResponseAlbums is api_response.Failure) {
-        print("Failure With Exception");
         emit(Failure(
             exception: (useCaseResponseAlbums as api_response.Failure).error));
       } else if (useCaseResponseAlbums is api_response.Success) {
         var albums = (useCaseResponseAlbums as api_response.Success);
         final uiAlbums = domainMapper.mapToPresentation(albums.data);
-        print("Success Here");
-        emit(Success(data: uiAlbums));
+        uiAlbums.songsList.forEach((songUiModel) {
+          topAlbumList.add(songUiModel.songName);
+        });
+        emit(Success(
+            data: AllSongUiStateDataClass(
+                uiAlbums, getTopAlbumList(), getRecentSearchedList())));
       }
     }
   }
@@ -50,4 +66,13 @@ class AllSongCubit extends Cubit<UiState<UiSongsList>> {
     getTopRandomAlbumsUseCase.dispose();
     return super.close();
   }
+}
+
+class AllSongUiStateDataClass {
+  UiSongsList uiSongsList;
+  List<String> allTopAlbumList;
+  List<String> recentSearchedAlbumList;
+
+  AllSongUiStateDataClass(
+      this.uiSongsList, this.allTopAlbumList, this.recentSearchedAlbumList);
 }

@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:clean_architecture/clean_architecture.dart';
+import 'package:praxis_flutter_domain/entities/song/dm_song.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song_list.dart';
 import 'package:praxis_flutter_domain/repositories/song/SongsRepository.dart';
-
-import 'get_random_song_list_usecase.dart';
 
 class GetCachedFavAlbumUseCase extends UseCase<SongsWithListType?, void> {
   final SongsRepository dataAlbumRepository;
@@ -20,10 +18,9 @@ class GetCachedFavAlbumUseCase extends UseCase<SongsWithListType?, void> {
       if (cachedFavAlbumList != null) {
         dataStreamController.add(cachedFavAlbumList);
       }
-      dataStreamController.close();
     } catch (e) {
+      print("CachedUseCase Error $e");
       dataStreamController.addError(e);
-      dataStreamController.close();
     }
     return dataStreamController.stream;
   }

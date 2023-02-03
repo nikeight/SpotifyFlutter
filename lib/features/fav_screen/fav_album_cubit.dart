@@ -2,17 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/ui/model/song/ui_song.dart';
+import 'package:praxis_flutter/ui/model/song/ui_songs_mapper.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song_list.dart';
-import 'package:praxis_flutter_domain/mapper/ui_model_mapper.dart';
-import 'package:praxis_flutter_domain/use_cases/get_cached_fav_albums_use_case.dart';
-import 'package:praxis_flutter_domain/use_cases/insert_remove_fav_album_from_db_usecase.dart';
+import 'package:praxis_flutter_domain/use_cases/DummyGetCachedAlbumbsUseCase.dart';
 
 class FavAlbumsCubit extends Cubit<UiState<UiSongsList>> {
-  // Injecting Classes using GetIt
-  final getFavAlbumsUseCase = GetIt.I.get<GetCachedFavAlbumUseCase>();
-  final getToggleFavItemUseCase = GetIt.I.get<
-      InsertRemoveFavAlbumFromDbUseCase>();
-  final uiDomainMapper = GetIt.I.get<UiModelMapper>();
+  final getFavAlbumsUseCase = GetIt.I.get<DummyGetCachedAlbumbsUseCase>();
+  final uiDomainMapper = GetIt.I.get<UISongsListMapper>();
 
   // Loading data as soon sa we init the Cubit
   FavAlbumsCubit() : super(Initial()) {
@@ -21,38 +17,26 @@ class FavAlbumsCubit extends Cubit<UiState<UiSongsList>> {
 
   void loadFavAlbums() {
     emit(Loading());
-    getFavAlbumsUseCase.perform(
-        _handleDatabaseReadOperation, _onErrorCaught, _onCompleteProcess);
+    getFavAlbumsUseCase.perform(handleDatabaseReadOperation, onErrorCaught, onCompleteProcess);
   }
 
-  // Todo : Do We have to create separate cubit
-  // For Different Action/Events and Different return type (in this case boolean)
-  void toggleFavAlbum(SongUiModel song) {
-    getToggleFavItemUseCase.perform((event) {
-      if (event == true) {
-        // emit(Success(data: true));
-      } else {
-        // emit(Failure(exception: ));
-      }
-    }, onError, () {});
-  }
-
-  void _handleDatabaseReadOperation(SongsWithListType? cachedFavAlbums) {
-    if (cachedFavAlbums != null) {
+  void handleDatabaseReadOperation(SongsWithListType? cachedFavAlbums) {
+    print("Inside HandleDataBaseOp Method $cachedFavAlbums");
+    var responseCachedList = cachedFavAlbums?.songList ?? [];
+    if (responseCachedList.isNotEmpty) {
       emit(Success(
-          data: uiDomainMapper.mapToPresentation(cachedFavAlbums.songList)));
+          data: uiDomainMapper.mapToPresentation(
+              SongsWithListType(songList: responseCachedList))));
     } else {
       emit(Failure(exception: Exception("No data found")));
     }
   }
 
-  _onErrorCaught(Exception e) {
-    emit(Failure(exception: e));
+  onErrorCaught(e) {
+    emit(Failure(exception: Exception(e)));
   }
 
-  _onCompleteProcess() {
-    // Emit some state or dispose channel until trigger again.
-  }
+  onCompleteProcess() {}
 
   @override
   Future<void> close() async {
