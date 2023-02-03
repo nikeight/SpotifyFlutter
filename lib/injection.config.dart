@@ -9,6 +9,7 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import 'infrastructure/notifications/firebase_messaging.dart' as _i3;
 import 'ui/model/jokes/ui_jokes_mapper.dart' as _i4;
+import 'ui/model/song/ui_song.dart' as _i6;
 import 'ui/model/song/ui_songs_mapper.dart'
     as _i5; // ignore_for_file: unnecessary_lambdas
 
@@ -23,6 +24,7 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i3.PraxisFirebaseMessaging());
     gh.factory<_i4.UIJokeMapper>(() => _i4.UIJokeMapper());
     gh.factory<_i5.UISongsListMapper>(() => _i5.UISongsListMapper());
+    gh.factory<_i6.UiDomainMapper>(() => _i6.UiDomainMapper());
     return this;
   }
 }

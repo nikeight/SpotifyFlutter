@@ -12,10 +12,7 @@ class AllSongScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AllSongCubit(),
-      child: BlocListener<AllSongCubit, UiState<UiSongsList>>(
-        child: const AllSongScreenWidget(),
-        listener: (context, state) {},
-      ),
+      child: const AllSongScreenWidget(),
     );
   }
 }

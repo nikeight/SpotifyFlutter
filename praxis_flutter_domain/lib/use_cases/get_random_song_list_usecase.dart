@@ -21,12 +21,8 @@ class GetRandomSongListUseCase
     try {
       final songList = await songsRepository.getRandomSongList();
       controller.add(GetRandomSongListResponse(randomSongList: songList));
-      print("Success API Call");
-      logger.finest('Successful API Call done');
       controller.close();
     } catch (e) {
-      print("Failure API Call $e");
-      logger.finest('Failed API Call');
       controller.addError(e);
     }
     return controller.stream;

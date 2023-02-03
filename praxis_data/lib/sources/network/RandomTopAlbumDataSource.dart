@@ -17,12 +17,10 @@ class RandomTopAlbumDataSource {
       final apiResponse = await httpDioClient.get(URL.iTunesTopAlbumsUrl);
       if (apiResponse.data != null) {
         var dtSongList = DtSongList([]); 
-        print("Api Response ${apiResponse.data}");
         MusicResponse albumResponse = MusicResponse.fromJson(json.decode(apiResponse.data));
-        print("Entry Response ${albumResponse.feed?.entry}");
         albumResponse.feed?.entry?.forEach((element) {
-          var dtSongObject = DtSong("", element?.imname?.label,
-              element?.imartist?.label, element?.imimage?[0].label, false);
+          var dtSongObject = DtSong(123, element.imname?.label,
+              element.imartist?.label, element.imimage?[0].label, false);
           dtSongList.add(dtSongObject);
         });
         return Success(data: dtSongList);

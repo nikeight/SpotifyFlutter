@@ -26,6 +26,7 @@ class PraxisDatabase {
   }
 
   Future _createDB(Database db, int version) async {
+    // Todo : Primary Key should be Integer here?
     const idType = "TEXT PRIMARY KEY";
     const jokeType = "TEXT NOT NULL";
     await db.execute("""
