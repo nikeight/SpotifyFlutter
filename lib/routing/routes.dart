@@ -58,7 +58,7 @@ GoRoute songPlayedRoute() {
     path: songPlayRoute,
     name: songPlayRouteName,
     builder: (context, state) => SongPlayScreen(
-      index: state.params['index'],
+      passedIndex: state.params['index'],
     ),
   );
 }

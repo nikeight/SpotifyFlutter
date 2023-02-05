@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 import 'package:praxis_data/models/album/album_response.dart';

@@ -11,24 +11,22 @@ class SongPlayDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SongPlayCubit, UiState<bool>>(
-        builder: (context, state) {
+    return BlocBuilder<SongPlayCubit, UiState<bool>>(builder: (context, state) {
       return Container(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Positioned.fill(
+            Positioned.fill(
                 child: Image(
                     height: 400,
                     width: 400,
-                    image:
-                        AssetImage('images/spotify_clone_card_bg_img.jpeg'))),
+                    image: NetworkImage(song.songPosterUrl))),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
-                  children: const [Text("Song Title"), Text("Song Author")],
+                  children: [Text(song.songName), Text(song.songAuthor)],
                 ),
                 IconButton(
                     onPressed: () {
