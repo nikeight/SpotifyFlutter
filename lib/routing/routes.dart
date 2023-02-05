@@ -12,7 +12,8 @@ const homeRoute = '/home';
 const rootRoute = '/';
 
 // Shopify
-const songPlayRoute = "/songPlay";
+const songPlayRoute = "/songPlay/:index";
+const songPlayRouteName = "songPlay";
 
 final praxisRoutes = GoRouter(
   routes: [
@@ -55,6 +56,9 @@ GoRoute splashRoute() {
 GoRoute songPlayedRoute() {
   return GoRoute(
     path: songPlayRoute,
-    builder: (context, state) => const SongPlayScreen(),
+    name: songPlayRouteName,
+    builder: (context, state) => SongPlayScreen(
+      index: state.params['index'],
+    ),
   );
 }

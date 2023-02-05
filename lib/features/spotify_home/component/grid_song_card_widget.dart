@@ -20,7 +20,10 @@ class GridSongCardWidget extends StatelessWidget {
           height: 240,
           width: 180,
           margin: const EdgeInsets.all(4),
-          child: SongCard(song: currentItem),
+          child: SongCard(
+            song: currentItem,
+            index: index,
+          ),
         );
       }),
     );

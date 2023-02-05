@@ -97,7 +97,7 @@ class MySearchCustomDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    List<String> suggestions = fetchedSongTitleList!.where((element) {
+    List<String> suggestions = fetchedSongTitleList.where((element) {
       final String result = element.toLowerCase();
       final String input = query.toLowerCase();
       return result.contains(input);
