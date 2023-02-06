@@ -58,7 +58,7 @@ class AllSongCubit extends Cubit<UiState<AllSongUiStateDataClass>> {
   void complete() {}
 
   error(e) {
-    emit(Failure(exception: e));
+    emit(Failure(exception: Exception(e)));
   }
 
   @override

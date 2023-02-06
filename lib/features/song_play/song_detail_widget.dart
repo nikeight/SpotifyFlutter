@@ -31,7 +31,7 @@ class SongPlayDetailWidget extends StatelessWidget {
                 IconButton(
                     onPressed: () {
                       // Heart Icon Pressed
-                      // SongPlayCubit().toggleFavAlbum(song);
+                      SongPlayCubit().toggleFavAlbum(song);
                     },
                     icon: (state is Success)
                         ? const Icon(Icons.favorite)

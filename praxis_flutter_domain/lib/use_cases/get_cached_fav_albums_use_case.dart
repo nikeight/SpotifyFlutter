@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:clean_architecture/clean_architecture.dart';
-import 'package:praxis_flutter_domain/entities/song/dm_song.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song_list.dart';
 import 'package:praxis_flutter_domain/repositories/song/SongsRepository.dart';
 
