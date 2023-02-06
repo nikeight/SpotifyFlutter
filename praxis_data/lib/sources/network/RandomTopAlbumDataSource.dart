@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 import 'package:praxis_data/models/album/album_response.dart';
@@ -20,7 +19,7 @@ class RandomTopAlbumDataSource {
         MusicResponse albumResponse = MusicResponse.fromJson(json.decode(apiResponse.data));
         albumResponse.feed?.entry?.forEach((element) {
           var dtSongObject = DtSong(123, element.imname?.label,
-              element.imartist?.label, element.imimage?[0].label, false);
+              element.imartist?.label, element.imimage?[2].label, false);
           dtSongList.add(dtSongObject);
         });
         return Success(data: dtSongList);

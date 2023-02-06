@@ -4,10 +4,10 @@ import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 import 'package:praxis_flutter/ui/model/song/ui_songs_mapper.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song_list.dart';
-import 'package:praxis_flutter_domain/use_cases/DummyGetCachedAlbumbsUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/get_cached_fav_albums_use_case.dart';
 
 class FavAlbumsCubit extends Cubit<UiState<UiSongsList>> {
-  final getFavAlbumsUseCase = GetIt.I.get<DummyGetCachedAlbumbsUseCase>();
+  final getFavAlbumsUseCase = GetIt.I.get<GetCachedFavAlbumUseCase>();
   final uiDomainMapper = GetIt.I.get<UISongsListMapper>();
 
   // Loading data as soon sa we init the Cubit

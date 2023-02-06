@@ -5,6 +5,7 @@ import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 /*
 Todo : Add Placeholder image for Network Image;
+Todo : Wrap the Image as per the Container Size (Radius as well)
 
   A Common Widget which takes `Song` Object to showcase
     - Album Name
@@ -15,15 +16,16 @@ Todo : Add Placeholder image for Network Image;
  */
 class SongCard extends StatelessWidget {
   final SongUiModel song;
+  final int index;
 
-  const SongCard({Key? key, required this.song}) : super(key: key);
+  const SongCard({Key? key, required this.song, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Todo : Wrap the Image as per the Container Size (Radius as well)
     return GestureDetector(
       onTap: () {
-        context.push(songPlayRoute);
+        context.pushNamed(songPlayRouteName, params: {'index': index.toString()});
       },
       child: Container(
         decoration: BoxDecoration(

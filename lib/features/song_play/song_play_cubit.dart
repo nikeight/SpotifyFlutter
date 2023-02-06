@@ -14,17 +14,20 @@ class SongPlayCubit extends Cubit<UiState<bool>> {
   }
 
   void toggleFavAlbum(SongUiModel song) {
-    getToggleFavItemUseCase.perform((event) {
-      if (event != null && event == true) {
-        emit(Success(data: true));
-      } else {
-        emit(Failure(exception: Exception("Insertion failed")));
-      }
-    }, _onErrorCaught, _onCompleteProcess);
+    getToggleFavItemUseCase.perform(_handleToggleFavAlbumEvent, _onErrorCaught,
+        _onCompleteProcess, uiDomainMapper.mapToDomain(song));
   }
 
-  _onErrorCaught(Exception e) {
-    emit(Failure(exception: e));
+  _handleToggleFavAlbumEvent(bool? event) {
+    if (event != null && event == true) {
+      emit(Success(data: true));
+    } else {
+      emit(Failure(exception: Exception("Insertion failed")));
+    }
+  }
+
+  _onErrorCaught(e) {
+    emit(Failure(exception: Exception(e)));
   }
 
   _onCompleteProcess() {
