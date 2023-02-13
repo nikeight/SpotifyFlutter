@@ -75,4 +75,9 @@ class AlbumDatabase {
     final db = await database;
     db.close();
   }
+
+  Future<int> getDatabaseVersion() async {
+    final db = await database;
+    return db.getVersion();
+  }
 }
