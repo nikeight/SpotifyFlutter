@@ -64,6 +64,7 @@ class AlbumDatabase {
     return await db.delete(_albumTableName) > 0;
   }
 
+  // Todo : Return empty list if there is no data in the database
   Future<List<DtSong>> getAllAlbums() async {
     final db = await database;
     final albumMapList = await db.query(_albumTableName);
