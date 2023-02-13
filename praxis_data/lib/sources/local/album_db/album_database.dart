@@ -8,7 +8,17 @@ const String _albumTableName = "album_table";
 
 @singleton
 class AlbumDatabase {
-  Database? _albumDatabase;
+  Database? albumDatabase;
+
+  /*
+    Todo : Use of private field of database
+    Or to use named Constructor to pass the database from outside
+    in Cases of tests.
+
+   */
+  // AlbumDatabase.test(Database db){
+  //   albumDatabase = db;
+  // }
 
   AlbumDatabase();
 
@@ -37,9 +47,9 @@ class AlbumDatabase {
   }
 
   Future<Database> get database async {
-    if (_albumDatabase != null) return _albumDatabase!;
-    _albumDatabase = await _initDatabase(_albumDatabaseName);
-    return _albumDatabase!;
+    if (albumDatabase != null) return albumDatabase!;
+    albumDatabase = await _initDatabase(_albumDatabaseName);
+    return albumDatabase!;
   }
 
   Future<bool> insertToSpotifyDb(DtSong song) async {
