@@ -60,6 +60,7 @@ dev_dependencies:
   build_runner: any
   flutter_gen_runner: any
   bloc_test: ^9.1.0
+  mocktail: ^0.3.0
 
 flutter:
   uses-material-design: true
