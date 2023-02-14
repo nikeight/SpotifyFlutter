@@ -1,8 +1,8 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song_list.dart';
 import 'package:praxis_flutter_domain/repositories/song/SongsRepository.dart';
 import 'package:praxis_flutter_domain/use_cases/get_cached_fav_albums_use_case.dart';
+import 'package:test/test.dart';
 
 class MockDataSongRepository extends Mock implements SongsRepository {}
 
