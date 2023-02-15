@@ -21,14 +21,6 @@ class SpotifyHomeScreen extends StatelessWidget {
         ),
         BlocProvider<FavAlbumsCubit>(
           create: (BuildContext context) => FavAlbumsCubit(),
-          child: BlocListener<FavAlbumsCubit, UiState<UiSongsList>>(
-            listener: (context, state) {
-              // state is Initial
-              //     ? FavAlbumsCubit().loadFavAlbums()
-              //     : const Text("No fav selected yet");
-            },
-            child: const AllFavSongScreenWidget(),
-          ),
         ),
       ],
       child: DefaultTabController(

@@ -28,11 +28,6 @@ dependencies:
   sqflite: ^2.0.3+1
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  test: any
   flutter_lints: ^2.0.1
   injectable_generator: any
   build_runner: any
-  mocktail: ^0.3.0
-  sqflite_common_ffi: ^2.2.1+1

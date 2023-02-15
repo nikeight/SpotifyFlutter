@@ -61,6 +61,7 @@ dev_dependencies:
   flutter_gen_runner: any
   bloc_test: ^9.1.0
   mocktail: ^0.3.0
+  sqflite_common_ffi: ^2.2.1+1
 
 flutter:
   uses-material-design: true
