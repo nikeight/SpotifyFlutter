@@ -19,14 +19,19 @@ class DataAlbumRepository extends SongsRepository {
   DataAlbumRepository(this._randomTopAlbumDataSource, this.mapper,
       this.albumDatabase, this.modelMapper);
 
+  // Todo : Wrap with Try/Catch Block
   @override
   Future<ApiResponse<SongsWithListType>> getRandomSongList() async {
-    var response = await _randomTopAlbumDataSource.getTopRandomAlbums();
-    if (response != null) {
-      var domainModel = (response as Success).data as DtSongList;
-      return Success(data: mapper.mapToDomain(domainModel));
-    } else {
-      return Failure(error: Exception("Null values"));
+    try{
+      var response = await _randomTopAlbumDataSource.getTopRandomAlbums();
+      if (response != null) {
+        var domainModel = (response as Success).data as DtSongList;
+        return Success(data: mapper.mapToDomain(domainModel));
+      } else {
+        return Failure(error: Exception("Null values"));
+      }
+    } on Exception catch(e){
+      return Failure(error: Exception("Something went wrong : $e"));
     }
   }
 
