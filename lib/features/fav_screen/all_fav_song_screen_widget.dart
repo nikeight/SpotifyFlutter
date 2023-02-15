@@ -12,12 +12,13 @@ class AllFavSongScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FavAlbumsCubit, UiState<UiSongsList>>(
+    context.read<FavAlbumsCubit>().loadFavAlbums();
+    print("FavScreen Build Method called");
+    return BlocConsumer<FavAlbumsCubit, UiState<UiSongsList>>(
         builder: (context, state) {
-          print("FavCubit Build method called");
       return Stack(alignment: Alignment.center, children: [
         state is Initial
-            ? const Text("No Fav albums")
+            ?  const Text("No fav albums added yet")
             : state is Loading
                 ? const PraxisProgressBar()
                 : state is Failure
@@ -46,6 +47,8 @@ class AllFavSongScreenWidget extends StatelessWidget {
                                 "Debug Container Please Remove or Improve it"),
                           )
       ]);
+    }, listener: (context, state) {
+
     });
   }
 }

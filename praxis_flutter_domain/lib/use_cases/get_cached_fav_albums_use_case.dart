@@ -16,6 +16,8 @@ class GetCachedFavAlbumUseCase extends UseCase<SongsWithListType?, void> {
           await dataAlbumRepository.getAllCachedFavSongs();
       if (cachedFavAlbumList != null) {
         dataStreamController.add(cachedFavAlbumList);
+      } else {
+        dataStreamController.add(SongsWithListType(songList: []));
       }
     } catch (e) {
       print("CachedUseCase Error $e");
