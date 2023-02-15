@@ -18,13 +18,16 @@ class FavAlbumsCubit extends Cubit<UiState<UiSongsList>> {
 
   void loadFavAlbums() {
     emit(Loading());
-    getFavAlbumsUseCase.perform(handleDatabaseReadOperation, onErrorCaught, onCompleteProcess);
+    getFavAlbumsUseCase.perform(
+        handleDatabaseReadOperation, onErrorCaught, onCompleteProcess);
   }
 
   void handleDatabaseReadOperation(SongsWithListType? cachedFavAlbums) {
     print("Inside HandleDataBaseOp Method $cachedFavAlbums");
     var responseCachedList = cachedFavAlbums?.songList ?? [];
-    if (responseCachedList.isNotEmpty) {
+    if (responseCachedList.isEmpty) {
+      emit(Initial());
+    } else if (responseCachedList.isNotEmpty) {
       emit(Success(
           data: uiDomainMapper.mapToPresentation(
               SongsWithListType(songList: responseCachedList))));
@@ -49,7 +52,6 @@ class FavAlbumsCubit extends Cubit<UiState<UiSongsList>> {
 
   @override
   void onChange(Change<UiState<UiSongsList>> change) {
-
     super.onChange(change);
   }
 }
