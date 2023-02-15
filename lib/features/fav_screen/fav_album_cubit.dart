@@ -10,8 +10,9 @@ class FavAlbumsCubit extends Cubit<UiState<UiSongsList>> {
   final getFavAlbumsUseCase = GetIt.I.get<GetCachedFavAlbumUseCase>();
   final uiDomainMapper = GetIt.I.get<UISongsListMapper>();
 
-  // Loading data as soon sa we init the Cubit
+  // Loading data as soon as we init the Cubit
   FavAlbumsCubit() : super(Initial()) {
+    emit(Initial());
     loadFavAlbums();
   }
 
@@ -36,11 +37,19 @@ class FavAlbumsCubit extends Cubit<UiState<UiSongsList>> {
     emit(Failure(exception: Exception(e)));
   }
 
-  onCompleteProcess() {}
+  onCompleteProcess() {
+    print("On Complete called");
+  }
 
   @override
   Future<void> close() async {
     getFavAlbumsUseCase.dispose();
     super.close();
+  }
+
+  @override
+  void onChange(Change<UiState<UiSongsList>> change) {
+
+    super.onChange(change);
   }
 }
