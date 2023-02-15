@@ -2,8 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:praxis_data/models/album/model/dt_song.dart';
-import 'package:praxis_data/sources/network/RandomTopAlbumDataSource.dart';
 import 'package:praxis_data/sources/network/common/custom_api_client.dart';
+import 'package:praxis_data/sources/network/source/RandomTopAlbumDataSource.dart';
 import 'package:praxis_flutter_domain/entities/api_response.dart';
 
 class MockCustomApiClient extends Mock implements CustomApiClient {}
