@@ -7,7 +7,6 @@ import 'package:praxis_flutter/presentation/core/widgets/abstract_plaform_widget
 import 'package:praxis_flutter/routing/routes.dart';
 
 class SpotifyApp extends AbstractPlatformWidget<CupertinoApp, MaterialApp> {
-  /// Platform dependent app widget (CupertinoApp for iOS, MaterialApp for android)
   final String title;
 
   const SpotifyApp({Key? key, this.title = 'Spotify'}) : super(key: key);

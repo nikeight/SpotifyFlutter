@@ -4,6 +4,7 @@ import 'package:praxis_flutter/features/spotify_home/component/grid_song_card_wi
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/all_song/all_song_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
+import 'package:praxis_flutter/presentation/core/widgets/platform_progress_bar.dart';
 
 class AllSongScreenWidget extends StatelessWidget {
   const AllSongScreenWidget({Key? key}) : super(key: key);
@@ -12,9 +13,10 @@ class AllSongScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AllSongCubit, UiState<AllSongUiStateDataClass>>(
         builder: (context, state) {
-      return Stack(alignment: Alignment.center, children: [
+          print("AllSongCubit Build method called");
+          return Stack(alignment: Alignment.center, children: [
         state is Loading
-            ? const Text("Loading")
+            ? const PraxisProgressBar()
             : state is Failure
                 ? const Text("Failure")
                 : state is Success
