@@ -1,183 +1,63 @@
-# Praxis Flutter Playground
+## SpotifyClone - Flutter
 
-Minimal Flutter project targeting the following platforms
+  <p align="left"> A Flutter clean-architecture project that uses BLoC and Dio with best practices. Includes unit tests for each layer. Project is still in WIP 🚧</p>
 
-## Platforms
+  <p align="left">
+      <a href = "https://github.com/Solido/awesome-flutter">
+        <img src = "https://img.shields.io/badge/Awesome-Flutter-blue.svg?color=blue&style=for-the-badge" />
+      </a>
+      <a href = "https://github.com/nikeight/SpotifyFlutter/stargazers">
+        <img src="https://img.shields.io/github/stars/nikeight/SpotifyFlutter?color=green&style=for-the-badge" />
+      </a>
+      <a href = "https://github.com/nikeight/SpotifyFlutter/network/members">
+          <img src="https://img.shields.io/github/forks/nikeight/SpotifyFlutter?color=green&style=for-the-badge" />
+      </a>
+      <a href = "https://github.com/nikeight/SpotifyFlutter/watchers">
+          <img src="https://img.shields.io/github/watchers/nikeight/SpotifyFlutter?color=yellowgreen&style=for-the-badge" />
+      </a>
+      <a href = "https://github.com/nikeight/SpotifyFlutter/issues">
+          <img src="https://img.shields.io/github/issues/nikeight/SpotifyFlutter?color=orange&style=for-the-badge" />
+      </a>
+  </p>
 
-* Android ✅ DONE
-* iOS ✅ DONE
-* Web ✅ DONE
+### 👨‍💻 Tech stack
+
+| Tools               | Link                                                            |
+|:--------------------|:----------------------------------------------------------------|
+| 🤖 State Management | [flutter_bloc](https://pub.dev/packages/flutter_bloc)           |
+| 💚 Service Locator  | [get_it](https://pub.dev/packages/get_it)                       |
+| 💉 DI               | [injectable](https://pub.dev/packages/injectable)               |
+| 🏛 Navigation       | [go_router](https://pub.dev/packages/go_router)                 |
+| 🌐 Network Calls    | [dio](https://pub.dev/packages/dio) 				|
+| 🚀 BloC Test        | [bloc_test](https://pub.dev/packages/bloc_test)                 |
+| 🖊️ Mock             | [mocktail](https://pub.dev/packages/mocktail)                   |
+
+### ⚒️ Architecture
+
+SpotifyClone Flutter follows the principles of Clean Architecture.
+The project architecture has been inspired
+from [Praxis Flutter](https://github.com/mutualmobile/PraxisFlutter).
+
+### 🖥️ Screens
+
+<table style="width:100%">
+  <tr>
+    <th>AllSong Screen</th>
+    <th>Favourite Screen</th> 
+    <th>SongDetail Screen</th>
+  </tr>
+  <tr>
+    <td><img src = "art/spotify_flutter_all_song_screen.png" width=240/></td> 
+    <td><img src = "art/spotify_flutter_fav_screen_with_snackbar.png" width=240/></td>
+    <td><img src = "art/spotify_flutter_song_detail_screen.png" width=240/></td>
+  </tr>
+</table>
 
 
-### Screenshots
-
-<img src="art/art2.png" alt="drawing" style="width:200px;"/>
-
-<img src="art/art1.png" alt="drawing" style="width:200px;"/>
-
-<img src="art/art3.png" alt="drawing" style="width:200px;"/>
-
-<img src="art/art4.png" alt="drawing" style="width:200px;"/>
-
-## Getting Started 🚀
-
-This project contains 3 flavors:
-
-- development
-- staging
-- production
-
-
-```sh
-To generate code for injectable
-
-```sh
-$ flutter packages pub run build_runner build --delete-conflicting-outputs
-
----
-
-To run the desired flavor either use the launch configuration in VSCode/Android Studio or use the following commands:
-
-```sh
-# Development
-$ flutter run --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter run --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter run --flavor production --target lib/main_production.dart
-
----
-
-## Running Tests 🧪
-
-To run all unit and widget tests use the following command:
-
-```sh
-$ flutter test --coverage --test-randomize-ordering-seed random
-```
-
-To view the generated coverage report you can use [lcov](https://github.com/linux-test-project/lcov).
-
-```sh
-# Generate Coverage Report
-$ genhtml coverage/lcov.info -o coverage/
-
-# Open Coverage Report
-$ open coverage/index.html
-```
-
----
-
-## Working with Translations 🌐
-
-This project relies on [flutter_localizations][flutter_localizations_link] and follows the [official internationalization guide for Flutter][internationalization_link].
-
-### Adding Strings
-
-1. To add a new localizable string, open the `app_en.arb` file at `lib/l10n/arb/app_en.arb`.
-
-```arb
-{
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
-}
-```
-
-2. Then add a new key/value and description
-
-```arb
-{
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    },
-    "helloWorld": "Hello World",
-    "@helloWorld": {
-        "description": "Hello World Text"
-    }
-}
-```
-
-3. Run the command to update translation
-
-```sh
-# Generate Translations.
-$ flutter gen-l10n --template-arb-file=arb/app_en.arb
-```
-
-4. Use the new string after running 
-
-```dart
-import 'package:flutter_praxis/l10n/l10n.dart';
-
-@override
-Widget build(BuildContext context) {
-  final l10n = context.l10n;
-  return Text(l10n.helloWorld);
-}
-```
-
-### Adding Supported Locales
-
-Update the `CFBundleLocalizations` array in the `Info.plist` at `ios/Runner/Info.plist` to include the new locale.
-
-```xml
-    ...
-
-    <key>CFBundleLocalizations</key>
-	<array>
-		<string>en</string>
-		<string>es</string>
-	</array>
-
-    ...
-```
-
-### Adding Translations
-
-1. For each supported locale, add a new ARB file in `lib/l10n/arb`.
-
-```
-├── l10n
-│   ├── arb
-│   │   ├── app_en.arb
-│   │   └── app_es.arb
-```
-
-2. Add the translated strings to each `.arb` file:
-
-`app_en.arb`
-
-```arb
-{
-    "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
-    }
-}
-```
-
-`app_es.arb`
-
-```arb
-{
-    "@@locale": "es",
-    "counterAppBarTitle": "Contador",
-    "@counterAppBarTitle": {
-        "description": "Texto mostrado en la AppBar de la página del contador"
-    }
-}
-```
-
-[coverage_badge]: coverage_badge.svg
-[flutter_localizations_link]: https://api.flutter.dev/flutter/flutter_localizations/flutter_localizations-library.html
-[internationalization_link]: https://flutter.dev/docs/development/accessibility-and-localization/internationalization
-
+### 🐥 Upcoming Features : 
+- Performance Enhancement 
+- Dedicated Search screen with filters 
+- Feature : Play music 
+- Integration, Widgets and more Unit tests 
+- Animations
 
