@@ -5,7 +5,6 @@ import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 /*
 Todo : Add Placeholder image for Network Image;
-Todo : Wrap the Image as per the Container Size (Radius as well)
 
   A Common Widget which takes `Song` Object to showcase
     - Album Name
@@ -25,39 +24,56 @@ class SongCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.pushNamed(songPlayRouteName, params: {'index': index.toString()});
+        context
+            .pushNamed(songPlayRouteName, params: {'index': index.toString()});
       },
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey,
-            ),
-            borderRadius: const BorderRadius.all(Radius.circular(0))),
-        height: 200,
-        width: 200,
-        child: Stack(
-          children: [
-            Positioned.fill(child: Image.network(song.songPosterUrl)),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Column(children: [
-                Text(
-                  song.songName,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w100,
-                      color: Colors.black),
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: NetworkImage(song.songPosterUrl),
+                      fit: BoxFit.cover),
                 ),
-                Text(
-                  song.songAuthor,
-                  style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w100,
-                      color: Colors.black45),
-                ),
-              ]),
-            )
-          ],
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      Colors.transparent,
+                      Colors.black12,
+                      Colors.black45,
+                      Colors.black54,
+                      Colors.black
+                    ])),
+              ),
+              Container(
+                  padding: const EdgeInsets.only(left: 8, bottom: 8),
+                  alignment: Alignment.bottomLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        song.songName,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                      Text(
+                        song.songAuthor,
+                        style:
+                            const TextStyle(color: Colors.grey, fontSize: 14),
+                      ),
+                    ],
+                  )),
+            ],
+          ),
         ),
       ),
     );
