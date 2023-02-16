@@ -37,7 +37,7 @@ class AlbumDatabase {
     const albumIsFav = "INTEGER NOT NULL";
     await database.execute("""
       CREATE TABLE $_albumTableName (
-      ${SpotifyDbSongsField.album_primary_id} integer primary key autoincrement,
+      ${SpotifyDbSongsField.album_primary_id} $primaryId,
       ${SpotifyDbSongsField.album_name} $albumName,
       ${SpotifyDbSongsField.album_title} $albumTitle,
       ${SpotifyDbSongsField.album_image_url} $albumSongUrl,
@@ -54,9 +54,7 @@ class AlbumDatabase {
 
   Future<bool> insertToSpotifyDb(DtSong song) async {
     final db = await database;
-    return await db.insert(_albumTableName, song.toMap(),
-            conflictAlgorithm: ConflictAlgorithm.replace) >
-        0;
+    return await db.insert(_albumTableName, song.toMap()) > 0;
   }
 
   Future<bool> deleteAllJokes() async {

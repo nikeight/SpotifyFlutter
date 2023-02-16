@@ -22,8 +22,12 @@ class RandomTopAlbumDataSource {
         MusicResponse albumResponse =
             MusicResponse.fromJson(json.decode(apiResponse));
         albumResponse.feed?.entry?.forEach((element) {
-          var dtSongObject = DtSong(123, element.imname?.label,
-              element.imartist?.label, element.imimage?[2].label, false);
+          var dtSongObject = DtSong(
+              int.parse(element.id?.attributes?.imid ?? "0"),
+              element.imname?.label,
+              element.imartist?.label,
+              element.imimage?[2].label,
+              false);
           dtSongList.add(dtSongObject);
         });
         return Success(data: dtSongList);

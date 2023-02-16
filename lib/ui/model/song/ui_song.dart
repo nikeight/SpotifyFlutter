@@ -4,15 +4,18 @@ import 'package:praxis_flutter/ui/model/ui_model.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song.dart';
 
 class SongUiModel extends UIModel {
+  final int songId;
   final String songPosterUrl;
   final String songName;
   final String songAuthor;
+  final bool isFav;
 
-  SongUiModel({
-    required this.songName,
-    required this.songAuthor,
-    required this.songPosterUrl,
-  });
+  SongUiModel(
+      {required this.songName,
+      required this.songAuthor,
+      required this.songPosterUrl,
+      required this.songId,
+      required this.isFav});
 }
 
 @injectable
@@ -22,12 +25,15 @@ class UiDomainMapper extends EntityMapper<Song, SongUiModel> {
     return SongUiModel(
         songPosterUrl: model.songPosterImgUrl,
         songName: model.songName,
-        songAuthor: model.songAuthor);
+        songAuthor: model.songAuthor,
+        songId: model.songId,
+        isFav: model.isFav);
   }
 
   @override
   Song mapToDomain(SongUiModel entity) {
-    return Song(entity.songPosterUrl, entity.songName, entity.songAuthor);
+    return Song(entity.songPosterUrl, entity.songName, entity.songAuthor,
+        entity.songId, entity.isFav);
   }
 }
 

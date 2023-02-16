@@ -651,15 +651,22 @@ class Attributes {
 
 class EntryId {
   final String? label;
+  final IdAttributes? attributes;
 
   EntryId({
     this.label,
+    this.attributes
   });
 
   EntryId.fromJson(Map<String, dynamic> json)
-      : label = json['label'] as String?;
+      : label = json['label'] as String?,
+        attributes = (json['attributes'] as Map<String, dynamic>?) != null
+            ? IdAttributes.fromJson(
+                json['attributes'] as Map<String, dynamic>)
+            : null;
 
   Map<String, dynamic> toJson() => {
-    'label' : label
+    'label' : label,
+    'attributes' : attributes
   };
 }
