@@ -27,7 +27,7 @@ void main() {
 
   final fakeSongDomainModelList = List.generate(
     5,
-    (index) => Song("https://daftpunk/discovery.png", "Discovery", "Daft Punk"),
+    (index) => Song("https://daftpunk/discovery.png", "Discovery", "Daft Punk",1234),
   );
 
   late final DataAlbumRepository sut;

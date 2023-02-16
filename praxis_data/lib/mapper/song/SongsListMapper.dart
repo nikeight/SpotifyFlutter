@@ -31,12 +31,13 @@ class SongsListMapper extends EntityMapper<SongsWithListType, DtSongList> {
 class DataSongModelMapper extends EntityMapper<Song, DtSong> {
   @override
   DtSong mapToData(Song model) {
-    return DtSong(0, model.songName, model.songAuthor, model.songPosterImgUrl, false);
+    return DtSong(
+        model.songId, model.songName, model.songAuthor, model.songPosterImgUrl, false);
   }
 
   @override
   Song mapToDomain(DtSong entity) {
     return Song(entity.albumImageUrl ?? '', entity.authorName ?? '',
-        entity.albumName ?? '');
+        entity.albumName ?? '', entity.albumId ?? 0, entity.isFav ?? false);
   }
 }

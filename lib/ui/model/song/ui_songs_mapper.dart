@@ -10,7 +10,8 @@ class UISongsListMapper extends UiModelMapper<SongsWithListType, UiSongsList> {
   SongsWithListType mapToDomain(UiSongsList modelItem) {
     return SongsWithListType(
         songList: modelItem.songsList
-            .map((e) => Song(e.songPosterUrl, e.songName, e.songAuthor))
+            .map((e) => Song(
+                e.songPosterUrl, e.songName, e.songAuthor, e.songId, e.isFav))
             .toList());
   }
 
@@ -20,7 +21,9 @@ class UISongsListMapper extends UiModelMapper<SongsWithListType, UiSongsList> {
         .map((domainModel) => SongUiModel(
             songPosterUrl: domainModel.songPosterImgUrl,
             songName: domainModel.songName,
-            songAuthor: domainModel.songAuthor))
+            songAuthor: domainModel.songAuthor,
+            songId: domainModel.songId,
+            isFav: domainModel.isFav))
         .toList());
   }
 }

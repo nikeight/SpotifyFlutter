@@ -10,7 +10,7 @@ class SongPlayCubit extends Cubit<UiState<bool>> {
   final uiDomainMapper = GetIt.I.get<UiDomainMapper>();
 
   SongPlayCubit() : super(Initial()) {
-    // Do nothing here
+    //
   }
 
   void toggleFavAlbum(SongUiModel song) {
@@ -19,7 +19,8 @@ class SongPlayCubit extends Cubit<UiState<bool>> {
   }
 
   _handleToggleFavAlbumEvent(bool? event) {
-    if (event != null && event == true) {
+    if (event == true) {
+      print("This is the DB event $event");
       emit(Success(data: true));
     } else {
       emit(Failure(exception: Exception("Insertion failed")));
