@@ -13,42 +13,45 @@ class AllFavSongScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<FavAlbumsCubit>().loadFavAlbums();
-    print("FavScreen Build Method called");
     return BlocConsumer<FavAlbumsCubit, UiState<UiSongsList>>(
         builder: (context, state) {
-      return Stack(alignment: Alignment.center, children: [
-        state is Initial
-            ?  const Text("No fav albums added yet")
-            : state is Loading
-                ? const PraxisProgressBar()
-                : state is Failure
-                    ? Text("Failure ${(state as Failure).exception.toString()}")
-                    : state is Success
-                        ? Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: ListView(
-                              scrollDirection: Axis.vertical,
-                              children: [
-                                const SearchComponent(
-                                  recentSearchedCachedList: [],
-                                  fetchedSongTitleList: [],
-                                ),
-                                const SizedBox(
-                                  height: 8,
-                                ),
-                                // GridSongCardWidget(songList: (state as Success).data.songsList)
-                                GridSongCardWidget(
-                                    songList: (state as Success).data.songsList)
-                              ],
-                            ),
-                          )
-                        : const Center(
-                            child: Text(
-                                "Debug Container Please Remove or Improve it"),
-                          )
-      ]);
-    }, listener: (context, state) {
-
-    });
+          return Container(
+            color: const Color(0xffE0DECA),
+            child: Stack(alignment: Alignment.center, children: [
+              state is Initial
+                  ? const Text("No fav albums added yet")
+                  : state is Loading
+                      ? const PraxisProgressBar()
+                      : state is Failure
+                          ? Text(
+                              "Failure ${(state as Failure).exception.toString()}")
+                          : state is Success
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: ListView(
+                                    scrollDirection: Axis.vertical,
+                                    children: [
+                                      const SearchComponent(
+                                        recentSearchedCachedList: [],
+                                        fetchedSongTitleList: [],
+                                      ),
+                                      const SizedBox(
+                                        height: 8,
+                                      ),
+                                      // GridSongCardWidget(songList: (state as Success).data.songsList)
+                                      GridSongCardWidget(
+                                          songList:
+                                              (state as Success).data.songsList)
+                                    ],
+                                  ),
+                                )
+                              : const Center(
+                                  child: Text(
+                                      "Debug Container Please Remove or Improve it"),
+                                )
+            ]),
+          );
+        },
+        listener: (context, state) {});
   }
 }
