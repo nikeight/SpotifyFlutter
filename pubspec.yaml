@@ -16,7 +16,6 @@ dependencies:
   bloc: ^8.1.0
   go_router: ^5.0.5
   flex_color_scheme: ^6.0.1
-  google_fonts: ^3.0.1
   cupertino_icons: ^1.0.5
   get_it: ^7.2.0
   injectable: ^1.5.3
@@ -38,6 +37,7 @@ dependencies:
   shimmer: ^2.0.0
   uuid: ^3.0.6
   intl: ^0.17.0
+  google_fonts: ^4.0.3
 
   clean_architecture:
     path: ./clean_architecture

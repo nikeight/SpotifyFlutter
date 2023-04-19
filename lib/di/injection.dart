@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:praxis_data/injection.dart';
-import 'package:praxis_flutter/injection.config.dart';
+import 'package:praxis_flutter/di/injection.config.dart';
 
 @InjectableInit(
   initializerName: r'$initGetIt', // default

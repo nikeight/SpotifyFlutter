@@ -2,7 +2,6 @@ import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/features/song_play/song_play_screen.dart';
 import 'package:praxis_flutter/features/spotify_home/spotify_home_screen.dart';
 
-const homeRoute = '/home';
 const rootRoute = '/';
 
 // Shopify
@@ -16,7 +15,7 @@ final praxisRoutes = GoRouter(
 GoRoute splashRoute() {
   return GoRoute(
     path: rootRoute,
-    builder: (context, state) => const SpotifyHomeScreen(),
+    builder: (context, state) => const SpotifyHostScreen(),
   );
 }
 

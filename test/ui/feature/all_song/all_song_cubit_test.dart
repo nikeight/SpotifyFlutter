@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:praxis_flutter/features/all_song/all_song_cubit.dart';
-import 'package:praxis_flutter/injection.dart';
+import 'package:praxis_flutter/di/injection.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter_domain/entities/song/dm_song_list.dart';
 import 'package:praxis_flutter_domain/use_cases/get_random_song_list_usecase.dart';

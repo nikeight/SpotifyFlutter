@@ -11,7 +11,7 @@ import 'package:logging/logging.dart';
 import 'package:praxis_flutter/bloc/app_bloc_observer.dart';
 import 'package:praxis_flutter/firebase_options.dart';
 import 'package:praxis_flutter/infrastructure/notifications/firebase_messaging.dart';
-import 'package:praxis_flutter/injection.dart';
+import 'package:praxis_flutter/di/injection.dart';
 
 Future<void> bootstrap(FutureOr<Widget> Function() builder, String env) async {
   flutterLogError();

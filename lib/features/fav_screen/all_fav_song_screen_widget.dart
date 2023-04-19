@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/fav_screen/fav_album_cubit.dart';
-import 'package:praxis_flutter/features/spotify_home/component/SearchComponent.dart';
-import 'package:praxis_flutter/features/spotify_home/component/grid_song_card_widget.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/presentation/core/widgets/platform_progress_bar.dart';
 import 'package:praxis_flutter/ui/model/song/ui_song.dart';
+
+import '../../ui/component/SearchComponent.dart';
+import '../../ui/component/grid_song_card_widget.dart';
 
 class AllFavSongScreenWidget extends StatelessWidget {
   const AllFavSongScreenWidget({Key? key}) : super(key: key);

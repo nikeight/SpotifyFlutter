@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:praxis_flutter/features/spotify_home/component/SearchComponent.dart';
-import 'package:praxis_flutter/features/spotify_home/component/grid_song_card_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/all_song/all_song_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/presentation/core/widgets/platform_progress_bar.dart';
+
+import '../../ui/component/SearchComponent.dart';
+import '../../ui/component/grid_song_card_widget.dart';
 
 class AllSongScreenWidget extends StatelessWidget {
   const AllSongScreenWidget({Key? key}) : super(key: key);

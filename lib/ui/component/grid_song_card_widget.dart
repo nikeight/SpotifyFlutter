@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:praxis_flutter/features/spotify_home/component/SongCard.dart';
 import 'package:praxis_flutter/ui/model/song/ui_song.dart';
+
+import 'SongCard.dart';
 
 class GridSongCardWidget extends StatelessWidget {
   final List<SongUiModel> songList;
