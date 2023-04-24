@@ -36,7 +36,7 @@ class AllSongScreenWidget extends StatelessWidget {
                                 height: 8,
                               ),
                               GridSongCardWidget(
-                                  songList: (state as Success).data.uiSongsList.songsList
+                                  // songList: (state as Success).data.uiSongsList.songsList
                               )
                             ],
                           ),

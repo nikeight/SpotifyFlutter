@@ -1,9 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/fav_screen/fav_album_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/presentation/core/widgets/platform_progress_bar.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 import '../../ui/component/SearchComponent.dart';
 import '../../ui/component/grid_song_card_widget.dart';
@@ -14,7 +15,7 @@ class AllFavSongScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<FavAlbumsCubit>().loadFavAlbums();
-    return BlocConsumer<FavAlbumsCubit, UiState<UiSongsList>>(
+    return BlocConsumer<FavAlbumsCubit, UiState<Void>>(
         builder: (context, state) {
           return Container(
             color: const Color(0xffE0DECA),
@@ -41,8 +42,9 @@ class AllFavSongScreenWidget extends StatelessWidget {
                                       ),
                                       // GridSongCardWidget(songList: (state as Success).data.songsList)
                                       GridSongCardWidget(
-                                          songList:
-                                              (state as Success).data.songsList)
+                                          // songList:
+                                          //     (state as Success).data.songsList
+                                      )
                                     ],
                                   ),
                                 )

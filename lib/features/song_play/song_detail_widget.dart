@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/song_play/song_play_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
-
-import '../../presentation/core/widgets/platform_progress_bar.dart';
 
 class SongPlayDetailWidget extends StatelessWidget {
-  final SongUiModel song;
-
-  const SongPlayDetailWidget({Key? key, required this.song}) : super(key: key);
+  const SongPlayDetailWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +15,21 @@ class SongPlayDetailWidget extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
           children: [
-            Text(song.songAuthor,
+            const Text("Song Artist",
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.fade,
-                style: const TextStyle(color: Colors.black, fontSize: 18)),
-            Text(song.songName,
+                style: TextStyle(color: Colors.black, fontSize: 18)),
+            const Text("Song Name",
                 textAlign: TextAlign.left,
                 overflow: TextOverflow.fade,
-                style: const TextStyle(color: Colors.black45, fontSize: 14)),
+                style: TextStyle(color: Colors.black45, fontSize: 14)),
             const SizedBox(height: 24),
-            SizedBox(
+            const SizedBox(
               width: 340,
               height: 300,
               child: FittedBox(
                 fit: BoxFit.fill,
-                child: Image(image: NetworkImage(song.songPosterUrl)),
+                child: Image(image: NetworkImage("https://google.com")),
               ),
             ),
             const SizedBox(height: 24),
@@ -56,7 +51,7 @@ class SongPlayDetailWidget extends StatelessWidget {
                 IconButton(
                   onPressed: () {
                     // Heart Icon Pressed
-                    context.read<SongPlayCubit>().toggleFavAlbum(song);
+                    // context.read<SongPlayCubit>().toggleFavAlbum(song);
                   },
                   icon: (state is Success)
                       ? (state as Success).data

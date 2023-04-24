@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/routing/routes.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 /*
 Todo : Add Placeholder image for Network Image;
@@ -14,10 +13,9 @@ Todo : Add Placeholder image for Network Image;
     - a clickListener to Open the `PlaySongScreen`
  */
 class SongCard extends StatelessWidget {
-  final SongUiModel song;
   final int index;
 
-  const SongCard({Key? key, required this.song, required this.index})
+  const SongCard({Key? key, required this.index})
       : super(key: key);
 
   @override
@@ -36,7 +34,7 @@ class SongCard extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(song.songPosterUrl),
+                      image: NetworkImage("Song URl"),
                       fit: BoxFit.cover),
                 ),
               ),
@@ -59,16 +57,16 @@ class SongCard extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
-                        song.songName,
+                        "Song Name",
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 14),
+                            TextStyle(color: Colors.white, fontSize: 14),
                       ),
                       Text(
-                        song.songAuthor,
+                        "Song artist",
                         style:
-                            const TextStyle(color: Colors.grey, fontSize: 14),
+                            TextStyle(color: Colors.grey, fontSize: 14),
                       ),
                     ],
                   )),

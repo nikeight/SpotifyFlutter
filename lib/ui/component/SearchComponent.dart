@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:praxis_flutter/features/song_play/song_detail_widget.dart';
 import 'package:praxis_flutter/features/song_play/song_play_screen.dart';
-import 'package:praxis_flutter/models/SuggestionsUiModel.dart';
-import 'package:praxis_flutter/routing/routes.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
-import 'package:praxis_flutter_domain/entities/song/dm_song.dart';
 
 /*
    Search Component : Delegates the work for a Search Screen

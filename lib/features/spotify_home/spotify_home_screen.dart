@@ -2,15 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/design_system/design_system_example_view.dart';
 import 'package:praxis_flutter/features/all_song/all_song_cubit.dart';
-import 'package:praxis_flutter/features/all_song/all_song_screen.dart';
-import 'package:praxis_flutter/features/all_song/all_song_screen_widget.dart';
-import 'package:praxis_flutter/features/fav_screen/all_fav_song_screen_widget.dart';
 import 'package:praxis_flutter/features/fav_screen/fav_album_cubit.dart';
-import 'package:praxis_flutter/features/fav_screen/fav_song_screen.dart';
-import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/navigation/NavigationState.dart';
 import 'package:praxis_flutter/navigation/bottom_navigation_cubit.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 class SpotifyHostScreen extends StatelessWidget {
   const SpotifyHostScreen({Key? key}) : super(key: key);

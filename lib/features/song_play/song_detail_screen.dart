@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/song_play/song_detail_widget.dart';
 import 'package:praxis_flutter/features/song_play/song_play_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 class SongDetailScreen extends StatelessWidget {
-  final SongUiModel model;
 
-  const SongDetailScreen({Key? key, required this.model}) : super(key: key);
+  const SongDetailScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +43,6 @@ class SongDetailScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             },
-            child: SongPlayDetailWidget(song: model)));
+            child: SongPlayDetailWidget()));
   }
 }
