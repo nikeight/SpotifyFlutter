@@ -125,3 +125,6 @@ app.*.map.json
 !.vscode/launch.json
 !.idea/codeStyles/
 !.idea/dictionaries/
+
+# API Keys
+api_key.dart
