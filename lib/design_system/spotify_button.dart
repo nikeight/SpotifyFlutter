@@ -11,14 +11,15 @@ class SpotifyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 8,vertical: 8),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
       ),
-      child: SpotifyText.headline(title),
+      child: SpotifyText.headingThree(title),
     );
   }
 }

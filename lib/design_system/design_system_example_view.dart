@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:praxis_flutter/design_system/spotify_button.dart';
+import 'package:praxis_flutter/design_system/spotify_chip_button.dart';
+import 'package:praxis_flutter/design_system/spotify_horizontal_img_card.dart';
 import 'package:praxis_flutter/design_system/spotify_text.dart';
 import 'package:praxis_flutter/design_system/spotify_text_input.dart';
+import 'package:praxis_flutter/design_system/spotify_vertical_img_card.dart';
 
 class ExampleView extends StatelessWidget {
   const ExampleView({Key? key}) : super(key: key);
@@ -12,19 +15,27 @@ class ExampleView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
         children: [
-          SpotifyText.headingOne('Design System'),
-          verticalSpaceSmall,
-          const Divider(),
-          verticalSpaceSmall,
-          ...buttonWidgets,
-          ...textWidgets,
-          ...inputFields,
+        SpotifyHorizontalImageCard(
+        label: "Old is Gold",
+        isPlaying: true,
+        albumId: "1231",
+        onTap: () {},
+      ),
+      SpotifyVerticalImageCard(
+        label: "Daily Mix 1",
+        isPlaying: false,
+        albumId: "9123",
+        onTap: () {},
+        artistName: "Pritam",
+      ),
+      SpotifyChipButton(label: "Music", isSelected: false, onChipClicked: () {})
         ],
       ),
     );
   }
 
-  List<Widget> get textWidgets => [
+  List<Widget> get textWidgets =>
+      [
         SpotifyText.headline('Text Styles'),
         verticalSpaceMedium,
         SpotifyText.headingOne('Heading One'),
@@ -45,18 +56,20 @@ class ExampleView extends StatelessWidget {
         verticalSpaceMedium,
       ];
 
-  List<Widget> get buttonWidgets => [
+  List<Widget> get buttonWidgets =>
+      [
         SpotifyText.headline('Buttons Testing'),
         verticalSpaceMedium,
         SpotifyText.bodyText('Body Text'),
         verticalSpaceSmall,
         const SpotifyButton(
-          title: 'Sign In',
+          title: 'Button',
         ),
         verticalSpaceSmall
       ];
 
-  List<Widget> get inputFields => [
+  List<Widget> get inputFields =>
+      [
         SpotifyText.headline('Input Field Test'),
         verticalSpaceSmall,
         SpotifyText.captionText('Caption Text'),
