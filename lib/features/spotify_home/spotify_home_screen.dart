@@ -51,12 +51,6 @@ class SpotifyHostScreen extends StatelessWidget {
                   ),
                   label: 'Library',
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.money,
-                  ),
-                  label: 'Premium',
-                ),
               ],
               onTap: (index) {
                 switch (index) {
@@ -71,10 +65,6 @@ class SpotifyHostScreen extends StatelessWidget {
                   case 2:
                     BlocProvider.of<BottomNavigationCubit>(context)
                         .getNavBarItem(NavigationBottomBarItems.LIBRARY);
-                    break;
-                  case 3:
-                    BlocProvider.of<BottomNavigationCubit>(context)
-                        .getNavBarItem(NavigationBottomBarItems.PREMIUM);
                     break;
                 }
               },
@@ -95,9 +85,6 @@ class SpotifyHostScreen extends StatelessWidget {
                   break;
                 case NavigationBottomBarItems.LIBRARY:
                   return const Text("Library Screen");
-                  break;
-                case NavigationBottomBarItems.PREMIUM:
-                  return const Text("Premium Screen");
                   break;
               }
             },

@@ -14,5 +14,4 @@ enum NavigationBottomBarItems {
   PROFILE,
   SEARCH,
   LIBRARY,
-  PREMIUM
 }

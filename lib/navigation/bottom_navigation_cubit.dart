@@ -16,9 +16,6 @@ class BottomNavigationCubit extends Cubit<NavigationState> {
       case NavigationBottomBarItems.LIBRARY:
         emit(const NavigationState(NavigationBottomBarItems.LIBRARY, 2));
         break;
-      case NavigationBottomBarItems.PREMIUM:
-        emit(const NavigationState(NavigationBottomBarItems.PREMIUM, 3));
-        break;
     }
   }
 }
