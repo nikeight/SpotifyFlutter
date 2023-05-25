@@ -29,7 +29,7 @@ void main() {
     when(() => mockHttpAdapter.fetch(any(), any(), any()))
         .thenAnswer((invocation) async => httpResponse);
 
-    final response = await sut.getRequest("/any_given_valid_url", null, null);
+    final response = await sut.getRequest("/any_given_valid_url", null, null,"");
     // Todo : Retry without `jsonEncode`
     /**
      * Test Fails when we remove jsonEncode
@@ -59,7 +59,7 @@ void main() {
         .thenThrow(Exception("No internet connection"));
 
     final response =
-        await sut.getRequest("/any_valid_base_url",null,null);
+        await sut.getRequest("/any_valid_base_url",null,null,"");
     const expectedOutPut = "Exception: No internet connection";
     expect(response, expectedOutPut);
   });

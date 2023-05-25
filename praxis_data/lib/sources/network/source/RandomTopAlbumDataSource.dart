@@ -16,11 +16,11 @@ class RandomTopAlbumDataSource {
   Future<ApiResponse<DtSongList>?> getTopRandomAlbums() async {
     try {
       final apiResponse = await customDioApiClient.getRequest(
-          URL.iTunesTopAlbumsUrl, null, null);
+          URL.iTunesTopAlbumsUrl, null, null,"");
       if (apiResponse != null) {
         var dtSongList = DtSongList([]);
         MusicResponse albumResponse =
-            MusicResponse.fromJson(json.decode(apiResponse));
+            MusicResponse.fromJson(json.decode(apiResponse as String));
         albumResponse.feed?.entry?.forEach((element) {
           var dtSongObject = DtSong(
               int.parse(element.id?.attributes?.imid ?? "0"),
