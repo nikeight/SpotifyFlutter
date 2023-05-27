@@ -47,7 +47,7 @@ class SpotifyHomeRepositoryImpl extends SpotifyRepository {
     final multipleAlbumResponse = await datasource.getMultipleAlbums();
 
     // Creating an empty list
-    final List<AlbumDm> albumList = List.empty();
+    final List<AlbumDm> albumList = [];
 
     if (multipleAlbumResponse is Success) {
       final spotifyAlbumDataModel = (multipleAlbumResponse as Success).data

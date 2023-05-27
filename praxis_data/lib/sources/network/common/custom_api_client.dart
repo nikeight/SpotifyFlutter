@@ -10,8 +10,7 @@ class CustomApiClient {
   // Used for Testing
   CustomApiClient.test(this.dioHttpClient);
 
-  CustomApiClient(this.dioHttpClient)
-  {
+  CustomApiClient(this.dioHttpClient) {
     dioHttpClient
       ..options.connectTimeout = ApiClientConstants.apiTimeOut
       ..options.receiveTimeout = ApiClientConstants.apiReceiveTimeOut
@@ -32,8 +31,9 @@ class CustomApiClient {
   ) async {
     try {
       dioHttpClient.options.headers['Authorization'] = 'Bearer $accessToken';
-      final response = await dioHttpClient.get(url);
-      return response.data;
+      final response =
+          await dioHttpClient.get(url, queryParameters: queryParameters);
+      return response;
     } on DioError catch (someException) {
       print(
           '[API Helper - GET] Connection Exception => ${someException.message}');
@@ -43,7 +43,8 @@ class CustomApiClient {
 
   Future<Response<dynamic>?> postRequest(String url, dynamic body) async {
     try {
-      dioHttpClient.options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      dioHttpClient.options.headers['Content-Type'] =
+          'application/x-www-form-urlencoded';
       final postResponse = await dioHttpClient.post(url, data: body);
       print("Status Code -> ${postResponse.statusCode}");
       return postResponse;

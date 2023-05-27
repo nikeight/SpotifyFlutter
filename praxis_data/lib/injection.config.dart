@@ -57,8 +57,10 @@ extension GetItInjectableX on _i1.GetIt {
     gh.factory<_i9.CustomApiClient>(() => _i9.CustomApiClient(get<_i5.Dio>()));
     gh.factory<_i10.RandomTopAlbumDataSource>(
         () => _i10.RandomTopAlbumDataSource(get<_i9.CustomApiClient>()));
-    gh.factory<_i11.SpotifyDatasource>(
-        () => _i12.SpotifyDataSourceImpl(get<_i9.CustomApiClient>()));
+    gh.factory<_i11.SpotifyDatasource>(() => _i12.SpotifyDataSourceImpl(
+          get<_i9.CustomApiClient>(),
+          get<_i8.SharedPreferences>(),
+        ));
     gh.factory<_i13.SpotifyRepository>(() => _i14.SpotifyHomeRepositoryImpl(
           get<_i11.SpotifyDatasource>(),
           get<_i4.AlbumModelMapper>(),

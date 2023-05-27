@@ -8,14 +8,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../sources/network/common/custom_api_client.dart';
 import 'network_response_handler.dart';
 
-Future<ApiResponse<dynamic>?> safeApiCallHandler(
+Future<ApiResponse<dynamic>> safeApiCallHandler(
   CustomApiClient httpClient,
   HttpRequestType requestType,
   String url,
   SharedPreferences sharedPreference,
   dynamic requestBody,
 ) async {
-
   // Checks if the Access Token is Valid or not.
   // IF Not valid, we make another API call to update the Refresh Token.
   if (!AccessTokenHelper().isTokenValid(sharedPreference)) {
@@ -26,10 +25,11 @@ Future<ApiResponse<dynamic>?> safeApiCallHandler(
   switch (requestType) {
     case HttpRequestType.GET:
       final accessToken = sharedPreference.getString(SPOTIFY_ACCESS_TOKEN_KEY);
-      final response = await httpClient.getRequest(url, null, null,accessToken);
-      return await networkResponseHandler(response);
+      final response =
+          await httpClient.getRequest(url, null, null, accessToken);
+      return networkResponseHandler(response);
     case HttpRequestType.POST:
       final response = await httpClient.postRequest(url, requestBody);
-      return await networkResponseHandler(response);
+      return networkResponseHandler(response);
   }
 }

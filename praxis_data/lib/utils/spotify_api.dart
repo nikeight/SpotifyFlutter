@@ -3,7 +3,7 @@
 const SPOTIFY_ACCESS_TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 
 // Get single Album track data
-String get_single_album_endpoint(String albumId) => "https://api.spotify.com/v1/albums/$albumId";
+String get_single_album_endpoint(String albumId) => "https://api.spotify.com/v1/albums?ids=$albumId";
 
 // Get single Album track data
 String get_album_tracks_endpoint(String albumId) => "https://api.spotify.com/v1/albums/$albumId/tracks";
