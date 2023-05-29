@@ -7,15 +7,26 @@ import 'package:praxis_flutter/design_system/spotify_text_input.dart';
 import 'package:praxis_flutter/design_system/spotify_vertical_img_card.dart';
 
 class ExampleView extends StatelessWidget {
-  const ExampleView({Key? key}) : super(key: key);
+  ExampleView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
-        children: [
-        SpotifyHorizontalImageCard(
+      body: SpotifyVerticalImageCard(
+        label: "Daily Mix 1",
+        isPlaying: false,
+        albumId: "9123",
+        onTap: () {},
+        artistName: "Pritam",
+      ),
+    );
+  }
+
+  final listWidget = ListView(
+    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+    children: [
+      SpotifyHorizontalImageCard(
+        imageUrl: "",
         label: "Old is Gold",
         isPlaying: true,
         albumId: "1231",
@@ -29,13 +40,10 @@ class ExampleView extends StatelessWidget {
         artistName: "Pritam",
       ),
       SpotifyChipButton(label: "Music", isSelected: false, onChipClicked: () {})
-        ],
-      ),
-    );
-  }
+    ],
+  );
 
-  List<Widget> get textWidgets =>
-      [
+  List<Widget> get textWidgets => [
         SpotifyText.headline('Text Styles'),
         verticalSpaceMedium,
         SpotifyText.headingOne('Heading One'),
@@ -56,8 +64,7 @@ class ExampleView extends StatelessWidget {
         verticalSpaceMedium,
       ];
 
-  List<Widget> get buttonWidgets =>
-      [
+  List<Widget> get buttonWidgets => [
         SpotifyText.headline('Buttons Testing'),
         verticalSpaceMedium,
         SpotifyText.bodyText('Body Text'),
@@ -68,8 +75,7 @@ class ExampleView extends StatelessWidget {
         verticalSpaceSmall
       ];
 
-  List<Widget> get inputFields =>
-      [
+  List<Widget> get inputFields => [
         SpotifyText.headline('Input Field Test'),
         verticalSpaceSmall,
         SpotifyText.captionText('Caption Text'),

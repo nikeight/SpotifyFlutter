@@ -30,7 +30,7 @@ class SongDetailScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  duration: const Duration(seconds: 5),
+                  duration: const Duration(seconds: 2),
                   backgroundColor: const Color(0xff344D67),
                   elevation: 2,
                   margin: const EdgeInsets.only(
@@ -43,6 +43,6 @@ class SongDetailScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             },
-            child: SongPlayDetailWidget()));
+            child: const SongPlayDetailWidget()));
   }
 }

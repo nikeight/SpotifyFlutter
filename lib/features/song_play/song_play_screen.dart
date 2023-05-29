@@ -55,14 +55,11 @@ class SongPlayScreen extends StatelessWidget {
                                   .length,
                               controller: pageController,
                               scrollDirection: Axis.horizontal,
-                              onPageChanged: (index) {},
+                              onPageChanged: (index) {
+
+                              },
                               itemBuilder: (BuildContext context, int index) {
-                                return const SongDetailScreen(
-                                    // model: (state as Success)
-                                    //     .data
-                                    //     .uiSongsList
-                                    //     .songsList[index]
-                                );
+                                return const SongDetailScreen();
                               },
                             ),
                           ),

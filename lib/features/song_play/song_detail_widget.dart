@@ -9,7 +9,6 @@ class SongPlayDetailWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SongPlayCubit, UiState<bool>>(builder: (context, state) {
-      print("State Changed to $state");
       return Container(
         color: const Color(0xffE0DECA),
         padding: const EdgeInsets.only(left: 16, right: 16),
