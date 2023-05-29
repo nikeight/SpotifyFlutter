@@ -8,7 +8,7 @@ import 'package:praxis_flutter/di/injection.config.dart';
   preferRelativeImports: true, // default
   asExtension: true, // default
 )
-void configureAppInjection(String env) {
-  configureDataInjection(env);
+Future<void> configureAppInjection(String env) async {
+  await configureDataInjection(env);
   GetIt.instance.$initGetIt(environment: env);
 }

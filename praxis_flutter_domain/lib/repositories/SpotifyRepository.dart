@@ -1,15 +1,17 @@
+import 'dart:async';
+import 'package:praxis_flutter_domain/entities/AlbumDm.dart';
+import 'package:praxis_flutter_domain/entities/ArtistDm.dart';
+import 'package:praxis_flutter_domain/entities/TrackDm.dart';
+import 'package:praxis_flutter_domain/utils/api_response.dart';
+
 abstract class SpotifyRepository {
-  Future<String> getActiveAccessToken();
+  Future<ApiResponse<String>> getActiveAccessToken();
 
-  Future<String> getCachedAlbumList(List<String> albumIds);
+  Future<ApiResponse<List<AlbumDm>>> getCachedAlbumList(List<String> albumIds);
 
-  Future<String> getAlbumTracksList(int albumId);
+  Future<ApiResponse<List<TrackDm>>> getAlbumTracksList(int albumId);
 
-  Future<String> getTrackDetails(int trackId);
+  Future<ApiResponse<TrackDm>> getTrackDetails(int trackId);
 
-  Future<String> getPlayLists();
-
-  Future<String> getGenres();
-
-  Future<String> searchQuery(String query);
+  Future<ApiResponse<AlbumDm>> getPlayLists();
 }

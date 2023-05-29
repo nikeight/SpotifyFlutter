@@ -26,7 +26,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, String env) async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  configureAppInjection(env);
+  await configureAppInjection(env);
 
   await runZonedGuarded(
         () async {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:praxis_flutter/design_system/design_system_example_view.dart';
 import 'package:praxis_flutter/features/all_song/all_song_cubit.dart';
 import 'package:praxis_flutter/features/fav_screen/fav_album_cubit.dart';
+import 'package:praxis_flutter/features/profile/spotify_profile_cubit.dart';
+import 'package:praxis_flutter/features/profile/spotify_profile_view.dart';
 import 'package:praxis_flutter/navigation/NavigationState.dart';
 import 'package:praxis_flutter/navigation/bottom_navigation_cubit.dart';
 
@@ -16,11 +17,8 @@ class SpotifyHostScreen extends StatelessWidget {
         BlocProvider<BottomNavigationCubit>(
           create: (BuildContext context) => BottomNavigationCubit(),
         ),
-        BlocProvider<AllSongCubit>(
-          create: (BuildContext context) => AllSongCubit(),
-        ),
-        BlocProvider<FavAlbumsCubit>(
-          create: (BuildContext context) => FavAlbumsCubit(),
+        BlocProvider<SpotifyProfileCubit>(
+          create: (BuildContext context) => SpotifyProfileCubit(),
         ),
       ],
       child: Scaffold(
@@ -73,12 +71,11 @@ class SpotifyHostScreen extends StatelessWidget {
         ),
         body: Align(
           alignment: Alignment.center,
-          child:
-          BlocBuilder<BottomNavigationCubit, NavigationState>(
+          child: BlocBuilder<BottomNavigationCubit, NavigationState>(
             builder: (context, state) {
               switch (state.navbarItem) {
                 case NavigationBottomBarItems.PROFILE:
-                  return const ExampleView();
+                  return const SpotifyProfileScreen();
                   break;
                 case NavigationBottomBarItems.SEARCH:
                   return const Text("Search Screen");
