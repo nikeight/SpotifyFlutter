@@ -8,11 +8,11 @@ class SpotifyProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SpotifyProfileCubit, UiState<String>>(
+    return BlocBuilder<SpotifyProfileCubit, UiState<SpotifyProfileCubitStates>>(
       builder: (context, state) {
         print("STATE : $state");
         return state is Success
-            ? Text((state as Success).data)
+            ? Text((state as Success).data.recentlyPlayedUiList[0].albumId)
             : state is Failure
                 ? const Text("Failure State")
                 : state is Initial
