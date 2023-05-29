@@ -41,8 +41,10 @@ class AccessTokenHelper {
         // Saving the time Token received and added 3500 millisecond buffer
         // as per the Spotify Docs.
 
+        final expireTimePeriod = DateTime.now().add(const Duration(minutes: 55)).microsecondsSinceEpoch;
         await sharedPreferences.setInt(LAST_SAVED_TIME_IN_MS_KEY,
-            DateTime.now().microsecondsSinceEpoch + 3500);
+            expireTimePeriod
+        );
 
         // Saving the new access token
         await sharedPreferences.setString(

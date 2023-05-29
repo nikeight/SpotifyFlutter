@@ -23,21 +23,22 @@ class AlbumModelMapper extends EntityMapper<AlbumDm, AlbumsDataModel> {
       artistHref: entity.artists?.first.href ?? "empty_href_link",
     );
 
-    const List<ItemDm>? itemTrackList = null;
+    final List<ItemDm> itemTrackList = [];
 
     entity.tracks?.items?.forEach((element) {
       final ItemDm itemDm = ItemDm(
-          artist: element.artists?.first?.name ?? "artistt_name_empty",
+          artist: element.artists?.first.name ?? "artist_name_empty",
           durationInMs: element.durationMs ?? 0,
           hrefMp3: element.previewUrl ?? "empty_mp3_url",
           thumbnailUrl: entity.images?.first.url ?? "empty_image_url",
           shareUri: element.href ?? "empty_href_endpoint"
       );
 
-      itemTrackList?.add(itemDm);
+      itemTrackList.add(itemDm);
     });
 
-    final tracks = TrackDm(itemList: itemTrackList ?? List.empty(),
+    final tracks = TrackDm(
+        itemList: itemTrackList,
         total: entity.tracks?.total ?? 0,
         href: entity.tracks?.href ?? "empty_href_endpoint");
 
