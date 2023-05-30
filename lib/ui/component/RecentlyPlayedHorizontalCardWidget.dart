@@ -14,6 +14,8 @@ class RecentlyPlayedHorizontalCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       child: GridView.count(
+        childAspectRatio: 4.0,
+        shrinkWrap: true,
         crossAxisCount: 2,
         children: List.generate(
           recentlyPlayedAlbums.length,
