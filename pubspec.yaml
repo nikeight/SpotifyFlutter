@@ -38,6 +38,8 @@ dependencies:
   uuid: ^3.0.6
   intl: ^0.17.0
   google_fonts: ^4.0.3
+  just_audio: ^0.9.33
+  audio_service: ^0.18.9
 
   clean_architecture:
     path: ./clean_architecture
