@@ -2,19 +2,20 @@ import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/features/song_list/SongListScreen.dart';
 import 'package:praxis_flutter/features/song_play/song_carousel_host.dart';
 import 'package:praxis_flutter/features/spotify_home/spotify_home_screen.dart';
+import 'package:praxis_flutter/models/TrackUiModel.dart';
 
 const rootRoute = '/';
 
 // Shopify
-const songPlayRoute = "/songPlay/:index";
-const songPlayRouteName = "songPlay";
+const songCarouselHostPathRoute = "/songCarouselHost";
+const songCarouselHostPathRouteName = "songCarouselHostPathName";
 
 // Track ID can be anything : Album Id, Playlist Id, TYPE is String
 const trackListScreenRoute = "/$trackListScreenRouteName/:trackId";
 const trackListScreenRouteName = "trackListScreen";
 
 final praxisRoutes = GoRouter(
-  routes: [splashRoute(), songPlayedRoute(),trackListRoute()],
+  routes: [splashRoute(), songsCarouselHostRoute(), trackListRoute()],
 );
 
 GoRoute splashRoute() {
@@ -29,17 +30,17 @@ GoRoute trackListRoute() {
   return GoRoute(
       path: trackListScreenRoute,
       name: trackListScreenRouteName,
-      builder: (context, state) => SongListScreen(
-          trackId : state.params['trackId'] ?? ""
-      ));
+      builder: (context, state) =>
+          SongListScreen(trackId: state.params['trackId'] ?? ""));
 }
 
-GoRoute songPlayedRoute() {
+GoRoute songsCarouselHostRoute() {
   return GoRoute(
-    path: songPlayRoute,
-    name: songPlayRouteName,
-    builder: (context, state) => SongCarouselHost(
-      passedIndex: state.params['index'],
-    ),
+    path: songCarouselHostPathRoute,
+    name: songCarouselHostPathRouteName,
+    builder: (context, state) {
+      TrackUiModel trackUiModel = state.extra as TrackUiModel;
+      return SongCarouselHost(trackUiModel: trackUiModel);
+    },
   );
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/features/song_list/track_list_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
+import 'package:praxis_flutter/routing/routes.dart';
 import 'package:praxis_flutter/ui/component/SongListItemView.dart';
 
 class SongListScreen extends StatelessWidget {
@@ -18,8 +20,6 @@ class SongListScreen extends StatelessWidget {
         // Todo : Find the best way to call Cubit or else Use Bloc with Events.
         TrackListCubit().loadTrackList(trackId ?? "");
 
-        print(" TrackList  ${state is Success ?(state as Success).data.tracks.itemList : "Nothing"} ");
-
         return state is Success
             ? ListView.builder(
                 itemCount: (state as Success).data.tracks.itemList.length,
@@ -32,7 +32,9 @@ class SongListScreen extends StatelessWidget {
                     artistName: currentItem.artist.toString(),
                     isPlaying: false,
                     onTap: () {
-                      // Navigate to the SongPlay Screen
+                      // Navigate to the Song Carousel Host Screen
+                      context.goNamed(songCarouselHostPathRouteName,
+                          extra: (state as Success).data.tracks);
                     },
                   );
                 })

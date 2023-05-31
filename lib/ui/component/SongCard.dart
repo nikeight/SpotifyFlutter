@@ -23,7 +23,7 @@ class SongCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context
-            .pushNamed(songPlayRouteName, params: {'index': index.toString()});
+            .pushNamed(songCarouselHostPathRouteName, params: {'index': index.toString()});
       },
       child: Align(
         alignment: Alignment.bottomLeft,
