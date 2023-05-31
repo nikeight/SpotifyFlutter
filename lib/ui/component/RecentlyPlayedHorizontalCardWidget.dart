@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/design_system/spotify_horizontal_img_card.dart';
+import 'package:praxis_flutter/routing/routes.dart';
 
 import '../../models/AlbumUiModel.dart';
 
@@ -26,7 +28,11 @@ class RecentlyPlayedHorizontalCardWidget extends StatelessWidget {
                 label: currentItem.label,
                 isPlaying: false,
                 albumId: currentItem.albumId,
-                onTap: () {});
+                onTap: () {
+                  // Navigate to the SongList Screen and pass the Album Id ->
+                  context
+                      .pushNamed(trackListScreenRouteName, params: {'trackId': currentItem.albumId.toString()});
+                });
           },
         ),
       ),

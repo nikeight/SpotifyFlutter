@@ -5,10 +5,10 @@ import 'package:praxis_flutter/features/song_play/song_detail_screen.dart';
 import 'package:praxis_flutter/presentation/core/widgets/platform_progress_bar.dart';
 import '../../models/ui_state.dart';
 
-class SongPlayScreen extends StatelessWidget {
+class SongCarouselHost extends StatelessWidget {
   final String? passedIndex;
 
-  const SongPlayScreen({Key? key, this.passedIndex}) : super(key: key);
+  const SongCarouselHost({Key? key, this.passedIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

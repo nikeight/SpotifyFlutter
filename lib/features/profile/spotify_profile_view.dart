@@ -65,18 +65,6 @@ class SpotifyProfileScreen extends StatelessWidget {
                             albumList:
                                 (state as Success).data.recentlyPlayedUiList),
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        "Hand Picked Albums",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      const SizedBox(height: 8),
-                      Expanded(
-                        child: HorizontalAlbumList(
-                            albumName: "Hand Picked",
-                            albumList:
-                                (state as Success).data.recentlyPlayedUiList),
-                      ),
                     ],
                   ),
                 ),
