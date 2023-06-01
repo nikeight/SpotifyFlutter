@@ -71,7 +71,7 @@ class MyAudioHandler extends BaseAudioHandler {
         bufferedPosition: _player.bufferedPosition,
         speed: _player.speed,
         queueIndex: event.currentIndex,
-      ));
+      ) ?? PlaybackState());
     });
   }
 }

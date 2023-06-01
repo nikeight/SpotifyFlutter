@@ -32,8 +32,6 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder, String env) async {
 
   await setupServiceLocator();
 
-  await initAudioService();
-
   await configureAppInjection(env);
 
   await runZonedGuarded(
