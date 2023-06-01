@@ -2,7 +2,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:praxis_flutter/models/AlbumUiModel.dart';
-import 'package:praxis_flutter/models/ItemUiModel.dart';
 import 'package:praxis_flutter_domain/entities/AlbumDm.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
 
@@ -11,8 +10,7 @@ import '../../mapper/AlbumUIMapper.dart';
 part 'audio_player_manager_state.dart';
 
 class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
-
-  AudioPlayerManagerCubit() : super(AudioPlayerManagerState()){
+  AudioPlayerManagerCubit() : super(AudioPlayerManagerState()) {
     init();
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
@@ -24,7 +22,7 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
 
   final List<AlbumUiModel> recentlyPlayedList = [];
 
-  void init(){
+  void init() {
     getMultipleAlbumsUseCase.perform(
         handleMultipleAlbumResponse, error, complete, "empty_param_string");
   }
@@ -52,29 +50,41 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
       final processingState = playbackState.processingState;
       if (processingState == AudioProcessingState.loading ||
           processingState == AudioProcessingState.buffering) {
-        playButtonNotifier.value = ButtonState.loading;
+        AudioPlayerManagerState().playButtonState?.isLoading = true;
+        emit((AudioPlayerManagerState().playButtonState?.isLoading ?? false)
+            as AudioPlayerManagerState);
       } else if (!isPlaying) {
-        playButtonNotifier.value = ButtonState.paused;
+        AudioPlayerManagerState().playButtonState?.isPaused = true;
+        emit((AudioPlayerManagerState().playButtonState?.isPaused ?? false)
+            as AudioPlayerManagerState);
       } else if (processingState != AudioProcessingState.completed) {
-        playButtonNotifier.value = ButtonState.playing;
+        AudioPlayerManagerState().playButtonState?.isPlaying = true;
+        emit((AudioPlayerManagerState().playButtonState?.isPlaying ?? false)
+            as AudioPlayerManagerState);
       } else {
-        _audioHandler.seek(Duration.zero);
-        _audioHandler.pause();
+        // _audioHandler.seek(Duration.zero);
+        AudioPlayerManagerState().playButtonState?.isPaused = true;
+        emit((AudioPlayerManagerState().playButtonState?.isPaused ?? false)
+            as AudioPlayerManagerState);
+        ;
       }
     });
   }
 
   void handleMultipleAlbumResponse(List<AlbumDm>? response) {
-
     if (response != null && response.isNotEmpty) {
       response.forEach((element) {
         recentlyPlayedList.add(getAlbumUiMapper.mapToUiModel(element));
       });
 
       final getTrackItems = recentlyPlayedList[0].tracks.itemList;
-      final mediaItemList = getTrackItems.map((e) => MediaItem(id: "some_random_id", title: "some_random_title",duration: Duration(milliseconds: e.durationInMs))).toList();
+      final mediaItemList = getTrackItems
+          .map((e) => MediaItem(
+              id: "some_random_id",
+              title: "some_random_title",
+              duration: Duration(milliseconds: e.durationInMs)))
+          .toList();
       audioHandler.addQueueItems(mediaItemList);
-
     } else {
       print("Response is empty");
     }
@@ -82,6 +92,5 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
 
   void complete() {}
 
-  error(e) {
-  }
+  error(e) {}
 }

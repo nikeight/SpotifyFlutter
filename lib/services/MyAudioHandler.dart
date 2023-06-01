@@ -26,8 +26,8 @@ class MyAudioHandler extends BaseAudioHandler {
     _playlist.addAll(audioSource.toList());
 
     // notify system
-    final newQueue = queue.value..addAll(mediaItems);
-    queue.add(newQueue);
+    final newQueue = queue.valueWrapper?.value?..addAll(mediaItems);
+    queue.add(newQueue ?? List.empty());
   }
 
   UriAudioSource _createAudioSource(MediaItem mediaItem) {
@@ -39,7 +39,7 @@ class MyAudioHandler extends BaseAudioHandler {
 
   /// Add support for the Play and Pause Features
 
- @override
+  @override
   Future<void> play() => _player.play();
 
   @override
@@ -48,7 +48,7 @@ class MyAudioHandler extends BaseAudioHandler {
   void _notifyAudioHandlerAboutPlaybackEvents() {
     _player.playbackEventStream.listen((PlaybackEvent event) {
       final playing = _player.playing;
-      playbackState.add(playbackState.value.copyWith(
+      playbackState.add(playbackState.valueWrapper?.value.copyWith(
         controls: [
           MediaControl.skipToPrevious,
           if (playing) MediaControl.pause else MediaControl.play,
@@ -74,5 +74,4 @@ class MyAudioHandler extends BaseAudioHandler {
       ));
     });
   }
-
 }
