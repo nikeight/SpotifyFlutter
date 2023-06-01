@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:praxis_flutter_domain/use_cases/GetNewRefreshTokenUseCase.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/GetTrackListUseCase.dart';
 
 @module
 abstract class UseCaseModule {
@@ -10,4 +11,7 @@ abstract class UseCaseModule {
 
   GetMultipleAlbumUseCase get getMultipleAlbumUseCase =>
       GetMultipleAlbumUseCase(GetIt.I.get());
+
+  GetTrackListUseCase get getTrackListUseCase =>
+      GetTrackListUseCase(GetIt.I.get());
 }

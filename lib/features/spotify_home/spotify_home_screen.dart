@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/design_system/design_system_example_view.dart';
+import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/profile/spotify_profile_cubit.dart';
 import 'package:praxis_flutter/features/profile/spotify_profile_view.dart';
 import 'package:praxis_flutter/navigation/NavigationState.dart';
@@ -25,6 +26,8 @@ class SpotifyHostScreen extends StatelessWidget {
             BlocBuilder<BottomNavigationCubit, NavigationState>(
           builder: (context, state) {
             return BottomNavigationBar(
+              backgroundColor: spotifyBlack,
+              fixedColor: Colors.white,
               type: BottomNavigationBarType.fixed,
               currentIndex: state.index,
               showUnselectedLabels: false,
@@ -33,18 +36,21 @@ class SpotifyHostScreen extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.home,
+                    color: Colors.white,
                   ),
                   label: 'Home',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.search,
+                    color: Colors.white,
                   ),
                   label: 'Search',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.local_library,
+                    color: Colors.white,
                   ),
                   label: 'Library',
                 ),

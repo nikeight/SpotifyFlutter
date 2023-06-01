@@ -13,6 +13,7 @@ class ExampleView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SpotifyVerticalImageCard(
+        imageUrl: "",
         label: "Daily Mix 1",
         isPlaying: false,
         albumId: "9123",
@@ -33,6 +34,7 @@ class ExampleView extends StatelessWidget {
         onTap: () {},
       ),
       SpotifyVerticalImageCard(
+        imageUrl: "",
         label: "Daily Mix 1",
         isPlaying: false,
         albumId: "9123",

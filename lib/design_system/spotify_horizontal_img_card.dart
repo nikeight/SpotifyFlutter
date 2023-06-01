@@ -18,6 +18,8 @@ class SpotifyHorizontalImageCard extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
+  // Todo : Use Media Query
+
   @override
   Widget build(BuildContext context) {
     return Card(

@@ -12,15 +12,16 @@ class HorizontalAlbumList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text("Album Name"),
-        const SizedBox(height: 8),
-        ListView(
-          scrollDirection: Axis.horizontal,
-          children: List.generate(albumList.length, (index) {
-            var currentItem = albumList[index];
-            return SpotifyVerticalImageCard(
+    return SizedBox(
+      height: 60,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        children: List.generate(albumList.length, (index) {
+          var currentItem = albumList[index];
+          return Expanded(
+            child: SpotifyVerticalImageCard(
+              imageUrl: currentItem.thumbnailImageUrl,
               label: currentItem.label,
               isPlaying: false,
               albumId: currentItem.albumId,
@@ -28,10 +29,10 @@ class HorizontalAlbumList extends StatelessWidget {
                 // On Pressed
               },
               artistName: currentItem.artist.artistName,
-            );
-          }),
-        ),
-      ],
+            ),
+          );
+        }),
+      ),
     );
   }
 }
