@@ -48,7 +48,8 @@ class MyAudioHandler extends BaseAudioHandler {
   void _notifyAudioHandlerAboutPlaybackEvents() {
     _player.playbackEventStream.listen((PlaybackEvent event) {
       final playing = _player.playing;
-      playbackState.add(playbackState.valueWrapper?.value.copyWith(
+      playbackState.add(
+          playbackState.valueWrapper?.value.copyWith(
         controls: [
           MediaControl.skipToPrevious,
           if (playing) MediaControl.pause else MediaControl.play,
@@ -66,6 +67,14 @@ class MyAudioHandler extends BaseAudioHandler {
           ProcessingState.ready: AudioProcessingState.ready,
           ProcessingState.completed: AudioProcessingState.completed,
         }[_player.processingState]!,
+        repeatMode: const {
+          LoopMode.off: AudioServiceRepeatMode.none,
+          LoopMode.one: AudioServiceRepeatMode.one,
+          LoopMode.all: AudioServiceRepeatMode.all,
+        }[_player.loopMode]!,
+        shuffleMode: (_player.shuffleModeEnabled)
+            ? AudioServiceShuffleMode.all
+            : AudioServiceShuffleMode.none,
         playing: playing,
         updatePosition: _player.position,
         bufferedPosition: _player.bufferedPosition,

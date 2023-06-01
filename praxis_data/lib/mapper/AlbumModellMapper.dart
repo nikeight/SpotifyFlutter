@@ -27,6 +27,7 @@ class AlbumModelMapper extends EntityMapper<AlbumDm, AlbumsDataModel> {
 
     entity.tracks?.items?.forEach((element) {
       final ItemDm itemDm = ItemDm(
+          itemId: entity.id ?? "",
           artist: element.artists?.first.name ?? "artist_name_empty",
           durationInMs: element.durationMs ?? 0,
           hrefMp3: element.previewUrl ?? "empty_mp3_url",

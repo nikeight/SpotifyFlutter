@@ -1,4 +1,5 @@
 class ItemDm {
+  final String itemId;
   final String artist;
   final int durationInMs;
   final String hrefMp3;
@@ -6,6 +7,7 @@ class ItemDm {
   final String shareUri;
 
   ItemDm({
+    required this.itemId,
     required this.artist,
     required this.durationInMs,
     required this.hrefMp3,

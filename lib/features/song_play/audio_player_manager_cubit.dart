@@ -1,8 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:bloc/bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:praxis_flutter/models/AlbumUiModel.dart';
-import 'package:praxis_flutter_domain/entities/AlbumDm.dart';
+import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
 
 import '../../mapper/AlbumUIMapper.dart';
@@ -11,7 +10,6 @@ part 'audio_player_manager_state.dart';
 
 class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
   AudioPlayerManagerCubit() : super(AudioPlayerManagerState()) {
-    init();
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
   }
@@ -20,11 +18,22 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
   final getMultipleAlbumsUseCase = GetIt.I.get<GetMultipleAlbumUseCase>();
   final getAlbumUiMapper = GetIt.I.get<AlbumUiMapper>();
 
-  final List<AlbumUiModel> recentlyPlayedList = [];
-
-  void init() {
-    getMultipleAlbumsUseCase.perform(
-        handleMultipleAlbumResponse, error, complete, "empty_param_string");
+  void init(TrackUiModel trackUiModel) {
+    final getTrackItems = trackUiModel.itemList;
+    final mediaItemList = getTrackItems
+        .map(
+          (e) => MediaItem(
+              id: e.itemId,
+              title: e.artist,
+              duration: const Duration(milliseconds: 30000),
+              // Extra Parameters takes the source for the Audio File.
+              extras: {
+                'url': e.hrefMp3
+              }
+              ),
+        )
+        .toList();
+    audioHandler.addQueueItems(mediaItemList);
   }
 
   void playAudio() => audioHandler.play();
@@ -50,47 +59,24 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
       final processingState = playbackState.processingState;
       if (processingState == AudioProcessingState.loading ||
           processingState == AudioProcessingState.buffering) {
-        AudioPlayerManagerState().playButtonState?.isLoading = true;
-        emit((AudioPlayerManagerState().playButtonState?.isLoading ?? false)
-            as AudioPlayerManagerState);
+        // AudioPlayerManagerState().playButtonState?.isLoading = true;
+        // emit((AudioPlayerManagerState().playButtonState?.isLoading ?? false)
+        //     as AudioPlayerManagerState);
       } else if (!isPlaying) {
-        AudioPlayerManagerState().playButtonState?.isPaused = true;
-        emit((AudioPlayerManagerState().playButtonState?.isPaused ?? false)
-            as AudioPlayerManagerState);
+        // AudioPlayerManagerState().playButtonState?.isPaused = true;
+        // emit((AudioPlayerManagerState().playButtonState?.isPaused ?? false)
+        //     as AudioPlayerManagerState);
       } else if (processingState != AudioProcessingState.completed) {
-        AudioPlayerManagerState().playButtonState?.isPlaying = true;
-        emit((AudioPlayerManagerState().playButtonState?.isPlaying ?? false)
-            as AudioPlayerManagerState);
+        // AudioPlayerManagerState().playButtonState?.isPlaying = true;
+        // emit((AudioPlayerManagerState().playButtonState?.isPlaying ?? false)
+        //     as AudioPlayerManagerState);
       } else {
         // _audioHandler.seek(Duration.zero);
-        AudioPlayerManagerState().playButtonState?.isPaused = true;
-        emit((AudioPlayerManagerState().playButtonState?.isPaused ?? false)
-            as AudioPlayerManagerState);
+        // AudioPlayerManagerState().playButtonState?.isPaused = true;
+        // emit((AudioPlayerManagerState().playButtonState?.isPaused ?? false)
+        //     as AudioPlayerManagerState);
         ;
       }
     });
   }
-
-  void handleMultipleAlbumResponse(List<AlbumDm>? response) {
-    if (response != null && response.isNotEmpty) {
-      response.forEach((element) {
-        recentlyPlayedList.add(getAlbumUiMapper.mapToUiModel(element));
-      });
-
-      final getTrackItems = recentlyPlayedList[0].tracks.itemList;
-      final mediaItemList = getTrackItems
-          .map((e) => MediaItem(
-              id: "some_random_id",
-              title: "some_random_title",
-              duration: Duration(milliseconds: e.durationInMs)))
-          .toList();
-      audioHandler.addQueueItems(mediaItemList);
-    } else {
-      print("Response is empty");
-    }
-  }
-
-  void complete() {}
-
-  error(e) {}
 }

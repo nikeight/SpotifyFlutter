@@ -70,7 +70,7 @@ Future<AudioHandler> initAudioService() async {
   return await AudioService.init(
     builder: () => MyAudioHandler(),
     config: const AudioServiceConfig(
-      androidNotificationChannelId: '0306',
+      androidNotificationChannelId: 'com.appchefs.spotify',
       androidNotificationChannelName: 'Spotify',
       androidNotificationOngoing: true,
       androidStopForegroundOnPause: true,
