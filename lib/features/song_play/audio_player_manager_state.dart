@@ -9,8 +9,8 @@ class AudioPlayerManagerState {
   bool? isLastSongNotifier = false;
   bool? isShuffleModeEnabled = false;
 
-  AudioPlayerManagerState({
-      this.currentSongTitle,
+  AudioPlayerManagerState(
+      {this.currentSongTitle,
       this.playList,
       this.progressBarState,
       this.playButtonState,
@@ -35,3 +35,5 @@ class PlayButtonState {
 
   PlayButtonState(this.isPlaying, this.isPaused, this.isLoading);
 }
+
+enum RepeatState { OFF, REPEAT_SONG, REPEAT_PLAYLIST }

@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/song_play/audio_player_manager_cubit.dart';
+import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
+import 'package:praxis_flutter/models/AlbumUiModel.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 
@@ -11,19 +15,19 @@ class SongPlayDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AudioPlayerManagerCubit, AudioPlayerManagerState>(
+    return BlocBuilder<AudioPlayerManagerBloc, AudioPlayerManagerBlocState>(
         builder: (context, state) {
-      // Calling the Init Method to load the Playlist and Play Songs.
-      context.read<AudioPlayerManagerCubit>().init(trackUiModel);
 
       return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: const Color(0xffE0DECA),
-          title: const Text(
-            "Top Albums 🔝",
+          title: Text(
+            (state is CurrentPlayerSongTitleState)
+                ? (state).songTitle ?? ""
+                : "Album Name",
             textAlign: TextAlign.justify,
-            style: TextStyle(color: Colors.black45),
+            style: const TextStyle(color: Colors.black45),
           ),
           centerTitle: true,
           actions: [
@@ -39,21 +43,32 @@ class SongPlayDetailWidget extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             children: [
-              const Text("Song Artist",
+              Text(
+                  (state is CurrentPlayerArtistNameState)
+                      ? state.artistName ?? ""
+                      : "Track Artist Name",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.fade,
-                  style: TextStyle(color: Colors.black, fontSize: 18)),
-              const Text("Song Name",
+                  style: const TextStyle(color: Colors.black, fontSize: 18)),
+              Text(
+                  (state is CurrentPlayerSongTitleState)
+                      ? state.songTitle ?? ""
+                      : "Track Song Title",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.fade,
-                  style: TextStyle(color: Colors.black45, fontSize: 14)),
+                  style: const TextStyle(color: Colors.black45, fontSize: 14)),
               const SizedBox(height: 24),
-              const SizedBox(
+              SizedBox(
                 width: 340,
                 height: 300,
                 child: FittedBox(
                   fit: BoxFit.fill,
-                  child: Image(image: NetworkImage("https://google.com")),
+                  child: Image(
+                    image: NetworkImage(
+                      randomSpotifyCoverPages[
+                          Random().nextInt(randomSpotifyCoverPages.length)],
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -66,7 +81,11 @@ class SongPlayDetailWidget extends StatelessWidget {
                     icon: const Icon(Icons.outbox_sharp, size: 32),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context
+                          .read<AudioPlayerManagerBloc>()
+                          .add(AudioPlayerPauseEvent());
+                    },
                     icon: const Icon(
                       Icons.nightlight,
                       size: 32,
@@ -93,28 +112,44 @@ class SongPlayDetailWidget extends StatelessWidget {
               ),
               Slider(
                 min: 0,
-                max: 100,
-                divisions: 100,
+                max: (state is CurrentSongProgressBarState)
+                    ? state.totalLength.toDouble()
+                    : 100,
+                divisions: (state is CurrentSongProgressBarState)
+                    ? state.totalLength
+                    : 100,
                 activeColor: Colors.white70,
                 inactiveColor: Colors.grey,
                 thumbColor: Colors.white,
-                value: 20,
+                value: (state is CurrentSongProgressBarState)
+                    ? state.currentPosition.toDouble()
+                    : 0,
                 onChanged: (newValue) {
                   // Change the value of the Seeker from here
+                  final duration = Duration(seconds: newValue.toInt());
+                  context
+                      .read<AudioPlayerManagerBloc>()
+                      .add(AudioPlayerSeekPositionEvent(duration: duration));
                 },
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 24, right: 24, bottom: 4),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text("0.00",
-                        style: TextStyle(
+                  children: [
+                    Text(
+                        (state is CurrentSongProgressBarState)
+                            ? state.currentPosition.toString()
+                            : "0.00",
+                        style: const TextStyle(
                             color: Colors.black45,
                             fontSize: 12,
                             fontWeight: FontWeight.bold)),
-                    Text("-4.46",
-                        style: TextStyle(
+                    Text(
+                        (state is CurrentSongProgressBarState)
+                            ? state.totalLength.toString()
+                            : "0.00",
+                        style: const TextStyle(
                             color: Colors.black45,
                             fontSize: 12,
                             fontWeight: FontWeight.bold)),
@@ -127,27 +162,47 @@ class SongPlayDetailWidget extends StatelessWidget {
                 children: [
                   IconButton(
                       iconSize: 24,
-                      onPressed: () {},
+                      onPressed: () {
+                        context
+                            .read<AudioPlayerManagerBloc>()
+                            .add(AudioPlayerShuffleTrackEvent());
+                      },
                       icon: const Icon(Icons.shuffle_sharp)),
                   IconButton(
                       iconSize: 42,
                       onPressed: () {
-                        context.read<AudioPlayerManagerCubit>().playAudio();
+                        context
+                            .read<AudioPlayerManagerBloc>()
+                            .add(AudioPlayerPreviousTrackEvent());
                       },
                       icon: const Icon(Icons.skip_previous)),
                   IconButton(
                       iconSize: 62,
-                      onPressed: () {},
-                      icon: const Icon(Icons.play_circle_fill)),
+                      onPressed: () {
+                        context
+                            .read<AudioPlayerManagerBloc>()
+                            .add(AudioPlayerPlayEvent());
+                      },
+                      icon: (state is CurrentSongPlayButtonState)
+                          ? state.isPlaying
+                              ? const Icon(Icons.play_circle_fill)
+                              : const Icon(Icons.pause)
+                          : const Icon(Icons.download)),
                   IconButton(
                       iconSize: 42,
                       onPressed: () {
-                        context.read<AudioPlayerManagerCubit>().pauseAudio();
+                        context
+                            .read<AudioPlayerManagerBloc>()
+                            .add(AudioPlayerNextTrackEvent());
                       },
                       icon: const Icon(Icons.skip_next)),
                   IconButton(
                       iconSize: 24,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<AudioPlayerManagerBloc>().add(
+                            const AudioPlayerRepeatTrackEvent(
+                                repeatState: RepeatState.REPEAT_SONG));
+                      },
                       icon: const Icon(Icons.repeat_outlined)),
                 ],
               ),

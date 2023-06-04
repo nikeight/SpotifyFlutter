@@ -29,9 +29,9 @@ class AlbumModelMapper extends EntityMapper<AlbumDm, AlbumsDataModel> {
       final ItemDm itemDm = ItemDm(
           itemId: entity.id ?? "",
           artist: element.artists?.first.name ?? "artist_name_empty",
+          trackName: element.name ?? "track_name",
           durationInMs: element.durationMs ?? 0,
           hrefMp3: element.previewUrl ?? "empty_mp3_url",
-          thumbnailUrl: entity.images?.first.url ?? "empty_image_url",
           shareUri: element.href ?? "empty_href_endpoint"
       );
 
@@ -45,7 +45,7 @@ class AlbumModelMapper extends EntityMapper<AlbumDm, AlbumsDataModel> {
 
     return AlbumDm(
       artist: artist,
-      label: entity.label ?? "empty_label",
+      label: entity.name ?? "empty_label",
       thumbnailImageUrl: entity.images?.first.url ?? "empty_image_url",
       tracks: tracks,
       albumId: entity.id ?? "empty_id",

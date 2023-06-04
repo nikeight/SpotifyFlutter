@@ -16,9 +16,9 @@ class ItemUiMapper extends UIMapper<ItemUiModel, ItemDm> {
     return ItemUiModel(
         itemId: entity.itemId,
         artist: entity.artist,
+        trackName: entity.trackName,
         durationInMs: entity.durationInMs,
         hrefMp3: entity.hrefMp3,
-        thumbnailUrl: entity.thumbnailUrl,
         shareUri: entity.shareUri
     );
   }

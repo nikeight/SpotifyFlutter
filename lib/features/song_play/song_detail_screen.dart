@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/song_play/audio_player_manager_cubit.dart';
+import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
 import 'package:praxis_flutter/features/song_play/song_detail_widget.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
@@ -8,17 +9,19 @@ import 'package:praxis_flutter/models/ui_state.dart';
 class SongDetailScreen extends StatelessWidget {
   final TrackUiModel trackUiModel;
 
-  const SongDetailScreen(this.trackUiModel,{Key? key})
-      : super(key: key);
+  const SongDetailScreen(this.trackUiModel, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         lazy: true,
-        create: (_) => AudioPlayerManagerCubit(),
-        child: BlocListener<AudioPlayerManagerCubit, AudioPlayerManagerState>(
-          /// In the Listener we will manage all the Out of State scope methods
-          /// Like SnackBar, Dialog showing and other events.
+        create: (context) => AudioPlayerManagerBloc()
+          ..add(LoadDataAndInitializePlayerEvent(trackUiModel: trackUiModel)),
+        child: BlocListener<AudioPlayerManagerBloc,
+                AudioPlayerManagerBlocState>(
+
+            /// In the Listener we will manage all the Out of State scope methods
+            /// Like SnackBar, Dialog showing and other events.
 
             listener: (context, state) {
               if (state is Success) {

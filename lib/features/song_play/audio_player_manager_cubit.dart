@@ -12,6 +12,7 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
   AudioPlayerManagerCubit() : super(AudioPlayerManagerState()) {
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
+    _listenToChangesInSong();
   }
 
   final audioHandler = GetIt.I.get<AudioHandler>();
@@ -24,13 +25,11 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
         .map(
           (e) => MediaItem(
               id: e.itemId,
-              title: e.artist,
+              title: e.trackName,
+              artist: e.artist,
               duration: const Duration(milliseconds: 30000),
               // Extra Parameters takes the source for the Audio File.
-              extras: {
-                'url': e.hrefMp3
-              }
-              ),
+              extras: {'url': e.hrefMp3}),
         )
         .toList();
     audioHandler.addQueueItems(mediaItemList);
@@ -39,6 +38,12 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
   void playAudio() => audioHandler.play();
 
   void pauseAudio() => audioHandler.pause();
+
+  void seek(Duration position) => audioHandler.seek(position);
+
+  void previous() => audioHandler.skipToPrevious();
+
+  void next() => audioHandler.skipToNext();
 
   // Updates the playList of type String
   void _listenToChangesInPlaylist() {
@@ -78,5 +83,80 @@ class AudioPlayerManagerCubit extends Cubit<AudioPlayerManagerState> {
         ;
       }
     });
+  }
+
+  // Todo : Use RxJava to update the Single State
+  // By merging the three/four source into one
+  // Todo : Call this method at the constructor
+  void _listenToCurrentPosition() {
+    AudioService.position.listen((position) {
+      // Update the Current Position of the Progress bar
+    });
+  }
+
+  void _listenToBufferedPosition() {
+    audioHandler.playbackState.listen((playbackState) {
+      // Update the Buffered Position
+    });
+  }
+
+  /// Combine the TotalDuration and ChangesInSong Method into One
+  void _listenToTotalDuration() {
+    audioHandler.mediaItem.listen((mediaItem) {
+      // Update the Total Time
+      // mediaItem.duration
+    });
+  }
+
+  void _listenToChangesInSong() {
+    audioHandler.mediaItem.listen((mediaItem) {
+      // currentSongTitleNotifier.value = mediaItem?.title ?? '';
+      _updateSkipButtons();
+    });
+  }
+
+  /// Make the Next, and Previous Button Disable or Enable
+  void _updateSkipButtons() {
+    final mediaItem = audioHandler.mediaItem.valueWrapper?.value;
+    final playlist = audioHandler.queue.valueWrapper?.value;
+    if (playlist == null || playlist.length < 2 || mediaItem == null) {
+      // isFirstSongNotifier.value = true;
+      // isLastSongNotifier.value = true;
+    } else {
+      // isFirstSongNotifier.value = playlist.first == mediaItem;
+      // isLastSongNotifier.value = playlist.last == mediaItem;
+    }
+  }
+
+  void repeat() {
+    const repeatMode = RepeatState.OFF;
+    switch (repeatMode) {
+      case RepeatState.OFF:
+        audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
+        break;
+      case RepeatState.REPEAT_SONG:
+        audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
+        break;
+      case RepeatState.REPEAT_PLAYLIST:
+        audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
+        break;
+    }
+  }
+
+  void shuffle() {
+    // final enable = !isShuffleModeEnabledNotifier.value;
+    // isShuffleModeEnabledNotifier.value = enable;
+    // final isShufflingEnabled = true;
+    //Todo :  Make the Shuffle State True after calling this Method
+    if (true) {
+      audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
+    } else {
+      audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
+    }
+  }
+
+  // Todo : Call it once the Cubit has been destroyed
+  void dispose() {
+    audioHandler.stop();
   }
 }
