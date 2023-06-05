@@ -16,7 +16,10 @@ class SongDetailScreen extends StatelessWidget {
     return BlocProvider(
         lazy: true,
         create: (context) => AudioPlayerManagerBloc()
-          ..add(LoadDataAndInitializePlayerEvent(trackUiModel: trackUiModel)),
+          ..add(LoadDataAndInitializePlayerEvent(trackUiModel: trackUiModel))
+          ..add(AudioPlayerCurrentTrackArtistEvent())
+          ..add(AudioPlayerCurrentTrackTitleEvent())
+          ..add(AudioPlayerPauseEvent()),
         child: BlocListener<AudioPlayerManagerBloc,
                 AudioPlayerManagerBlocState>(
 

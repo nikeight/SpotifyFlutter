@@ -8,6 +8,7 @@ import 'package:praxis_flutter/features/song_play/audio_player_manager_cubit.dar
 import 'package:praxis_flutter/mapper/AlbumUIMapper.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 
 part 'audio_player_manager_event.dart';
 
@@ -16,21 +17,35 @@ part 'audio_player_manager_state.dart';
 class AudioPlayerManagerBloc
     extends Bloc<AudioPlayerManagerEvent, AudioPlayerManagerBlocState> {
   AudioPlayerManagerBloc() : super(InitialState()) {
-    on<LoadDataAndInitializePlayerEvent>(loadAndInitializeAudioPlayer);
-    on<AudioPlayerPlayEvent>(_listenToPlayBackState);
-    on<AudioPlayerPauseEvent>(_listenToPlayBackState);
-    on<AudioPlayerSeekPositionEvent>(_listenToSeekProgressState);
-    on<AudioPlayerNextTrackEvent>(_listenToSkipState);
-    on<AudioPlayerPreviousTrackEvent>(_listenToSkipState);
-    on<AudioPlayerRepeatTrackEvent>(_listenToRepeatModeState);
-    on<AudioPlayerShuffleTrackEvent>(_listenToShuffleState);
+    on<LoadDataAndInitializePlayerEvent>(_loadAndInitializeAudioPlayerState,
+        transformer: restartable());
+    on<AudioPlayerCurrentTrackTitleEvent>(_listenToCurrentTrackTitleState,
+        transformer: restartable());
+    on<AudioPlayerCurrentTrackArtistEvent>(_listenToCurrentTrackArtistState,
+        transformer: restartable());
+    on<AudioPlayerPlayEvent>(_listenToPlayBackState,
+        transformer: restartable());
+    on<AudioPlayerPauseEvent>(_listenToPlayBackState,
+        transformer: restartable());
+    on<AudioPlayerSeekPositionEvent>(_listenToSeekProgressState,
+        transformer: restartable());
+    on<AudioPlayerNextTrackEvent>(_listenToSkipState,
+        transformer: restartable());
+    on<AudioPlayerPreviousTrackEvent>(_listenToSkipState,
+        transformer: restartable());
+    on<AudioPlayerRepeatTrackEvent>(_listenToRepeatModeState,
+        transformer: restartable());
+    on<AudioPlayerShuffleTrackEvent>(_listenToShuffleState,
+        transformer: restartable());
   }
 
   final audioHandler = GetIt.I.get<AudioHandler>();
   final getMultipleAlbumsUseCase = GetIt.I.get<GetMultipleAlbumUseCase>();
   final getAlbumUiMapper = GetIt.I.get<AlbumUiMapper>();
+  var currentArtistState = const CurrentPlayerArtistNameState(artistName: "");
 
-  Future<void> loadAndInitializeAudioPlayer(
+  // Handled ✅
+  Future<void> _loadAndInitializeAudioPlayerState(
     LoadDataAndInitializePlayerEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
   ) async {
@@ -50,10 +65,9 @@ class AudioPlayerManagerBloc
     await audioHandler.addQueueItems(mediaItemList);
   }
 
-  void _listenToPlayBackState(
-    AudioPlayerManagerEvent event,
-    Emitter<AudioPlayerManagerBlocState> emit,
-  ) {
+  // Handled ✅
+  Future<void> _listenToPlayBackState(AudioPlayerManagerEvent event,
+      Emitter<AudioPlayerManagerBlocState> emit) async {
     if (event is AudioPlayerPlayEvent) {
       audioHandler.play();
     }
@@ -62,78 +76,152 @@ class AudioPlayerManagerBloc
       audioHandler.pause();
     }
 
-    audioHandler.playbackState.listen((playbackState) {
+    await emit.forEach(audioHandler.playbackState,
+        onData: (PlaybackState playbackState) {
       final isPlaying = playbackState.playing;
       final processingState = playbackState.processingState;
       if (processingState == AudioProcessingState.loading ||
           processingState == AudioProcessingState.buffering) {
-
-        emit(
-          const CurrentSongPlayButtonState(
-              isPlaying: false, isLoading: true, isPause: false),
-        );
+        return const CurrentSongPlayButtonState(
+            isPlaying: false, isLoading: true, isPause: false);
       } else if (!isPlaying) {
-        emit(
-          const CurrentSongPlayButtonState(
-              isPlaying: false, isLoading: false, isPause: true),
-        );
+        return const CurrentSongPlayButtonState(
+            isPlaying: false, isLoading: false, isPause: true);
       } else if (processingState != AudioProcessingState.completed) {
-        emit(
-          const CurrentSongPlayButtonState(
-              isPlaying: true, isLoading: false, isPause: false),
-        );
+        return const CurrentSongPlayButtonState(
+            isPlaying: true, isLoading: false, isPause: false);
       } else {
         audioHandler.seek(Duration.zero);
-        emit(
-          const CurrentSongPlayButtonState(
-              isPlaying: false, isLoading: false, isPause: false),
-        );
+        return const CurrentSongPlayButtonState(
+            isPlaying: false, isLoading: false, isPause: false);
       }
     });
   }
 
-  void _listenToSeekProgressState(
+  // Update the Artist Title
+  Future<void> _listenToCurrentTrackArtistState(AudioPlayerManagerEvent event,
+      Emitter<AudioPlayerManagerBlocState> emit) async {
+    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
+      // Update the Track Title and Artist name
+      currentArtistState = CurrentPlayerArtistNameState(
+          artistName: mediaItem?.artist.toString() ?? "");
+      return currentArtistState;
+    });
+  }
+
+  // Update the Track Song Title
+  Future<void> _listenToCurrentTrackTitleState(AudioPlayerManagerEvent event,
+      Emitter<AudioPlayerManagerBlocState> emit) async {
+    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
+      return CurrentPlayerSongTitleState(
+          songTitle: mediaItem?.title.toString() ?? "");
+    });
+  }
+
+  // audioHandler.playbackState.listen((playbackState) {
+  //   final isPlaying = playbackState.playing;
+  //   final processingState = playbackState.processingState;
+  //   if (processingState == AudioProcessingState.loading ||
+  //       processingState == AudioProcessingState.buffering) {
+  //     emit(
+  //       const CurrentSongPlayButtonState(
+  //           isPlaying: false, isLoading: true, isPause: false),
+  //     );
+  //   } else if (!isPlaying) {
+  //     emit(
+  //       const CurrentSongPlayButtonState(
+  //           isPlaying: false, isLoading: false, isPause: true),
+  //     );
+  //   } else if (processingState != AudioProcessingState.completed) {
+  //     emit(
+  //       const CurrentSongPlayButtonState(
+  //           isPlaying: true, isLoading: false, isPause: false),
+  //     );
+  //   } else {
+  //     audioHandler.seek(Duration.zero);
+  //     emit(
+  //       const CurrentSongPlayButtonState(
+  //           isPlaying: false, isLoading: false, isPause: false),
+  //     );
+  //   }
+  // });
+
+  // Updating the Song Title and Artist value
+  // audioHandler.mediaItem.listen((event) {
+  //   // Update the Track Title and Artist name
+  //   emit(CurrentPlayerSongTitleState(
+  //       songTitle: event?.title.toString() ?? ""));
+  //   emit(CurrentPlayerArtistNameState(
+  //       artistName: event?.artist.toString() ?? ""));
+  // });
+
+  Future<void> _listenToSeekProgressState(
     AudioPlayerManagerEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
-  ) {
+  ) async {
     if (event is AudioPlayerSeekPositionEvent) {
       audioHandler.seek(event.duration);
     }
 
-    // Current Position Listener
-    AudioService.position.listen((progress) {
-      emit(CurrentSongProgressBarState(
-          currentPosition: progress.inMilliseconds,
+    // Update Current Position State
+    await emit.forEach(AudioService.position,
+        onData: (Duration currentPosition) => CurrentSongProgressBarState(
+              currentPosition: currentPosition.inSeconds,
+              buffered: 0,
+              totalLength: 0,
+            ));
+
+    // Update Buffered Position State
+    await emit.forEach(
+      audioHandler.playbackState,
+      onData: (PlaybackState bufferedPosition) => CurrentSongProgressBarState(
+          currentPosition: 0,
+          buffered: bufferedPosition.bufferedPosition.inMilliseconds,
+          totalLength: 0),
+    );
+
+    // Update the Total Duration Position State
+    await emit.forEach(
+      audioHandler.mediaItem,
+      onData: (MediaItem? totalDuration) => CurrentSongProgressBarState(
+          currentPosition: 0,
           buffered: 0,
-          totalLength: 0));
-    });
+          totalLength:
+              totalDuration?.duration?.inSeconds ?? Duration.zero.inSeconds),
+    );
+
+    // Current Position Listener
+    // AudioService.position.listen((progress) {
+    //   emit(CurrentSongProgressBarState(
+    //       currentPosition: progress.inMilliseconds,
+    //       buffered: 0,
+    //       totalLength: 0));
+    // });
 
     // Buffered Position Listener
-    audioHandler.playbackState.listen((bufferedProgress) {
-      emit(
-        CurrentSongProgressBarState(
-            currentPosition:
-                (state as CurrentSongProgressBarState).currentPosition,
-            buffered: bufferedProgress.bufferedPosition.inMilliseconds,
-            totalLength: 0),
-      );
-    });
+    // audioHandler.playbackState.listen((bufferedProgress) {
+    //   emit(
+    //     CurrentSongProgressBarState(
+    //         currentPosition:
+    //             (state as CurrentSongProgressBarState).currentPosition,
+    //         buffered: bufferedProgress.bufferedPosition.inMilliseconds,
+    //         totalLength: 0),
+    //   );
+    // });
 
     // Total Position Listener
-    audioHandler.mediaItem.listen((totalDuration) {
-      emit(CurrentSongProgressBarState(
-          currentPosition:
-              (state as CurrentSongProgressBarState).currentPosition,
-          buffered: (state as CurrentSongProgressBarState).buffered,
-          totalLength: totalDuration?.duration?.inMilliseconds ??
-              Duration.zero.inMilliseconds));
-    });
+    // audioHandler.mediaItem.listen((totalDuration) {
+    //   emit(CurrentSongProgressBarState(
+    //       currentPosition:
+    //           (state as CurrentSongProgressBarState).currentPosition,
+    //       buffered: (state as CurrentSongProgressBarState).buffered,
+    //       totalLength: totalDuration?.duration?.inMilliseconds ??
+    //           Duration.zero.inMilliseconds));
+    // });
   }
 
-  void _listenToSkipState(
-    AudioPlayerManagerEvent event,
-    Emitter<AudioPlayerManagerBlocState> emit,
-  ) {
+  Future<void> _listenToSkipState(AudioPlayerManagerEvent event,
+      Emitter<AudioPlayerManagerBlocState> emit) async {
     if (event is AudioPlayerNextTrackEvent) {
       audioHandler.skipToNext();
     }
@@ -142,13 +230,26 @@ class AudioPlayerManagerBloc
       audioHandler.skipToPrevious();
     }
 
+    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
+      // Update the Track Title and Artist name
+      return CurrentPlayerSongTitleState(
+          songTitle: mediaItem?.title.toString() ?? "");
+    });
+
+    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
+      // Update the Track Title and Artist name
+      return CurrentPlayerArtistNameState(
+          artistName: mediaItem?.artist.toString() ?? "");
+    });
+
+    // Todo : Setup those two State in One and Add the Logic at UI Layer (Next,Previous btn)
     // Updating the Song Title and Artist value
     audioHandler.mediaItem.listen((event) {
       // Update the Track Title and Artist name
-      emit(CurrentPlayerSongTitleState(
-          songTitle: event?.title.toString() ?? ""));
-      emit(CurrentPlayerArtistNameState(
-          artistName: event?.artist.toString() ?? ""));
+      // emit(CurrentPlayerSongTitleState(
+      //     songTitle: event?.title.toString() ?? ""));
+      // emit(CurrentPlayerArtistNameState(
+      //     artistName: event?.artist.toString() ?? ""));
 
       final mediaItem = audioHandler.mediaItem.valueWrapper?.value;
       final playlist = audioHandler.queue.valueWrapper?.value;

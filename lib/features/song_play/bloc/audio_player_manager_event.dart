@@ -15,6 +15,9 @@ class LoadDataAndInitializePlayerEvent extends AudioPlayerManagerEvent {
   @override
   List<Object?> get props => [trackUiModel];
 }
+class AudioPlayerCurrentTrackArtistEvent extends AudioPlayerManagerEvent {}
+
+class AudioPlayerCurrentTrackTitleEvent extends AudioPlayerManagerEvent {}
 
 class AudioPlayerPlayEvent extends AudioPlayerManagerEvent {}
 

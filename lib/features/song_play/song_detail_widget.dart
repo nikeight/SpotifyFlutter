@@ -17,7 +17,6 @@ class SongPlayDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AudioPlayerManagerBloc, AudioPlayerManagerBlocState>(
         builder: (context, state) {
-
       return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -45,14 +44,14 @@ class SongPlayDetailWidget extends StatelessWidget {
             children: [
               Text(
                   (state is CurrentPlayerArtistNameState)
-                      ? state.artistName ?? ""
+                      ? state.artistName
                       : "Track Artist Name",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.fade,
                   style: const TextStyle(color: Colors.black, fontSize: 18)),
               Text(
                   (state is CurrentPlayerSongTitleState)
-                      ? state.songTitle ?? ""
+                      ? state.songTitle
                       : "Track Song Title",
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.fade,
@@ -72,52 +71,16 @@ class SongPlayDetailWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.outbox_sharp, size: 32),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      context
-                          .read<AudioPlayerManagerBloc>()
-                          .add(AudioPlayerPauseEvent());
-                    },
-                    icon: const Icon(
-                      Icons.nightlight,
-                      size: 32,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Heart Icon Pressed
-                      // context.read<SongPlayCubit>().toggleFavAlbum(song);
-                    },
-                    icon: (state is Success)
-                        ? (state as Success).data
-                            ? const Icon(
-                                Icons.favorite,
-                                size: 32,
-                              )
-                            : const Icon(
-                                Icons.favorite_border,
-                                size: 32,
-                              )
-                        : const Icon(Icons.favorite_border, size: 32),
-                  )
-                ],
-              ),
               Slider(
                 min: 0,
-                max: (state is CurrentSongProgressBarState)
-                    ? state.totalLength.toDouble()
-                    : 100,
-                divisions: (state is CurrentSongProgressBarState)
-                    ? state.totalLength
-                    : 100,
+                max: 30,
+                // (state is CurrentSongProgressBarState)
+                //     ? state.totalLength.toDouble()
+                //     : 100,
+                divisions: 30,
+                // (state is CurrentSongProgressBarState)
+                //     ? state.totalLength
+                //     : 100,
                 activeColor: Colors.white70,
                 inactiveColor: Colors.grey,
                 thumbColor: Colors.white,
@@ -176,18 +139,41 @@ class SongPlayDetailWidget extends StatelessWidget {
                             .add(AudioPlayerPreviousTrackEvent());
                       },
                       icon: const Icon(Icons.skip_previous)),
-                  IconButton(
-                      iconSize: 62,
-                      onPressed: () {
-                        context
-                            .read<AudioPlayerManagerBloc>()
-                            .add(AudioPlayerPlayEvent());
-                      },
-                      icon: (state is CurrentSongPlayButtonState)
-                          ? state.isPlaying
-                              ? const Icon(Icons.play_circle_fill)
-                              : const Icon(Icons.pause)
-                          : const Icon(Icons.download)),
+                  Stack(
+                    children: [
+                      (state is CurrentSongPlayButtonState)
+                          ? state.isLoading
+                              ? const CircularProgressIndicator()
+                              : state.isPlaying
+                                  ? IconButton(
+                                      iconSize: 62,
+                                      onPressed: () {
+                                        context
+                                            .read<AudioPlayerManagerBloc>()
+                                            .add(AudioPlayerPauseEvent());
+                                      },
+                                      icon: const Icon(Icons.play_circle_fill),
+                                    )
+                                  : IconButton(
+                                      iconSize: 62,
+                                      onPressed: () {
+                                        context
+                                            .read<AudioPlayerManagerBloc>()
+                                            .add(AudioPlayerPlayEvent());
+                                      },
+                                      icon: const Icon(Icons.pause),
+                                    )
+                          : IconButton(
+                              iconSize: 62,
+                              onPressed: () {
+                                context
+                                    .read<AudioPlayerManagerBloc>()
+                                    .add(AudioPlayerPlayEvent());
+                              },
+                              icon: const Icon(Icons.pause),
+                            )
+                    ],
+                  ),
                   IconButton(
                       iconSize: 42,
                       onPressed: () {
