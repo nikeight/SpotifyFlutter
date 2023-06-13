@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:praxis_flutter/features/song_play/audio_player_manager_cubit.dart';
 import 'package:praxis_flutter/mapper/AlbumUIMapper.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'audio_player_manager_event.dart';
 
@@ -16,7 +17,8 @@ part 'audio_player_manager_state.dart';
 
 class AudioPlayerManagerBloc
     extends Bloc<AudioPlayerManagerEvent, AudioPlayerManagerBlocState> {
-  AudioPlayerManagerBloc() : super(InitialState()) {
+  AudioPlayerManagerBloc()
+      : super(const AudioPlayerManagerBlocState.initial()) {
     on<LoadDataAndInitializePlayerEvent>(_loadAndInitializeAudioPlayerState,
         transformer: restartable());
     on<AudioPlayerCurrentTrackTitleEvent>(_listenToCurrentTrackTitleState,
@@ -42,7 +44,6 @@ class AudioPlayerManagerBloc
   final audioHandler = GetIt.I.get<AudioHandler>();
   final getMultipleAlbumsUseCase = GetIt.I.get<GetMultipleAlbumUseCase>();
   final getAlbumUiMapper = GetIt.I.get<AlbumUiMapper>();
-  var currentArtistState = const CurrentPlayerArtistNameState(artistName: "");
 
   // Handled ✅
   Future<void> _loadAndInitializeAudioPlayerState(
@@ -68,6 +69,7 @@ class AudioPlayerManagerBloc
   // Handled ✅
   Future<void> _listenToPlayBackState(AudioPlayerManagerEvent event,
       Emitter<AudioPlayerManagerBlocState> emit) async {
+    // Handle Play Pause Events
     if (event is AudioPlayerPlayEvent) {
       audioHandler.play();
     }
@@ -82,18 +84,74 @@ class AudioPlayerManagerBloc
       final processingState = playbackState.processingState;
       if (processingState == AudioProcessingState.loading ||
           processingState == AudioProcessingState.buffering) {
-        return const CurrentSongPlayButtonState(
-            isPlaying: false, isLoading: true, isPause: false);
+        return AudioPlayerManagerBlocState.success(
+          trackTitleName: state.trackArtistName,
+          trackArtistName: state.trackArtistName,
+          fetchedPlayList: state.fetchedPlayList,
+          progressBarTotalValue: state.progressBarTotalValue,
+          progressBarBufferedValue: state.progressBarBufferedValue,
+          progressBarCurrentValue: state.progressBarCurrentValue,
+          isAudioPlayerLoading: true,
+          isAudioPlayerPlaying: false,
+          isAudioPlayerPaused: false,
+          isShuffledModeEnabled: state.isShuffledModeEnabled,
+          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        );
       } else if (!isPlaying) {
-        return const CurrentSongPlayButtonState(
-            isPlaying: false, isLoading: false, isPause: true);
+        return AudioPlayerManagerBlocState.success(
+          trackTitleName: state.trackArtistName,
+          trackArtistName: state.trackArtistName,
+          fetchedPlayList: state.fetchedPlayList,
+          progressBarTotalValue: state.progressBarTotalValue,
+          progressBarBufferedValue: state.progressBarBufferedValue,
+          progressBarCurrentValue: state.progressBarCurrentValue,
+          isAudioPlayerLoading: false,
+          isAudioPlayerPlaying: false,
+          isAudioPlayerPaused: true,
+          isShuffledModeEnabled: state.isShuffledModeEnabled,
+          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        );
       } else if (processingState != AudioProcessingState.completed) {
-        return const CurrentSongPlayButtonState(
-            isPlaying: true, isLoading: false, isPause: false);
+        return AudioPlayerManagerBlocState.success(
+          trackTitleName: state.trackArtistName,
+          trackArtistName: state.trackArtistName,
+          fetchedPlayList: state.fetchedPlayList,
+          progressBarTotalValue: state.progressBarTotalValue,
+          progressBarBufferedValue: state.progressBarBufferedValue,
+          progressBarCurrentValue: state.progressBarCurrentValue,
+          isAudioPlayerLoading: false,
+          isAudioPlayerPlaying: true,
+          isAudioPlayerPaused: false,
+          isShuffledModeEnabled: state.isShuffledModeEnabled,
+          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        );
       } else {
         audioHandler.seek(Duration.zero);
-        return const CurrentSongPlayButtonState(
-            isPlaying: false, isLoading: false, isPause: false);
+        return AudioPlayerManagerBlocState.success(
+          trackTitleName: state.trackArtistName,
+          trackArtistName: state.trackArtistName,
+          fetchedPlayList: state.fetchedPlayList,
+          progressBarTotalValue: state.progressBarTotalValue,
+          progressBarBufferedValue: state.progressBarBufferedValue,
+          progressBarCurrentValue: state.progressBarCurrentValue,
+          isAudioPlayerLoading: false,
+          isAudioPlayerPlaying: false,
+          isAudioPlayerPaused: true,
+          isShuffledModeEnabled: state.isShuffledModeEnabled,
+          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        );
       }
     });
   }
@@ -103,9 +161,22 @@ class AudioPlayerManagerBloc
       Emitter<AudioPlayerManagerBlocState> emit) async {
     await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
       // Update the Track Title and Artist name
-      currentArtistState = CurrentPlayerArtistNameState(
-          artistName: mediaItem?.artist.toString() ?? "");
-      return currentArtistState;
+      return AudioPlayerManagerBlocState.success(
+        trackTitleName: state.trackArtistName,
+        trackArtistName: mediaItem?.artist.toString() ?? "",
+        fetchedPlayList: state.fetchedPlayList,
+        progressBarTotalValue: state.progressBarTotalValue,
+        progressBarBufferedValue: state.progressBarBufferedValue,
+        progressBarCurrentValue: state.progressBarCurrentValue,
+        isAudioPlayerLoading: state.isAudioPlayerLoading,
+        isAudioPlayerPlaying: state.isAudioPlayerPlaying,
+        isAudioPlayerPaused: state.isAudioPlayerPaused,
+        isShuffledModeEnabled: state.isShuffledModeEnabled,
+        isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+        isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+        isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+        isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+      );
     });
   }
 
@@ -113,47 +184,24 @@ class AudioPlayerManagerBloc
   Future<void> _listenToCurrentTrackTitleState(AudioPlayerManagerEvent event,
       Emitter<AudioPlayerManagerBlocState> emit) async {
     await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
-      return CurrentPlayerSongTitleState(
-          songTitle: mediaItem?.title.toString() ?? "");
+      return AudioPlayerManagerBlocState.success(
+        trackTitleName: mediaItem?.title.toString() ?? "",
+        trackArtistName: state.trackArtistName,
+        fetchedPlayList: state.fetchedPlayList,
+        progressBarTotalValue: state.progressBarTotalValue,
+        progressBarBufferedValue: state.progressBarBufferedValue,
+        progressBarCurrentValue: state.progressBarCurrentValue,
+        isAudioPlayerLoading: state.isAudioPlayerLoading,
+        isAudioPlayerPlaying: state.isAudioPlayerPlaying,
+        isAudioPlayerPaused: state.isAudioPlayerPaused,
+        isShuffledModeEnabled: state.isShuffledModeEnabled,
+        isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+        isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+        isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+        isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+      );
     });
   }
-
-  // audioHandler.playbackState.listen((playbackState) {
-  //   final isPlaying = playbackState.playing;
-  //   final processingState = playbackState.processingState;
-  //   if (processingState == AudioProcessingState.loading ||
-  //       processingState == AudioProcessingState.buffering) {
-  //     emit(
-  //       const CurrentSongPlayButtonState(
-  //           isPlaying: false, isLoading: true, isPause: false),
-  //     );
-  //   } else if (!isPlaying) {
-  //     emit(
-  //       const CurrentSongPlayButtonState(
-  //           isPlaying: false, isLoading: false, isPause: true),
-  //     );
-  //   } else if (processingState != AudioProcessingState.completed) {
-  //     emit(
-  //       const CurrentSongPlayButtonState(
-  //           isPlaying: true, isLoading: false, isPause: false),
-  //     );
-  //   } else {
-  //     audioHandler.seek(Duration.zero);
-  //     emit(
-  //       const CurrentSongPlayButtonState(
-  //           isPlaying: false, isLoading: false, isPause: false),
-  //     );
-  //   }
-  // });
-
-  // Updating the Song Title and Artist value
-  // audioHandler.mediaItem.listen((event) {
-  //   // Update the Track Title and Artist name
-  //   emit(CurrentPlayerSongTitleState(
-  //       songTitle: event?.title.toString() ?? ""));
-  //   emit(CurrentPlayerArtistNameState(
-  //       artistName: event?.artist.toString() ?? ""));
-  // });
 
   Future<void> _listenToSeekProgressState(
     AudioPlayerManagerEvent event,
@@ -163,61 +211,67 @@ class AudioPlayerManagerBloc
       audioHandler.seek(event.duration);
     }
 
+    // Update the Total Duration Position State
+    await emit.forEach(audioHandler.mediaItem,
+        onData: (MediaItem? totalDuration) =>
+            AudioPlayerManagerBlocState.success(
+              trackTitleName: state.trackTitleName,
+              trackArtistName: state.trackArtistName,
+              fetchedPlayList: state.fetchedPlayList,
+              progressBarTotalValue:
+                  totalDuration?.duration?.inSeconds ?? Duration.zero.inSeconds,
+              progressBarBufferedValue: state.progressBarBufferedValue,
+              progressBarCurrentValue: state.progressBarCurrentValue,
+              isAudioPlayerLoading: state.isAudioPlayerLoading,
+              isAudioPlayerPlaying: state.isAudioPlayerPlaying,
+              isAudioPlayerPaused: state.isAudioPlayerPaused,
+              isShuffledModeEnabled: state.isShuffledModeEnabled,
+              isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+              isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+              isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+              isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+            ));
+
     // Update Current Position State
     await emit.forEach(AudioService.position,
-        onData: (Duration currentPosition) => CurrentSongProgressBarState(
-              currentPosition: currentPosition.inSeconds,
-              buffered: 0,
-              totalLength: 0,
+        onData: (Duration currentPosition) =>
+            AudioPlayerManagerBlocState.success(
+              trackTitleName: state.trackTitleName,
+              trackArtistName: state.trackArtistName,
+              fetchedPlayList: state.fetchedPlayList,
+              progressBarTotalValue: state.progressBarTotalValue,
+              progressBarBufferedValue: state.progressBarBufferedValue,
+              progressBarCurrentValue: currentPosition.inSeconds,
+              isAudioPlayerLoading: state.isAudioPlayerLoading,
+              isAudioPlayerPlaying: state.isAudioPlayerPlaying,
+              isAudioPlayerPaused: state.isAudioPlayerPaused,
+              isShuffledModeEnabled: state.isShuffledModeEnabled,
+              isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+              isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+              isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+              isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
             ));
 
     // Update Buffered Position State
-    await emit.forEach(
-      audioHandler.playbackState,
-      onData: (PlaybackState bufferedPosition) => CurrentSongProgressBarState(
-          currentPosition: 0,
-          buffered: bufferedPosition.bufferedPosition.inMilliseconds,
-          totalLength: 0),
-    );
-
-    // Update the Total Duration Position State
-    await emit.forEach(
-      audioHandler.mediaItem,
-      onData: (MediaItem? totalDuration) => CurrentSongProgressBarState(
-          currentPosition: 0,
-          buffered: 0,
-          totalLength:
-              totalDuration?.duration?.inSeconds ?? Duration.zero.inSeconds),
-    );
-
-    // Current Position Listener
-    // AudioService.position.listen((progress) {
-    //   emit(CurrentSongProgressBarState(
-    //       currentPosition: progress.inMilliseconds,
-    //       buffered: 0,
-    //       totalLength: 0));
-    // });
-
-    // Buffered Position Listener
-    // audioHandler.playbackState.listen((bufferedProgress) {
-    //   emit(
-    //     CurrentSongProgressBarState(
-    //         currentPosition:
-    //             (state as CurrentSongProgressBarState).currentPosition,
-    //         buffered: bufferedProgress.bufferedPosition.inMilliseconds,
-    //         totalLength: 0),
-    //   );
-    // });
-
-    // Total Position Listener
-    // audioHandler.mediaItem.listen((totalDuration) {
-    //   emit(CurrentSongProgressBarState(
-    //       currentPosition:
-    //           (state as CurrentSongProgressBarState).currentPosition,
-    //       buffered: (state as CurrentSongProgressBarState).buffered,
-    //       totalLength: totalDuration?.duration?.inMilliseconds ??
-    //           Duration.zero.inMilliseconds));
-    // });
+    await emit.forEach(audioHandler.playbackState,
+        onData: (PlaybackState bufferedPosition) =>
+            AudioPlayerManagerBlocState.success(
+              trackTitleName: state.trackTitleName,
+              trackArtistName: state.trackArtistName,
+              fetchedPlayList: state.fetchedPlayList,
+              progressBarTotalValue: state.progressBarTotalValue,
+              progressBarBufferedValue:
+                  bufferedPosition.bufferedPosition.inSeconds,
+              progressBarCurrentValue: state.progressBarCurrentValue,
+              isAudioPlayerLoading: state.isAudioPlayerLoading,
+              isAudioPlayerPlaying: state.isAudioPlayerPlaying,
+              isAudioPlayerPaused: state.isAudioPlayerPaused,
+              isShuffledModeEnabled: state.isShuffledModeEnabled,
+              isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
+              isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
+              isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
+              isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+            ));
   }
 
   Future<void> _listenToSkipState(AudioPlayerManagerEvent event,
@@ -230,93 +284,93 @@ class AudioPlayerManagerBloc
       audioHandler.skipToPrevious();
     }
 
-    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
-      // Update the Track Title and Artist name
-      return CurrentPlayerSongTitleState(
-          songTitle: mediaItem?.title.toString() ?? "");
-    });
-
-    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
-      // Update the Track Title and Artist name
-      return CurrentPlayerArtistNameState(
-          artistName: mediaItem?.artist.toString() ?? "");
-    });
-
-    // Todo : Setup those two State in One and Add the Logic at UI Layer (Next,Previous btn)
-    // Updating the Song Title and Artist value
-    audioHandler.mediaItem.listen((event) {
-      // Update the Track Title and Artist name
-      // emit(CurrentPlayerSongTitleState(
-      //     songTitle: event?.title.toString() ?? ""));
-      // emit(CurrentPlayerArtistNameState(
-      //     artistName: event?.artist.toString() ?? ""));
-
-      final mediaItem = audioHandler.mediaItem.valueWrapper?.value;
-      final playlist = audioHandler.queue.valueWrapper?.value;
-
-      // No Data available, disable the Skip buttons.
-      if (playlist == null || playlist.length < 2 || mediaItem == null) {
-        emit(const PlayerLastSongNotifier(isLastSongNotifier: false));
-        emit(const PlayerFirstSongNotifier(isFirstSongNotifier: false));
-      } else {
-        emit(PlayerFirstSongNotifier(
-            isFirstSongNotifier: playlist.first == mediaItem));
-        emit(PlayerLastSongNotifier(
-            isLastSongNotifier: playlist.last == mediaItem));
-      }
-    });
+    // await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
+    //   // Update the Track Title and Artist name
+    //   return CurrentPlayerSongTitleState(
+    //       songTitle: mediaItem?.title.toString() ?? "");
+    // });
+    //
+    // await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
+    //   // Update the Track Title and Artist name
+    //   return CurrentPlayerArtistNameState(
+    //       artistName: mediaItem?.artist.toString() ?? "");
+    // });
+    //
+    // // Todo : Setup those two State in One and Add the Logic at UI Layer (Next,Previous btn)
+    // // Updating the Song Title and Artist value
+    // audioHandler.mediaItem.listen((event) {
+    //   // Update the Track Title and Artist name
+    //   // emit(CurrentPlayerSongTitleState(
+    //   //     songTitle: event?.title.toString() ?? ""));
+    //   // emit(CurrentPlayerArtistNameState(
+    //   //     artistName: event?.artist.toString() ?? ""));
+    //
+    //   final mediaItem = audioHandler.mediaItem.valueWrapper?.value;
+    //   final playlist = audioHandler.queue.valueWrapper?.value;
+    //
+    //   // No Data available, disable the Skip buttons.
+    //   if (playlist == null || playlist.length < 2 || mediaItem == null) {
+    //     emit(const PlayerLastSongNotifier(isLastSongNotifier: false));
+    //     emit(const PlayerFirstSongNotifier(isFirstSongNotifier: false));
+    //   } else {
+    //     emit(PlayerFirstSongNotifier(
+    //         isFirstSongNotifier: playlist.first == mediaItem));
+    //     emit(PlayerLastSongNotifier(
+    //         isLastSongNotifier: playlist.last == mediaItem));
+    //   }
+    // });
   }
 
   void _listenToRepeatModeState(
     AudioPlayerManagerEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
   ) {
-    emit(const PlayerRepeatModeState(
-      isRepeatSongEnabled: false,
-      isRepeatPlayListEnabled: false,
-    ));
-    if (event is AudioPlayerRepeatTrackEvent) {
-      final currentRepeatMode = event.repeatState;
-      switch (currentRepeatMode) {
-        case RepeatState.OFF:
-          audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
-          emit(const PlayerRepeatModeState(
-            isRepeatSongEnabled: false,
-            isRepeatPlayListEnabled: false,
-          ));
-          break;
-        case RepeatState.REPEAT_SONG:
-          audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
-          emit(const PlayerRepeatModeState(
-            isRepeatSongEnabled: true,
-            isRepeatPlayListEnabled: false,
-          ));
-          break;
-        case RepeatState.REPEAT_PLAYLIST:
-          audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
-          emit(const PlayerRepeatModeState(
-            isRepeatSongEnabled: false,
-            isRepeatPlayListEnabled: true,
-          ));
-          break;
-      }
-    }
+    // emit(const PlayerRepeatModeState(
+    //   isRepeatSongEnabled: false,
+    //   isRepeatPlayListEnabled: false,
+    // ));
+    // if (event is AudioPlayerRepeatTrackEvent) {
+    //   final currentRepeatMode = event.repeatState;
+    //   switch (currentRepeatMode) {
+    //     case RepeatState.OFF:
+    //       audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
+    //       emit(const PlayerRepeatModeState(
+    //         isRepeatSongEnabled: false,
+    //         isRepeatPlayListEnabled: false,
+    //       ));
+    //       break;
+    //     case RepeatState.REPEAT_SONG:
+    //       audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
+    //       emit(const PlayerRepeatModeState(
+    //         isRepeatSongEnabled: true,
+    //         isRepeatPlayListEnabled: false,
+    //       ));
+    //       break;
+    //     case RepeatState.REPEAT_PLAYLIST:
+    //       audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
+    //       emit(const PlayerRepeatModeState(
+    //         isRepeatSongEnabled: false,
+    //         isRepeatPlayListEnabled: true,
+    //       ));
+    //       break;
+    //   }
+    // }
   }
 
   void _listenToShuffleState(
     AudioPlayerManagerEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
   ) {
-    if (event is AudioPlayerShuffleTrackEvent) {
-      final lastState = (state as IsPlayerShuffleMode).isShuffleModeEnabled;
-      if (lastState) {
-        audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
-        emit(const IsPlayerShuffleMode(isShuffleModeEnabled: true));
-      } else {
-        audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
-        emit(const IsPlayerShuffleMode(isShuffleModeEnabled: false));
-      }
-    }
+    // if (event is AudioPlayerShuffleTrackEvent) {
+    //   final lastState = (state as IsPlayerShuffleMode).isShuffleModeEnabled;
+    //   if (lastState) {
+    //     audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
+    //     emit(const IsPlayerShuffleMode(isShuffleModeEnabled: true));
+    //   } else {
+    //     audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
+    //     emit(const IsPlayerShuffleMode(isShuffleModeEnabled: false));
+    //   }
+    // }
   }
 
   @override

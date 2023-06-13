@@ -41,6 +41,7 @@ dependencies:
   just_audio: ^0.9.33
   audio_service: ^0.18.9
   bloc_concurrency: ^0.2.2
+  rxdart: ^0.26.0
 
   clean_architecture:
     path: ./clean_architecture

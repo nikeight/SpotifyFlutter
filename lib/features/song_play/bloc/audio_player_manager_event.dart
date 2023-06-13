@@ -48,3 +48,6 @@ class AudioPlayerRepeatTrackEvent extends AudioPlayerManagerEvent {
 }
 
 class FavouriteTrackEvent extends AudioPlayerManagerEvent {}
+
+
+enum RepeatState { OFF, REPEAT_SONG, REPEAT_PLAYLIST }

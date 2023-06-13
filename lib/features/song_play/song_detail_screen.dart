@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:praxis_flutter/features/song_play/audio_player_manager_cubit.dart';
 import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
 import 'package:praxis_flutter/features/song_play/song_detail_widget.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
@@ -19,6 +18,7 @@ class SongDetailScreen extends StatelessWidget {
           ..add(LoadDataAndInitializePlayerEvent(trackUiModel: trackUiModel))
           ..add(AudioPlayerCurrentTrackArtistEvent())
           ..add(AudioPlayerCurrentTrackTitleEvent())
+          ..add(const AudioPlayerSeekPositionEvent(duration: Duration.zero))
           ..add(AudioPlayerPauseEvent()),
         child: BlocListener<AudioPlayerManagerBloc,
                 AudioPlayerManagerBlocState>(
