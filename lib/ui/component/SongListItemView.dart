@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 import '../../design_system/spotify_color.dart';
 
 class SongListItemView extends StatelessWidget {

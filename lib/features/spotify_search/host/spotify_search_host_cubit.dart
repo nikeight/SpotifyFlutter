@@ -14,7 +14,9 @@ class SpotifySearchHostCubit extends Cubit<UiState<SpotifySearchHostState>> {
   final getMultipleCategoryUseCase = GetIt.I.get<GetSpotifyCategoriesUseCase>();
   final categoryUiMapper = GetIt.I.get<CategoryUiMapper>();
 
-  SpotifySearchHostCubit() : super(Initial());
+  SpotifySearchHostCubit() : super(Initial()){
+    loadMultipleAlbums();
+  }
 
   void loadMultipleAlbums() {
     getMultipleCategoryUseCase.perform(
