@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 import 'package:praxis_data/models/spotify_data_model/album/SpotifyMultipleAlbumDataModel.dart';
 import 'package:praxis_data/models/spotify_data_model/album/TrackDataModel.dart';
+import 'package:praxis_data/models/spotify_data_model/category/SpotifyCategoryResponseDataModel.dart';
 import 'package:praxis_data/sources/network/common/custom_api_client.dart';
 import 'package:praxis_data/sources/network/source/spotify_data_source.dart';
 import 'package:praxis_data/utils/HttpRequestType.dart';
@@ -42,8 +43,8 @@ class SpotifyDataSourceImpl extends SpotifyDatasource {
   }
 
   @override
-  Future<ApiResponse<TrackDataModel>> getSingleAlbumTracks(String trackId) async {
-
+  Future<ApiResponse<TrackDataModel>> getSingleAlbumTracks(
+      String trackId) async {
     final tracksAlbumResponse = await safeApiCallHandler(
         customDioApiClient,
         HttpRequestType.GET,
@@ -52,8 +53,7 @@ class SpotifyDataSourceImpl extends SpotifyDatasource {
         null);
 
     if (tracksAlbumResponse is Success) {
-      final tracksResponse =
-      TrackDataModel.fromJson(tracksAlbumResponse.data);
+      final tracksResponse = TrackDataModel.fromJson(tracksAlbumResponse.data);
 
       return Success(data: tracksResponse);
     } else if (tracksAlbumResponse is Failure) {
@@ -61,5 +61,33 @@ class SpotifyDataSourceImpl extends SpotifyDatasource {
     } else {
       return Failure(error: Exception("Something went wrong"));
     }
+  }
+
+  @override
+  Future<ApiResponse<SpotifyCategoryResponseDataModel>>
+      getSpotifySearchCategories() async {
+    final spotifyCategoryListResponse = await safeApiCallHandler(
+        customDioApiClient,
+        HttpRequestType.GET,
+        get_spotify_search_categories_endpoint,
+        sharedPreference,
+        null);
+
+    if (spotifyCategoryListResponse is Success) {
+      final spotifyCategoryData = SpotifyCategoryResponseDataModel.fromJson(
+          spotifyCategoryListResponse.data);
+
+      return Success(data: spotifyCategoryData);
+    } else if (spotifyCategoryListResponse is Failure) {
+      return Failure(error: spotifyCategoryListResponse.error);
+    } else {
+      return Failure(error: Exception("Something went wrong"));
+    }
+  }
+
+  @override
+  Future<ApiResponse<TrackDataModel>> spotifySearch(String query) {
+    // TODO: implement spotifySearch
+    throw UnimplementedError();
   }
 }

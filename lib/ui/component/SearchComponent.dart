@@ -86,7 +86,7 @@ class MySearchCustomDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return const SongCarouselHost();
+    return const Text("");
   }
 
   @override

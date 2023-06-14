@@ -80,9 +80,9 @@ class SpotifyHostScreen extends StatelessWidget {
             builder: (context, state) {
               switch (state.navbarItem) {
                 case NavigationBottomBarItems.PROFILE:
-                  return  const SpotifyProfileScreen();
+                  return const SpotifyProfileScreen();
                 case NavigationBottomBarItems.SEARCH:
-                  return  ExampleView();
+                  return const Text("Search Screen");
                 case NavigationBottomBarItems.LIBRARY:
                   return const Text("Library Screen");
               }
