@@ -17,5 +17,8 @@ String get_multiple_albums_tracks_endpoint(String albumId) => "https://api.spoti
 // Get Categories
 String get_spotify_search_categories_endpoint = "https://api.spotify.com/v1/browse/categories";
 
+// Search Query
+String get_spotify_search_endpoint() => "https://api.spotify.com/v1/search?q=sunflower&type=track";
+
 const SPOTIFY_ACCESS_TOKEN_KEY = "spotify_access_token";
 const LAST_SAVED_TIME_IN_MS_KEY = "last_saved_time_in_ms";

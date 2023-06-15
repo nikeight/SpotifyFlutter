@@ -18,7 +18,7 @@ class GetSpotifyCategoriesUseCase extends UseCase<List<CategoryDm>, String> {
       if (multipleCategoryResponse is Success) {
         final multipleCategory =
             (multipleCategoryResponse as Success).data as List<CategoryDm>;
-        if (multipleCategoryResponse != null) {
+        if (multipleCategory.isNotEmpty) {
           streamController.add(multipleCategory);
         } else {
           streamController.addError(Exception("Null List"));

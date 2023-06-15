@@ -1,4 +1,5 @@
 import 'package:injectable/injectable.dart';
+import 'package:praxis_data/models/spotify_data_model/album/SearchQueryResponse.dart';
 import 'package:praxis_data/models/spotify_data_model/album/SpotifyMultipleAlbumDataModel.dart';
 import 'package:praxis_data/models/spotify_data_model/album/TrackDataModel.dart';
 import 'package:praxis_data/models/spotify_data_model/category/SpotifyCategoryResponseDataModel.dart';
@@ -86,8 +87,24 @@ class SpotifyDataSourceImpl extends SpotifyDatasource {
   }
 
   @override
-  Future<ApiResponse<TrackDataModel>> spotifySearch(String query) {
-    // TODO: implement spotifySearch
-    throw UnimplementedError();
+  Future<ApiResponse<SearchQueryResponse>> spotifySearch(String query) async {
+    final spotifySearchResponse = await safeApiCallHandler(
+      customDioApiClient,
+      HttpRequestType.GET,
+      get_spotify_search_endpoint(),
+      sharedPreference,
+      null,
+    );
+
+    if (spotifySearchResponse is Success) {
+      final spotifySearchData =
+          SearchQueryResponse.fromJson(spotifySearchResponse.data);
+
+      return Success(data: spotifySearchData);
+    } else if (spotifySearchResponse is Failure) {
+      return Failure(error: spotifySearchResponse.error);
+    } else {
+      return Failure(error: Exception("Something went wrong"));
+    }
   }
 }

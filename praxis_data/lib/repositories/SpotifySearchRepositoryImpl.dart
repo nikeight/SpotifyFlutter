@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:injectable/injectable.dart';
+import 'package:praxis_data/mapper/SearchQueryDataDomainMapper.dart';
+import 'package:praxis_data/models/spotify_data_model/album/SearchQueryResponse.dart';
 import 'package:praxis_data/models/spotify_data_model/category/SpotifyCategoryResponseDataModel.dart';
 import 'package:praxis_data/sources/network/common/custom_api_client.dart';
 import 'package:praxis_flutter_domain/entities/CategoryDm.dart';
+import 'package:praxis_flutter_domain/entities/SearchItemDm.dart';
 import 'package:praxis_flutter_domain/repositories/SpotifySearchRepository.dart';
 import 'package:praxis_flutter_domain/utils/api_response.dart';
 import '../mapper/CategoryDataDomainMapper.dart';
@@ -14,9 +17,10 @@ class SpotifySearchRepositoryImpl extends SpotifySearchRepository {
   final CustomApiClient apiClient;
   final SpotifyDatasource datasource;
   final CategoryDataDomainMapper categoryDataDomainMapper;
+  final SearchQueryDataDomainMapper searchQueryDataDomainMapper;
 
-  SpotifySearchRepositoryImpl(
-      this.apiClient, this.datasource, this.categoryDataDomainMapper);
+  SpotifySearchRepositoryImpl(this.apiClient, this.datasource,
+      this.categoryDataDomainMapper, this.searchQueryDataDomainMapper);
 
   @override
   Future<ApiResponse> getCachedRecentSearchHistory() {
@@ -47,7 +51,24 @@ class SpotifySearchRepositoryImpl extends SpotifySearchRepository {
   }
 
   @override
-  Future<ApiResponse> searchQuery(String query) {
-    throw UnimplementedError();
+  Future<ApiResponse<List<SearchItemDm>>> searchQuery(String query) async {
+    final searchQueryResponse = await datasource.spotifySearch(query);
+
+    List<SearchItemDm> searchItemList = [];
+    if (searchQueryResponse is Success) {
+      final spotifySearchCategoryResponse =
+          (searchQueryResponse as Success).data as SearchQueryResponse;
+
+      spotifySearchCategoryResponse.albums?.items?.map((e) {
+            searchItemList.add(searchQueryDataDomainMapper.mapToDomain(e));
+          }) ??
+          List.empty();
+
+      return Success(data: searchItemList);
+    } else if (searchQueryResponse is Failure) {
+      return Failure(error: (searchQueryResponse as Failure).error);
+    } else {
+      return Failure(error: Exception("Something went wrong"));
+    }
   }
 }

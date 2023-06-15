@@ -38,6 +38,7 @@ dependencies:
   uuid: ^3.0.6
   intl: ^0.17.0
   google_fonts: ^4.0.3
+  rxdart: ^0.26.0
 
   clean_architecture:
     path: ./clean_architecture
