@@ -21,27 +21,22 @@ class SpotifyLibraryBloc
 
   SpotifyLibraryBloc() : super(Initial()) {
     on<FetchInitialDataEvent>(
-        (event, emit) async => await _loadLibraryAlbumList(event, emit));
+        (event, emit) => _loadLibraryAlbumList(event, emit));
+    on<LoadedAlbumEvent>((event, emit) => _updateUi(event, emit));
   }
 
-  Future<void> _loadLibraryAlbumList(
+  void _loadLibraryAlbumList(
     SpotifyLibraryEvent event,
     Emitter<UiState<SpotifyLibraryState>> emit,
-  ) async {
+  ) {
+    final List<AlbumUiModel> recentlyPlayedList = [];
     getMultipleAlbumsUseCase.perform(
       (List<AlbumDm>? response) {
-        final List<AlbumUiModel> recentlyPlayedList = [];
         if (response != null && response.isNotEmpty) {
           for (var element in response) {
             recentlyPlayedList.add(getAlbumUiMapper.mapToUiModel(element));
           }
-          emit(
-            Success(
-              data: SpotifyLibraryFetchedAlbumListState(
-                recentlyPlayedList,
-              ),
-            ),
-          );
+          add(LoadedAlbumEvent(recentlyPlayedList));
         } else {
           print("Response is empty");
           emit(Failure(exception: Exception("API Failure")));
@@ -54,5 +49,13 @@ class SpotifyLibraryBloc
         // emit(Failure(exception: Exception("Completed : Something Went Wrong")));
       },
     );
+  }
+
+  void _updateUi(
+      LoadedAlbumEvent event, Emitter<UiState<SpotifyLibraryState>> emit) {
+    emit(Success(
+        data: SpotifyLibraryFetchedAlbumListState(
+      event.albumsList,
+    )));
   }
 }
