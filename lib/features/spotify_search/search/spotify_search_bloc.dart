@@ -15,7 +15,6 @@ part 'spotify_search_event.dart';
 part 'spotify_search_state.dart';
 
 class SpotifySearchBloc extends Bloc<SpotifySearchEvent, SpotifySearchState> {
-
   final getSearchItemListUseCase = GetIt.I.get<GetSearchQueryItemUseCase>();
   final searchItemUiMapper = GetIt.I.get<SearchItemUiMapper>();
 
@@ -28,6 +27,7 @@ class SpotifySearchBloc extends Bloc<SpotifySearchEvent, SpotifySearchState> {
             .asyncExpand(mapper);
       },
     );
+    on<SearchQueryUpdateUiEvent>((event, emit) => _updateUiEvent(event, emit));
   }
 
   Future<void> _fetchSearchResults(
@@ -38,11 +38,16 @@ class SpotifySearchBloc extends Bloc<SpotifySearchEvent, SpotifySearchState> {
         for (var element in response) {
           searchQueryItemList.add(searchItemUiMapper.mapToUiModel(element));
         }
-        emit(SpotifySearchQueryResultState(searchQueryItemList));
+        add(SearchQueryUpdateUiEvent(searchQueryItemList));
       } else {
         print("Response is empty");
         emit(SpotifySearchQueryResultState(List.empty()));
       }
     }, (e) {}, () {});
+  }
+
+  _updateUiEvent(
+      SearchQueryUpdateUiEvent event, Emitter<SpotifySearchState> emit) {
+    emit(SpotifySearchQueryResultState(event.queryFetchedList));
   }
 }

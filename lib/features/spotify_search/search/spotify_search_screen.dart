@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/spotify_search/search/spotify_search_bloc.dart';
-import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/ui/component/SongListItemView.dart';
 
 class SpotifySearchScreen extends StatelessWidget {
@@ -34,10 +33,11 @@ class SpotifySearchScreen extends StatelessWidget {
             body: state is SpotifySearchQueryResultState
                 ? Center(
                     child: ListView.builder(
-                        itemCount: (state as Success).data.searchItems.length,
+                        itemCount: state
+                            .searchQueryItem
+                            .length,
                         itemBuilder: (context, index) {
-                          var currentItem =
-                              (state as Success).data.searchItems[index];
+                          var currentItem = state.searchQueryItem[index];
                           return SongListItemView(
                             // imageUrl: currentItem.thumbnailImageUrl,
                             songName: currentItem.trackName,

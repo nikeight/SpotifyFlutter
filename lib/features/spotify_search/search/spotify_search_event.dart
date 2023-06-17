@@ -8,3 +8,9 @@ class SearchQueryEnteredEvent extends SpotifySearchEvent {
 
   SearchQueryEnteredEvent(this.query);
 }
+
+class SearchQueryUpdateUiEvent extends SpotifySearchEvent {
+  final List<SearchItemUiModel> queryFetchedList;
+
+  SearchQueryUpdateUiEvent(this.queryFetchedList);
+}

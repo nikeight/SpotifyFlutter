@@ -59,10 +59,9 @@ class SpotifySearchRepositoryImpl extends SpotifySearchRepository {
       final spotifySearchCategoryResponse =
           (searchQueryResponse as Success).data as SearchQueryResponse;
 
-      spotifySearchCategoryResponse.albums?.items?.map((e) {
+      spotifySearchCategoryResponse.albums?.items?.forEach((e) {
             searchItemList.add(searchQueryDataDomainMapper.mapToDomain(e));
-          }) ??
-          List.empty();
+          });
 
       return Success(data: searchItemList);
     } else if (searchQueryResponse is Failure) {
