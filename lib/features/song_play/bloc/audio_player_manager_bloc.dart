@@ -3,12 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:praxis_flutter/mapper/AlbumUIMapper.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'audio_player_manager_event.dart';
@@ -18,27 +16,22 @@ part 'audio_player_manager_state.dart';
 class AudioPlayerManagerBloc
     extends Bloc<AudioPlayerManagerEvent, AudioPlayerManagerBlocState> {
   AudioPlayerManagerBloc()
-      : super(const AudioPlayerManagerBlocState.initial()) {
-    on<LoadDataAndInitializePlayerEvent>(_loadAndInitializeAudioPlayerState,
-        transformer: restartable());
-    on<AudioPlayerCurrentTrackTitleEvent>(_listenToCurrentTrackTitleState,
-        transformer: restartable());
-    on<AudioPlayerCurrentTrackArtistEvent>(_listenToCurrentTrackArtistState,
-        transformer: restartable());
-    on<AudioPlayerPlayEvent>(_listenToPlayBackState,
-        transformer: restartable());
-    on<AudioPlayerPauseEvent>(_listenToPlayBackState,
-        transformer: restartable());
-    on<AudioPlayerSeekPositionEvent>(_listenToSeekProgressState,
-        transformer: restartable());
-    on<AudioPlayerNextTrackEvent>(_listenToSkipState,
-        transformer: restartable());
-    on<AudioPlayerPreviousTrackEvent>(_listenToSkipState,
-        transformer: restartable());
-    on<AudioPlayerRepeatTrackEvent>(_listenToRepeatModeState,
-        transformer: restartable());
-    on<AudioPlayerShuffleTrackEvent>(_listenToShuffleState,
-        transformer: restartable());
+      : super(
+          AudioPlayerManagerBlocState.initial(),
+        ) {
+    // Reacting to Different Events
+    on<LoadDataAndInitializePlayerEvent>(_loadAndInitializeAudioPlayerState);
+    on<UpdateCompleteUiEvent>(_updateCompleteUi);
+    on<UpdateTrackTitleAndArtistEvent>(_listenToCurrentTrackArtistState);
+    on<AudioPlayerPlayEvent>(_listenToPlayBackState);
+    on<AudioPlayerPauseEvent>(_listenToPlayBackState);
+    on<AudioPlayerSeekPositionEvent>(_listenToSeekProgressState);
+    on<AudioPlayerNextTrackEvent>(_listenToSkipState);
+    on<AudioPlayerPreviousTrackEvent>(_listenToSkipState);
+    on<AudioPlayerRepeatTrackEvent>(_listenToRepeatModeState);
+    on<AudioPlayerShuffleTrackEvent>(_listenToShuffleState);
+
+    // checkSeekProgress();
   }
 
   final audioHandler = GetIt.I.get<AudioHandler>();
@@ -46,10 +39,20 @@ class AudioPlayerManagerBloc
   final getAlbumUiMapper = GetIt.I.get<AlbumUiMapper>();
 
   // Handled ✅
+  // Update the Whole State
+  void _updateCompleteUi(
+    UpdateCompleteUiEvent event,
+    Emitter<AudioPlayerManagerBlocState> emit,
+  ) {
+    emit(event.audioPlayerManagerBlocState);
+  }
+
+  // Handled ✅
   Future<void> _loadAndInitializeAudioPlayerState(
     LoadDataAndInitializePlayerEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
   ) async {
+    print("ActualState - Loading ${(state).audioPlayerStateModel}");
     final getTrackItems = event.trackUiModel.itemList;
     final mediaItemList = getTrackItems
         .map(
@@ -57,7 +60,7 @@ class AudioPlayerManagerBloc
               id: e.itemId,
               title: e.trackName,
               artist: e.artist,
-              duration: const Duration(milliseconds: 30000),
+              duration: const Duration(seconds: 30),
               // Extra Parameters takes the source for the Audio File.
               extras: {'url': e.hrefMp3}),
         )
@@ -69,6 +72,8 @@ class AudioPlayerManagerBloc
   // Handled ✅
   Future<void> _listenToPlayBackState(AudioPlayerManagerEvent event,
       Emitter<AudioPlayerManagerBlocState> emit) async {
+    print("ActualState - Play/Pause ${(state).audioPlayerStateModel}");
+
     // Handle Play Pause Events
     if (event is AudioPlayerPlayEvent) {
       audioHandler.play();
@@ -78,131 +83,79 @@ class AudioPlayerManagerBloc
       audioHandler.pause();
     }
 
-    await emit.forEach(audioHandler.playbackState,
-        onData: (PlaybackState playbackState) {
+    audioHandler.playbackState.listen((playbackState) {
       final isPlaying = playbackState.playing;
       final processingState = playbackState.processingState;
       if (processingState == AudioProcessingState.loading ||
           processingState == AudioProcessingState.buffering) {
-        return AudioPlayerManagerBlocState.success(
-          trackTitleName: state.trackArtistName,
-          trackArtistName: state.trackArtistName,
-          fetchedPlayList: state.fetchedPlayList,
-          progressBarTotalValue: state.progressBarTotalValue,
-          progressBarBufferedValue: state.progressBarBufferedValue,
-          progressBarCurrentValue: state.progressBarCurrentValue,
-          isAudioPlayerLoading: true,
-          isAudioPlayerPlaying: false,
-          isAudioPlayerPaused: false,
-          isShuffledModeEnabled: state.isShuffledModeEnabled,
-          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        add(UpdateTrackTitleAndArtistEvent());
+        // Adding the Update UI Event : For Loading State
+        add(
+          UpdateCompleteUiEvent(
+            state.copyWith(
+              currentPlayerPlayPauseBtnState:
+                  CurrentPlayerPlayPauseBtnState(false, false, true),
+            ),
+          ),
         );
       } else if (!isPlaying) {
-        return AudioPlayerManagerBlocState.success(
-          trackTitleName: state.trackArtistName,
-          trackArtistName: state.trackArtistName,
-          fetchedPlayList: state.fetchedPlayList,
-          progressBarTotalValue: state.progressBarTotalValue,
-          progressBarBufferedValue: state.progressBarBufferedValue,
-          progressBarCurrentValue: state.progressBarCurrentValue,
-          isAudioPlayerLoading: false,
-          isAudioPlayerPlaying: false,
-          isAudioPlayerPaused: true,
-          isShuffledModeEnabled: state.isShuffledModeEnabled,
-          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        add(UpdateTrackTitleAndArtistEvent());
+        // Adding the Update UI Event : For Pause State
+        add(
+          UpdateCompleteUiEvent(
+            state.copyWith(
+              currentPlayerPlayPauseBtnState:
+                  CurrentPlayerPlayPauseBtnState(false, true, false),
+            ),
+          ),
         );
       } else if (processingState != AudioProcessingState.completed) {
-        return AudioPlayerManagerBlocState.success(
-          trackTitleName: state.trackArtistName,
-          trackArtistName: state.trackArtistName,
-          fetchedPlayList: state.fetchedPlayList,
-          progressBarTotalValue: state.progressBarTotalValue,
-          progressBarBufferedValue: state.progressBarBufferedValue,
-          progressBarCurrentValue: state.progressBarCurrentValue,
-          isAudioPlayerLoading: false,
-          isAudioPlayerPlaying: true,
-          isAudioPlayerPaused: false,
-          isShuffledModeEnabled: state.isShuffledModeEnabled,
-          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        add(UpdateTrackTitleAndArtistEvent());
+        // Adding the Update UI Event : For Playing State
+        add(
+          UpdateCompleteUiEvent(
+            state.copyWith(
+              currentPlayerPlayPauseBtnState:
+                  CurrentPlayerPlayPauseBtnState(true, false, false),
+            ),
+          ),
         );
       } else {
         audioHandler.seek(Duration.zero);
-        return AudioPlayerManagerBlocState.success(
-          trackTitleName: state.trackArtistName,
-          trackArtistName: state.trackArtistName,
-          fetchedPlayList: state.fetchedPlayList,
-          progressBarTotalValue: state.progressBarTotalValue,
-          progressBarBufferedValue: state.progressBarBufferedValue,
-          progressBarCurrentValue: state.progressBarCurrentValue,
-          isAudioPlayerLoading: false,
-          isAudioPlayerPlaying: false,
-          isAudioPlayerPaused: true,
-          isShuffledModeEnabled: state.isShuffledModeEnabled,
-          isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-          isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-          isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-          isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+        // Adding the Update UI Event : For Idle State
+        add(
+          UpdateCompleteUiEvent(
+            state.copyWith(
+              currentPlayerPlayPauseBtnState:
+                  CurrentPlayerPlayPauseBtnState(false, true, false),
+            ),
+          ),
         );
       }
     });
   }
 
+  // Handled ✅
   // Update the Artist Title
-  Future<void> _listenToCurrentTrackArtistState(AudioPlayerManagerEvent event,
+  Future<void> _listenToCurrentTrackArtistState(
+      UpdateTrackTitleAndArtistEvent event,
       Emitter<AudioPlayerManagerBlocState> emit) async {
-    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
-      // Update the Track Title and Artist name
-      return AudioPlayerManagerBlocState.success(
-        trackTitleName: state.trackArtistName,
-        trackArtistName: mediaItem?.artist.toString() ?? "",
-        fetchedPlayList: state.fetchedPlayList,
-        progressBarTotalValue: state.progressBarTotalValue,
-        progressBarBufferedValue: state.progressBarBufferedValue,
-        progressBarCurrentValue: state.progressBarCurrentValue,
-        isAudioPlayerLoading: state.isAudioPlayerLoading,
-        isAudioPlayerPlaying: state.isAudioPlayerPlaying,
-        isAudioPlayerPaused: state.isAudioPlayerPaused,
-        isShuffledModeEnabled: state.isShuffledModeEnabled,
-        isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-        isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-        isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-        isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
+    audioHandler.mediaItem.listen((MediaItem? mediaItem) {
+      add(
+        UpdateCompleteUiEvent(
+          state.copyWith(
+            currentTrackDetailState: CurrentTrackDetailState(
+                mediaItem?.artist.toString() ?? "Loading  II",
+                mediaItem?.title.toString() ?? "Loading II"),
+          ),
+        ),
       );
+
+      _listenToSkipState(event, emit);
     });
   }
 
-  // Update the Track Song Title
-  Future<void> _listenToCurrentTrackTitleState(AudioPlayerManagerEvent event,
-      Emitter<AudioPlayerManagerBlocState> emit) async {
-    await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
-      return AudioPlayerManagerBlocState.success(
-        trackTitleName: mediaItem?.title.toString() ?? "",
-        trackArtistName: state.trackArtistName,
-        fetchedPlayList: state.fetchedPlayList,
-        progressBarTotalValue: state.progressBarTotalValue,
-        progressBarBufferedValue: state.progressBarBufferedValue,
-        progressBarCurrentValue: state.progressBarCurrentValue,
-        isAudioPlayerLoading: state.isAudioPlayerLoading,
-        isAudioPlayerPlaying: state.isAudioPlayerPlaying,
-        isAudioPlayerPaused: state.isAudioPlayerPaused,
-        isShuffledModeEnabled: state.isShuffledModeEnabled,
-        isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-        isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-        isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-        isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
-      );
-    });
-  }
-
+  // Handled ✅
   Future<void> _listenToSeekProgressState(
     AudioPlayerManagerEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
@@ -211,67 +164,16 @@ class AudioPlayerManagerBloc
       audioHandler.seek(event.duration);
     }
 
-    // Update the Total Duration Position State
-    await emit.forEach(audioHandler.mediaItem,
-        onData: (MediaItem? totalDuration) =>
-            AudioPlayerManagerBlocState.success(
-              trackTitleName: state.trackTitleName,
-              trackArtistName: state.trackArtistName,
-              fetchedPlayList: state.fetchedPlayList,
-              progressBarTotalValue:
-                  totalDuration?.duration?.inSeconds ?? Duration.zero.inSeconds,
-              progressBarBufferedValue: state.progressBarBufferedValue,
-              progressBarCurrentValue: state.progressBarCurrentValue,
-              isAudioPlayerLoading: state.isAudioPlayerLoading,
-              isAudioPlayerPlaying: state.isAudioPlayerPlaying,
-              isAudioPlayerPaused: state.isAudioPlayerPaused,
-              isShuffledModeEnabled: state.isShuffledModeEnabled,
-              isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-              isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-              isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-              isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
-            ));
-
-    // Update Current Position State
-    await emit.forEach(AudioService.position,
-        onData: (Duration currentPosition) =>
-            AudioPlayerManagerBlocState.success(
-              trackTitleName: state.trackTitleName,
-              trackArtistName: state.trackArtistName,
-              fetchedPlayList: state.fetchedPlayList,
-              progressBarTotalValue: state.progressBarTotalValue,
-              progressBarBufferedValue: state.progressBarBufferedValue,
-              progressBarCurrentValue: currentPosition.inSeconds,
-              isAudioPlayerLoading: state.isAudioPlayerLoading,
-              isAudioPlayerPlaying: state.isAudioPlayerPlaying,
-              isAudioPlayerPaused: state.isAudioPlayerPaused,
-              isShuffledModeEnabled: state.isShuffledModeEnabled,
-              isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-              isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-              isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-              isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
-            ));
-
-    // Update Buffered Position State
-    await emit.forEach(audioHandler.playbackState,
-        onData: (PlaybackState bufferedPosition) =>
-            AudioPlayerManagerBlocState.success(
-              trackTitleName: state.trackTitleName,
-              trackArtistName: state.trackArtistName,
-              fetchedPlayList: state.fetchedPlayList,
-              progressBarTotalValue: state.progressBarTotalValue,
-              progressBarBufferedValue:
-                  bufferedPosition.bufferedPosition.inSeconds,
-              progressBarCurrentValue: state.progressBarCurrentValue,
-              isAudioPlayerLoading: state.isAudioPlayerLoading,
-              isAudioPlayerPlaying: state.isAudioPlayerPlaying,
-              isAudioPlayerPaused: state.isAudioPlayerPaused,
-              isShuffledModeEnabled: state.isShuffledModeEnabled,
-              isLastSongNotifierEnabled: state.isLastSongNotifierEnabled,
-              isFirstSongNotifierEnabled: state.isFirstSongNotifierEnabled,
-              isRepeatSongModeEnabled: state.isRepeatSongModeEnabled,
-              isRepeatAlbumModeEnabled: state.isRepeatAlbumModeEnabled,
-            ));
+    AudioService.position.listen((Duration currentPosition) {
+      add(
+        UpdateCompleteUiEvent(
+          state.copyWith(
+            currentProgressBarState:
+                CurrentProgressBarState(currentPosition.inSeconds, 30),
+          ),
+        ),
+      );
+    });
   }
 
   Future<void> _listenToSkipState(AudioPlayerManagerEvent event,
@@ -284,41 +186,32 @@ class AudioPlayerManagerBloc
       audioHandler.skipToPrevious();
     }
 
-    // await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
-    //   // Update the Track Title and Artist name
-    //   return CurrentPlayerSongTitleState(
-    //       songTitle: mediaItem?.title.toString() ?? "");
-    // });
-    //
-    // await emit.forEach(audioHandler.mediaItem, onData: (MediaItem? mediaItem) {
-    //   // Update the Track Title and Artist name
-    //   return CurrentPlayerArtistNameState(
-    //       artistName: mediaItem?.artist.toString() ?? "");
-    // });
-    //
-    // // Todo : Setup those two State in One and Add the Logic at UI Layer (Next,Previous btn)
-    // // Updating the Song Title and Artist value
-    // audioHandler.mediaItem.listen((event) {
-    //   // Update the Track Title and Artist name
-    //   // emit(CurrentPlayerSongTitleState(
-    //   //     songTitle: event?.title.toString() ?? ""));
-    //   // emit(CurrentPlayerArtistNameState(
-    //   //     artistName: event?.artist.toString() ?? ""));
-    //
-    //   final mediaItem = audioHandler.mediaItem.valueWrapper?.value;
-    //   final playlist = audioHandler.queue.valueWrapper?.value;
-    //
-    //   // No Data available, disable the Skip buttons.
-    //   if (playlist == null || playlist.length < 2 || mediaItem == null) {
-    //     emit(const PlayerLastSongNotifier(isLastSongNotifier: false));
-    //     emit(const PlayerFirstSongNotifier(isFirstSongNotifier: false));
-    //   } else {
-    //     emit(PlayerFirstSongNotifier(
-    //         isFirstSongNotifier: playlist.first == mediaItem));
-    //     emit(PlayerLastSongNotifier(
-    //         isLastSongNotifier: playlist.last == mediaItem));
-    //   }
-    // });
+    final mediaItem = audioHandler.mediaItem.valueWrapper?.value;
+    final playlist = audioHandler.queue.valueWrapper?.value;
+
+    // No Data available, disable the Skip buttons.
+    if (playlist == null || playlist.length < 2 || mediaItem == null) {
+      add(
+        UpdateCompleteUiEvent(
+          state.copyWith(
+            audioPlayerOtherBtnState:
+                AudioPlayerOtherBtnState(false, false, false, false),
+          ),
+        ),
+      );
+    } else {
+      add(
+        UpdateCompleteUiEvent(
+          state.copyWith(
+            audioPlayerOtherBtnState: AudioPlayerOtherBtnState(
+                playlist.first == mediaItem,
+                playlist.last == mediaItem,
+                false,
+                false),
+          ),
+        ),
+      );
+    }
   }
 
   void _listenToRepeatModeState(

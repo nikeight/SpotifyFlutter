@@ -16,16 +16,13 @@ class SongDetailScreen extends StatelessWidget {
         lazy: true,
         create: (context) => AudioPlayerManagerBloc()
           ..add(LoadDataAndInitializePlayerEvent(trackUiModel: trackUiModel))
-          ..add(AudioPlayerCurrentTrackArtistEvent())
-          ..add(AudioPlayerCurrentTrackTitleEvent())
+          ..add(UpdateTrackTitleAndArtistEvent())
           ..add(const AudioPlayerSeekPositionEvent(duration: Duration.zero))
           ..add(AudioPlayerPauseEvent()),
         child: BlocListener<AudioPlayerManagerBloc,
                 AudioPlayerManagerBlocState>(
-
             /// In the Listener we will manage all the Out of State scope methods
             /// Like SnackBar, Dialog showing and other events.
-
             listener: (context, state) {
               if (state is Success) {
                 final snackBar = SnackBar(

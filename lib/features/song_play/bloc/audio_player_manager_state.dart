@@ -1,170 +1,82 @@
 part of 'audio_player_manager_bloc.dart';
 
-// Todo : Read about @immutable in Flutter Bloc Pattern
+class AudioPlayerManagerBlocState {
+  final AudioPlayerStateModel audioPlayerStateModel;
 
-class AudioPlayerManagerBlocState extends Equatable {
-  final String trackTitleName;
-  final String trackArtistName;
-  final List<String>? fetchedPlayList;
-  final int progressBarTotalValue;
-  final int progressBarBufferedValue;
-  final int progressBarCurrentValue;
-  final bool isAudioPlayerPlaying;
-  final bool isAudioPlayerLoading;
-  final bool isAudioPlayerPaused;
-  final bool isShuffledModeEnabled;
-  final bool isLastSongNotifierEnabled;
-  final bool isFirstSongNotifierEnabled;
-  final bool isRepeatSongModeEnabled;
-  final bool isRepeatAlbumModeEnabled;
+  factory AudioPlayerManagerBlocState.initial() => AudioPlayerManagerBlocState(
+          audioPlayerStateModel: AudioPlayerStateModel(
+        currentTrackDetailState:
+            CurrentTrackDetailState("Loading..", "Loading.."),
+        currentProgressBarState: CurrentProgressBarState(0, 30),
+        currentPlayerPlayPauseBtnState:
+            CurrentPlayerPlayPauseBtnState(false, false, true),
+        audioPlayerOtherBtnState:
+            AudioPlayerOtherBtnState(false, false, false, false),
+      ));
 
-  const AudioPlayerManagerBlocState.initial(
-      {this.trackTitleName = "Album Title",
-      this.trackArtistName = "Album Artist Name",
-      this.fetchedPlayList,
-      this.progressBarTotalValue = 100,
-      this.progressBarBufferedValue = 0,
-      this.progressBarCurrentValue = 0,
-      this.isAudioPlayerLoading = false,
-      this.isAudioPlayerPlaying = false,
-      this.isAudioPlayerPaused = true,
-      this.isShuffledModeEnabled = false,
-      this.isLastSongNotifierEnabled = true,
-      this.isFirstSongNotifierEnabled = true,
-      this.isRepeatSongModeEnabled = false,
-      this.isRepeatAlbumModeEnabled = false});
+  AudioPlayerManagerBlocState({required this.audioPlayerStateModel});
 
-  const AudioPlayerManagerBlocState.success({
-    this.trackTitleName = "",
-    this.trackArtistName = "",
-    this.fetchedPlayList,
-    this.progressBarTotalValue = 0,
-    this.progressBarBufferedValue = 0,
-    this.progressBarCurrentValue = 0,
-    this.isAudioPlayerLoading = false,
-    this.isAudioPlayerPlaying = false,
-    this.isAudioPlayerPaused = false,
-    this.isShuffledModeEnabled = false,
-    this.isLastSongNotifierEnabled = false,
-    this.isFirstSongNotifierEnabled = false,
-    this.isRepeatSongModeEnabled = false,
-    this.isRepeatAlbumModeEnabled = false,
-  });
-
-  @override
-  List<Object?> get props => [
-        trackTitleName,
-        trackArtistName,
-        fetchedPlayList,
-        progressBarCurrentValue,
-        progressBarBufferedValue,
-        progressBarTotalValue,
-        isAudioPlayerLoading,
-        isAudioPlayerPaused,
-        isAudioPlayerPlaying,
-        isShuffledModeEnabled,
-        isLastSongNotifierEnabled,
-        isFirstSongNotifierEnabled,
-        isRepeatSongModeEnabled,
-        isRepeatAlbumModeEnabled,
-      ];
+  AudioPlayerManagerBlocState copyWith({
+    CurrentTrackDetailState? currentTrackDetailState,
+    CurrentProgressBarState? currentProgressBarState,
+    CurrentPlayerPlayPauseBtnState? currentPlayerPlayPauseBtnState,
+    AudioPlayerOtherBtnState? audioPlayerOtherBtnState,
+  }) =>
+      AudioPlayerManagerBlocState(
+        audioPlayerStateModel: AudioPlayerStateModel(
+            currentTrackDetailState: currentTrackDetailState ??
+                this.audioPlayerStateModel.currentTrackDetailState,
+            currentProgressBarState: currentProgressBarState ??
+                this.audioPlayerStateModel.currentProgressBarState,
+            currentPlayerPlayPauseBtnState: currentPlayerPlayPauseBtnState ??
+                this.audioPlayerStateModel.currentPlayerPlayPauseBtnState,
+            audioPlayerOtherBtnState: audioPlayerOtherBtnState ??
+                this.audioPlayerStateModel.audioPlayerOtherBtnState),
+      );
 }
 
-// Nothing Happening : Initial State
-// class InitialState extends AudioPlayerManagerBlocState {}
-//
-// // Changing Title of the Track
-// class CurrentPlayerSongTitleState extends AudioPlayerManagerBlocState {
-//   final String songTitle;
-//
-//   const CurrentPlayerSongTitleState({required this.songTitle});
-//
-//   @override
-//   List<Object?> get props => [songTitle];
-// }
-//
-// // Changing ArtistName of the Track
-// class CurrentPlayerArtistNameState extends AudioPlayerManagerBlocState {
-//   final String artistName;
-//
-//   const CurrentPlayerArtistNameState({required this.artistName});
-//
-//   @override
-//   List<Object?> get props => [artistName];
-// }
-//
-// class FetchedPlayListState extends AudioPlayerManagerBlocState {
-//   final List<String> fetchedPlayList;
-//
-//   const FetchedPlayListState({required this.fetchedPlayList});
-//
-//   @override
-//   List<Object?> get props => [fetchedPlayList];
-// }
-//
-// class CurrentSongProgressBarState extends AudioPlayerManagerBlocState {
-//   final int totalLength;
-//   final int buffered;
-//   final int currentPosition;
-//
-//   const CurrentSongProgressBarState(
-//       {required this.currentPosition,
-//       required this.buffered,
-//       required this.totalLength});
-//
-//   @override
-//   List<Object?> get props => [currentPosition, buffered, totalLength];
-// }
-//
-// class CurrentSongPlayButtonState extends AudioPlayerManagerBlocState {
-//   final bool isPlaying;
-//   final bool isLoading;
-//   final bool isPause;
-//
-//   const CurrentSongPlayButtonState(
-//       {required this.isPlaying,
-//       required this.isLoading,
-//       required this.isPause});
-//
-//   @override
-//   List<Object?> get props => [isPlaying, isLoading, isPause];
-// }
-//
-// class IsPlayerShuffleMode extends AudioPlayerManagerBlocState {
-//   final bool isShuffleModeEnabled;
-//
-//   const IsPlayerShuffleMode({required this.isShuffleModeEnabled});
-//
-//   @override
-//   List<Object?> get props => [isShuffleModeEnabled];
-// }
-//
-// class PlayerLastSongNotifier extends AudioPlayerManagerBlocState {
-//   final bool isLastSongNotifier;
-//
-//   const PlayerLastSongNotifier({required this.isLastSongNotifier});
-//
-//   @override
-//   List<Object?> get props => [isLastSongNotifier];
-// }
-//
-// class PlayerFirstSongNotifier extends AudioPlayerManagerBlocState {
-//   final bool isFirstSongNotifier;
-//
-//   const PlayerFirstSongNotifier({required this.isFirstSongNotifier});
-//
-//   @override
-//   List<Object?> get props => [isFirstSongNotifier];
-// }
-//
-// class PlayerRepeatModeState extends AudioPlayerManagerBlocState {
-//   final bool isRepeatSongEnabled;
-//   final bool isRepeatPlayListEnabled;
-//
-//   const PlayerRepeatModeState(
-//       {required this.isRepeatSongEnabled,
-//       required this.isRepeatPlayListEnabled});
-//
-//   @override
-//   List<Object?> get props => [isRepeatSongEnabled, isRepeatPlayListEnabled];
-// }
+class AudioPlayerStateModel {
+  CurrentTrackDetailState? currentTrackDetailState;
+  CurrentProgressBarState? currentProgressBarState;
+  CurrentPlayerPlayPauseBtnState? currentPlayerPlayPauseBtnState;
+  AudioPlayerOtherBtnState? audioPlayerOtherBtnState;
+
+  AudioPlayerStateModel({
+    this.currentTrackDetailState,
+    this.currentProgressBarState,
+    this.currentPlayerPlayPauseBtnState,
+    this.audioPlayerOtherBtnState,
+  });
+}
+
+class CurrentTrackDetailState {
+  String artistName;
+  String trackTitle;
+
+  CurrentTrackDetailState(this.artistName, this.trackTitle);
+}
+
+class CurrentProgressBarState {
+  int currentProgress;
+  int totalProgress;
+
+  CurrentProgressBarState(this.currentProgress, this.totalProgress);
+}
+
+class CurrentPlayerPlayPauseBtnState {
+  bool isPlaying;
+  bool isPaused;
+  bool isLoading;
+
+  CurrentPlayerPlayPauseBtnState(this.isPlaying, this.isPaused, this.isLoading);
+}
+
+class AudioPlayerOtherBtnState {
+  bool isNextTrackAvailable;
+  bool isPrevTrackAvailable;
+  bool isRepeatModeEnabled;
+  bool isShuffleModeEnabled;
+
+  AudioPlayerOtherBtnState(this.isNextTrackAvailable, this.isPrevTrackAvailable,
+      this.isRepeatModeEnabled, this.isShuffleModeEnabled);
+}

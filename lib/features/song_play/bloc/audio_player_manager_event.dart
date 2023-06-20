@@ -7,6 +7,8 @@ abstract class AudioPlayerManagerEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+// Load Data at the Initial Steps
+// Pass the Track Details to Bloc
 class LoadDataAndInitializePlayerEvent extends AudioPlayerManagerEvent {
   final TrackUiModel trackUiModel;
 
@@ -15,18 +17,34 @@ class LoadDataAndInitializePlayerEvent extends AudioPlayerManagerEvent {
   @override
   List<Object?> get props => [trackUiModel];
 }
-class AudioPlayerCurrentTrackArtistEvent extends AudioPlayerManagerEvent {}
 
-class AudioPlayerCurrentTrackTitleEvent extends AudioPlayerManagerEvent {}
+// This will update the whole UI at each other Event
+class UpdateCompleteUiEvent extends AudioPlayerManagerEvent {
+  final AudioPlayerManagerBlocState audioPlayerManagerBlocState;
 
+  const UpdateCompleteUiEvent(this.audioPlayerManagerBlocState);
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [audioPlayerManagerBlocState];
+}
+
+// Play Event
 class AudioPlayerPlayEvent extends AudioPlayerManagerEvent {}
 
+// Update Track Title and Artist
+class UpdateTrackTitleAndArtistEvent extends AudioPlayerManagerEvent {}
+
+// Pause Event
 class AudioPlayerPauseEvent extends AudioPlayerManagerEvent {}
 
+// Next Track Event
 class AudioPlayerNextTrackEvent extends AudioPlayerManagerEvent {}
 
+// Previous Track Event
 class AudioPlayerPreviousTrackEvent extends AudioPlayerManagerEvent {}
 
+// Update SeekBar position Event
 class AudioPlayerSeekPositionEvent extends AudioPlayerManagerEvent {
   final Duration duration;
 
@@ -36,8 +54,10 @@ class AudioPlayerSeekPositionEvent extends AudioPlayerManagerEvent {
   List<Object?> get props => [duration];
 }
 
+// Update Shuffle Mode Event
 class AudioPlayerShuffleTrackEvent extends AudioPlayerManagerEvent {}
 
+// Update Repeat Mode Event
 class AudioPlayerRepeatTrackEvent extends AudioPlayerManagerEvent {
   final RepeatState repeatState;
 
@@ -47,7 +67,7 @@ class AudioPlayerRepeatTrackEvent extends AudioPlayerManagerEvent {
   List<Object?> get props => [repeatState];
 }
 
+// Mark any Track as Fav Event
 class FavouriteTrackEvent extends AudioPlayerManagerEvent {}
-
 
 enum RepeatState { OFF, REPEAT_SONG, REPEAT_PLAYLIST }
