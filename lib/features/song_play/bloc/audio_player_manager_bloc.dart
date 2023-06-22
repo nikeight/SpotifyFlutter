@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:praxis_flutter/mapper/AlbumUIMapper.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'audio_player_manager_event.dart';
 
@@ -30,8 +29,6 @@ class AudioPlayerManagerBloc
     on<AudioPlayerPreviousTrackEvent>(_listenToSkipState);
     on<AudioPlayerRepeatTrackEvent>(_listenToRepeatModeState);
     on<AudioPlayerShuffleTrackEvent>(_listenToShuffleState);
-
-    // checkSeekProgress();
   }
 
   final audioHandler = GetIt.I.get<AudioHandler>();
@@ -83,56 +80,55 @@ class AudioPlayerManagerBloc
       audioHandler.pause();
     }
 
-    audioHandler.playbackState.listen((playbackState) {
-      final isPlaying = playbackState.playing;
-      final processingState = playbackState.processingState;
-      if (processingState == AudioProcessingState.loading ||
-          processingState == AudioProcessingState.buffering) {
-        add(UpdateTrackTitleAndArtistEvent());
-        // Adding the Update UI Event : For Loading State
-        add(
-          UpdateCompleteUiEvent(
-            state.copyWith(
-              currentPlayerPlayPauseBtnState:
-                  CurrentPlayerPlayPauseBtnState(false, false, true),
+    audioHandler.playbackState.listen(
+      (playbackState) {
+        final isPlaying = playbackState.playing;
+        final processingState = playbackState.processingState;
+        if (processingState == AudioProcessingState.loading ||
+            processingState == AudioProcessingState.buffering) {
+          // Adding the Update UI Event : For Loading State
+          add(
+            UpdateCompleteUiEvent(
+              state.copyWith(
+                currentPlayerPlayPauseBtnState:
+                    CurrentPlayerPlayPauseBtnState(false, false, true),
+              ),
             ),
-          ),
-        );
-      } else if (!isPlaying) {
-        add(UpdateTrackTitleAndArtistEvent());
-        // Adding the Update UI Event : For Pause State
-        add(
-          UpdateCompleteUiEvent(
-            state.copyWith(
-              currentPlayerPlayPauseBtnState:
-                  CurrentPlayerPlayPauseBtnState(false, true, false),
+          );
+        } else if (!isPlaying) {
+          // Adding the Update UI Event : For Pause State
+          add(
+            UpdateCompleteUiEvent(
+              state.copyWith(
+                currentPlayerPlayPauseBtnState:
+                    CurrentPlayerPlayPauseBtnState(false, true, false),
+              ),
             ),
-          ),
-        );
-      } else if (processingState != AudioProcessingState.completed) {
-        add(UpdateTrackTitleAndArtistEvent());
-        // Adding the Update UI Event : For Playing State
-        add(
-          UpdateCompleteUiEvent(
-            state.copyWith(
-              currentPlayerPlayPauseBtnState:
-                  CurrentPlayerPlayPauseBtnState(true, false, false),
+          );
+        } else if (processingState != AudioProcessingState.completed) {
+          // Adding the Update UI Event : For Playing State
+          add(
+            UpdateCompleteUiEvent(
+              state.copyWith(
+                currentPlayerPlayPauseBtnState:
+                    CurrentPlayerPlayPauseBtnState(true, false, false),
+              ),
             ),
-          ),
-        );
-      } else {
-        audioHandler.seek(Duration.zero);
-        // Adding the Update UI Event : For Idle State
-        add(
-          UpdateCompleteUiEvent(
-            state.copyWith(
-              currentPlayerPlayPauseBtnState:
-                  CurrentPlayerPlayPauseBtnState(false, true, false),
+          );
+        } else {
+          audioHandler.seek(Duration.zero);
+          // Adding the Update UI Event : For Idle State
+          add(
+            UpdateCompleteUiEvent(
+              state.copyWith(
+                currentPlayerPlayPauseBtnState:
+                    CurrentPlayerPlayPauseBtnState(false, true, false),
+              ),
             ),
-          ),
-        );
-      }
-    });
+          );
+        }
+      },
+    );
   }
 
   // Handled ✅
@@ -140,19 +136,17 @@ class AudioPlayerManagerBloc
   Future<void> _listenToCurrentTrackArtistState(
       UpdateTrackTitleAndArtistEvent event,
       Emitter<AudioPlayerManagerBlocState> emit) async {
-    audioHandler.mediaItem.listen((MediaItem? mediaItem) {
-      add(
-        UpdateCompleteUiEvent(
-          state.copyWith(
-            currentTrackDetailState: CurrentTrackDetailState(
-                mediaItem?.artist.toString() ?? "Loading  II",
-                mediaItem?.title.toString() ?? "Loading II"),
-          ),
-        ),
-      );
-
-      _listenToSkipState(event, emit);
-    });
+    emit.forEach(
+      audioHandler.mediaItem,
+      onData: (MediaItem? mediaItem) {
+        _listenToSkipState(event, emit);
+        return state.copyWith(
+          currentTrackDetailState: CurrentTrackDetailState(
+              mediaItem?.artist.toString() ?? "Loading  II",
+              mediaItem?.title.toString() ?? "Loading II"),
+        );
+      },
+    );
   }
 
   // Handled ✅
@@ -164,16 +158,18 @@ class AudioPlayerManagerBloc
       audioHandler.seek(event.duration);
     }
 
-    AudioService.position.listen((Duration currentPosition) {
-      add(
-        UpdateCompleteUiEvent(
-          state.copyWith(
-            currentProgressBarState:
-                CurrentProgressBarState(currentPosition.inSeconds, 30),
+    AudioService.position.listen(
+      (Duration currentPosition) {
+        add(
+          UpdateCompleteUiEvent(
+            state.copyWith(
+              currentProgressBarState:
+                  CurrentProgressBarState(currentPosition.inSeconds, 30),
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   Future<void> _listenToSkipState(AudioPlayerManagerEvent event,
@@ -215,55 +211,96 @@ class AudioPlayerManagerBloc
   }
 
   void _listenToRepeatModeState(
-    AudioPlayerManagerEvent event,
+    AudioPlayerRepeatTrackEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
   ) {
-    // emit(const PlayerRepeatModeState(
-    //   isRepeatSongEnabled: false,
-    //   isRepeatPlayListEnabled: false,
-    // ));
-    // if (event is AudioPlayerRepeatTrackEvent) {
-    //   final currentRepeatMode = event.repeatState;
-    //   switch (currentRepeatMode) {
-    //     case RepeatState.OFF:
-    //       audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
-    //       emit(const PlayerRepeatModeState(
-    //         isRepeatSongEnabled: false,
-    //         isRepeatPlayListEnabled: false,
-    //       ));
-    //       break;
-    //     case RepeatState.REPEAT_SONG:
-    //       audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
-    //       emit(const PlayerRepeatModeState(
-    //         isRepeatSongEnabled: true,
-    //         isRepeatPlayListEnabled: false,
-    //       ));
-    //       break;
-    //     case RepeatState.REPEAT_PLAYLIST:
-    //       audioHandler.setRepeatMode(AudioServiceRepeatMode.all);
-    //       emit(const PlayerRepeatModeState(
-    //         isRepeatSongEnabled: false,
-    //         isRepeatPlayListEnabled: true,
-    //       ));
-    //       break;
-    //   }
-    // }
+    // Todo : Provide Support for Repeat ALL also
+    final lastState = state.audioPlayerStateModel.audioPlayerOtherBtnState
+            ?.isRepeatModeEnabled ??
+        false;
+    if (lastState) {
+      audioHandler.setRepeatMode(AudioServiceRepeatMode.one);
+      emit(
+        state.copyWith(
+          audioPlayerOtherBtnState: AudioPlayerOtherBtnState(
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isNextTrackAvailable ??
+                false,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isPrevTrackAvailable ??
+                false,
+            true,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isShuffleModeEnabled ??
+                false,
+          ),
+        ),
+      );
+    } else {
+      audioHandler.setRepeatMode(AudioServiceRepeatMode.none);
+      emit(
+        state.copyWith(
+          audioPlayerOtherBtnState: AudioPlayerOtherBtnState(
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isNextTrackAvailable ??
+                false,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isPrevTrackAvailable ??
+                false,
+            false,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isShuffleModeEnabled ??
+                false,
+          ),
+        ),
+      );
+    }
   }
 
   void _listenToShuffleState(
-    AudioPlayerManagerEvent event,
+    AudioPlayerShuffleTrackEvent event,
     Emitter<AudioPlayerManagerBlocState> emit,
   ) {
-    // if (event is AudioPlayerShuffleTrackEvent) {
-    //   final lastState = (state as IsPlayerShuffleMode).isShuffleModeEnabled;
-    //   if (lastState) {
-    //     audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
-    //     emit(const IsPlayerShuffleMode(isShuffleModeEnabled: true));
-    //   } else {
-    //     audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
-    //     emit(const IsPlayerShuffleMode(isShuffleModeEnabled: false));
-    //   }
-    // }
+    final lastState = state.audioPlayerStateModel.audioPlayerOtherBtnState
+            ?.isShuffleModeEnabled ??
+        false;
+    if (lastState) {
+      audioHandler.setShuffleMode(AudioServiceShuffleMode.all);
+      emit(
+        state.copyWith(
+          audioPlayerOtherBtnState: AudioPlayerOtherBtnState(
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isNextTrackAvailable ??
+                false,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isPrevTrackAvailable ??
+                false,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isRepeatModeEnabled ??
+                false,
+            true,
+          ),
+        ),
+      );
+    } else {
+      audioHandler.setShuffleMode(AudioServiceShuffleMode.none);
+      emit(
+        state.copyWith(
+          audioPlayerOtherBtnState: AudioPlayerOtherBtnState(
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isNextTrackAvailable ??
+                false,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isPrevTrackAvailable ??
+                false,
+            state.audioPlayerStateModel.audioPlayerOtherBtnState
+                    ?.isRepeatModeEnabled ??
+                false,
+            false,
+          ),
+        ),
+      );
+    }
   }
 
   @override

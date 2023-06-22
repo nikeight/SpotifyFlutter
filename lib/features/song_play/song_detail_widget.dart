@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
-import 'package:praxis_flutter/models/AlbumUiModel.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 
 class SongPlayDetailWidget extends StatelessWidget {
@@ -15,7 +14,6 @@ class SongPlayDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AudioPlayerManagerBloc, AudioPlayerManagerBlocState>(
         builder: (context, state) {
-      print("CurrentState is  ${state.audioPlayerStateModel.toString()}");
       return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -117,22 +115,49 @@ class SongPlayDetailWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  IconButton(
-                      iconSize: 24,
-                      onPressed: () {
-                        context
-                            .read<AudioPlayerManagerBloc>()
-                            .add(AudioPlayerShuffleTrackEvent());
-                      },
-                      icon: const Icon(Icons.shuffle_sharp)),
-                  IconButton(
-                      iconSize: 42,
-                      onPressed: () {
-                        context
-                            .read<AudioPlayerManagerBloc>()
-                            .add(AudioPlayerPreviousTrackEvent());
-                      },
-                      icon: const Icon(Icons.skip_previous)),
+                  state.audioPlayerStateModel.audioPlayerOtherBtnState
+                              ?.isRepeatModeEnabled ??
+                          false
+                      ? IconButton(
+                          iconSize: 24,
+                          onPressed: () {
+                            context
+                                .read<AudioPlayerManagerBloc>()
+                                .add(AudioPlayerShuffleTrackEvent());
+                          },
+                          icon: const Icon(
+                            Icons.shuffle_sharp,
+                            color: Colors.orange,
+                          ),
+                        )
+                      : IconButton(
+                          iconSize: 24,
+                          onPressed: () {
+                            context
+                                .read<AudioPlayerManagerBloc>()
+                                .add(AudioPlayerShuffleTrackEvent());
+                          },
+                          icon: const Icon(
+                            Icons.shuffle_sharp,
+                          ),
+                        ),
+                  state.audioPlayerStateModel.audioPlayerOtherBtnState
+                              ?.isPrevTrackAvailable ??
+                          false
+                      ? IconButton(
+                          iconSize: 42,
+                          onPressed: () {},
+                          icon: const Icon(Icons.square_sharp),
+                        )
+                      : IconButton(
+                          iconSize: 42,
+                          onPressed: () {
+                            context
+                                .read<AudioPlayerManagerBloc>()
+                                .add(AudioPlayerPreviousTrackEvent());
+                          },
+                          icon: const Icon(Icons.skip_previous),
+                        ),
                   Stack(
                     children: [
                       state.audioPlayerStateModel.currentPlayerPlayPauseBtnState
@@ -164,22 +189,51 @@ class SongPlayDetailWidget extends StatelessWidget {
                                 )
                     ],
                   ),
-                  IconButton(
-                      iconSize: 42,
-                      onPressed: () {
-                        context
-                            .read<AudioPlayerManagerBloc>()
-                            .add(AudioPlayerNextTrackEvent());
-                      },
-                      icon: const Icon(Icons.skip_next)),
-                  IconButton(
-                      iconSize: 24,
-                      onPressed: () {
-                        context.read<AudioPlayerManagerBloc>().add(
-                            const AudioPlayerRepeatTrackEvent(
-                                repeatState: RepeatState.REPEAT_SONG));
-                      },
-                      icon: const Icon(Icons.repeat_outlined)),
+                  state.audioPlayerStateModel.audioPlayerOtherBtnState
+                              ?.isPrevTrackAvailable ??
+                          false
+                      ? IconButton(
+                          iconSize: 42,
+                          onPressed: () {},
+                          icon: const Icon(Icons.crop_square),
+                        )
+                      : IconButton(
+                          iconSize: 42,
+                          onPressed: () {
+                            context
+                                .read<AudioPlayerManagerBloc>()
+                                .add(AudioPlayerNextTrackEvent());
+                          },
+                          icon: const Icon(Icons.skip_next),
+                        ),
+                  state.audioPlayerStateModel.audioPlayerOtherBtnState
+                              ?.isShuffleModeEnabled ??
+                          false
+                      ? IconButton(
+                          iconSize: 24,
+                          onPressed: () {
+                            context.read<AudioPlayerManagerBloc>().add(
+                                  const AudioPlayerRepeatTrackEvent(
+                                      repeatState: RepeatState.REPEAT_SONG),
+                                );
+                          },
+                          icon: const Icon(
+                            Icons.repeat_outlined,
+                            color: Colors.orange,
+                          ),
+                        )
+                      : IconButton(
+                          iconSize: 24,
+                          onPressed: () {
+                            context.read<AudioPlayerManagerBloc>().add(
+                                  const AudioPlayerRepeatTrackEvent(
+                                      repeatState: RepeatState.REPEAT_SONG),
+                                );
+                          },
+                          icon: const Icon(
+                            Icons.repeat,
+                          ),
+                        )
                 ],
               ),
               Row(
