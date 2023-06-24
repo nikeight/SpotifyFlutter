@@ -5,6 +5,7 @@ import 'package:praxis_flutter/features/profile/spotify_profile_cubit.dart';
 import 'package:praxis_flutter/features/profile/spotify_profile_view.dart';
 import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host.dart';
 import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host_cubit.dart';
+import 'package:praxis_flutter/features/spotify_library/spotify_library_screen.dart';
 import 'package:praxis_flutter/navigation/NavigationState.dart';
 import 'package:praxis_flutter/navigation/bottom_navigation_cubit.dart';
 
@@ -88,7 +89,7 @@ class SpotifyHostScreen extends StatelessWidget {
                 case NavigationBottomBarItems.SEARCH:
                   return const SpotifySearchHostScreen();
                 case NavigationBottomBarItems.LIBRARY:
-                  return const Text("Library Screen");
+                  return const SpotifyLibraryScreen();
               }
             },
           ),
