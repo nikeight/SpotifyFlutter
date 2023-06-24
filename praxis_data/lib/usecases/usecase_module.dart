@@ -3,6 +3,8 @@ import 'package:injectable/injectable.dart';
 import 'package:praxis_flutter_domain/use_cases/GetNewRefreshTokenUseCase.dart';
 import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
 import 'package:praxis_flutter_domain/use_cases/GetTrackListUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/search/GetSpotifyCategoriesUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/search/GetSearchQueryItemUseCase.dart';
 
 @module
 abstract class UseCaseModule {
@@ -14,4 +16,10 @@ abstract class UseCaseModule {
 
   GetTrackListUseCase get getTrackListUseCase =>
       GetTrackListUseCase(GetIt.I.get());
+
+  GetSpotifyCategoriesUseCase get getSpotifyCategoriesUseCase =>
+      GetSpotifyCategoriesUseCase(GetIt.I.get());
+
+  GetSearchQueryItemUseCase get getSearchQueryItemUseCase =>
+      GetSearchQueryItemUseCase(GetIt.I.get());
 }
