@@ -20,11 +20,12 @@ class ItemDataDomainMapper extends EntityMapper<ItemDm, ItemDataModel> {
   @override
   ItemDm mapToDomain(ItemDataModel entity) {
     return ItemDm(
+      itemId: entity?.id ?? "",
       artist: entity.artists?.first.name ?? "",
+      trackName: entity.name ?? "",
       durationInMs: entity.durationMs ?? 0,
       hrefMp3: entity.previewUrl ?? "",
-      thumbnailUrl: entity.uri ?? "",
-      shareUri: entity.uri ?? "",
+      shareUri: entity.href ?? "",
     );
   }
 }
