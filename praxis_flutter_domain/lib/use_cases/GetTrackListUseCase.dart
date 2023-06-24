@@ -16,7 +16,7 @@ class GetTrackListUseCase extends UseCase<TrackDm, String> {
     final streamController = StreamController<TrackDm?>();
     try {
       final tracksResponse =
-          await spotifyRepository.getAlbumTracksList("6jk3ucx33D7CLURgcfVFOT");
+          await spotifyRepository.getAlbumTracksList("6jk3ucx33D7CLURgcfVFOT" ?? "");
       if (tracksResponse is Success) {
         final multipleAlbums = (tracksResponse as Success).data as TrackDm;
         if (tracksResponse != null) {
