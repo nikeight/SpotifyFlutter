@@ -3,6 +3,6 @@ class URL {
 }
 
 class ApiClientConstants{
-  static const int apiTimeOut = 1000;
-  static const int apiReceiveTimeOut = 1000;
+  static const int apiTimeOut = 5000;
+  static const int apiReceiveTimeOut = 5000;
 }

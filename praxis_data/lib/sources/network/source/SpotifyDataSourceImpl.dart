@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:praxis_data/models/spotify_data_model/album/SpotifyMultipleAlbumDataModel.dart';
+import 'package:praxis_data/models/spotify_data_model/album/TrackDataModel.dart';
 import 'package:praxis_data/sources/network/common/custom_api_client.dart';
 import 'package:praxis_data/sources/network/source/spotify_data_source.dart';
 import 'package:praxis_data/utils/HttpRequestType.dart';
@@ -10,26 +11,23 @@ import '../../../utils/spotify_api.dart';
 
 @Injectable(as: SpotifyDatasource)
 class SpotifyDataSourceImpl extends SpotifyDatasource {
-
   final CustomApiClient customDioApiClient;
   final SharedPreferences sharedPreference;
 
-  SpotifyDataSourceImpl(this.customDioApiClient,this.sharedPreference);
+  SpotifyDataSourceImpl(this.customDioApiClient, this.sharedPreference);
 
   @override
   Future<ApiResponse<SpotifyMultipleAlbumDataModel>> getMultipleAlbums() async {
-
-    // Multiple Album id.
+    // Multiple Album id. 6jk3ucx33D7CLURgcfVFOT [EXTRA ID FOR LATER USAGE ]
     const albumId =
-        "2cUzlmLfL5LUTSEk7qG09k,4yh5pn9VghfFn3ejC4p8MP";
+        "2cUzlmLfL5LUTSEk7qG09k,4yh5pn9VghfFn3ejC4p8MP,4ONIL6w6cUj2ArNYM6V4CL,5xjaz957o6YGSXmlfd2tex,6FC95PYKFrO8UYhjCidPZ9,1IwC3SdQXPgXSs8FLvOUju";
 
     final multipleAlbumResponse = await safeApiCallHandler(
-      customDioApiClient,
-      HttpRequestType.GET,
-      get_single_album_endpoint(albumId),
-      sharedPreference,
-      null
-    );
+        customDioApiClient,
+        HttpRequestType.GET,
+        get_single_album_endpoint(albumId),
+        sharedPreference,
+        null);
 
     if (multipleAlbumResponse is Success) {
       final spotifySingleAlbumModelResponse =
@@ -44,8 +42,24 @@ class SpotifyDataSourceImpl extends SpotifyDatasource {
   }
 
   @override
-  Future<ApiResponse<String>> getSingleAlbumTracks() {
-    // TODO: implement getSingleAlbumTracks
-    throw UnimplementedError();
+  Future<ApiResponse<TrackDataModel>> getSingleAlbumTracks(String trackId) async {
+
+    final tracksAlbumResponse = await safeApiCallHandler(
+        customDioApiClient,
+        HttpRequestType.GET,
+        get_album_tracks_endpoint(trackId),
+        sharedPreference,
+        null);
+
+    if (tracksAlbumResponse is Success) {
+      final tracksResponse =
+      TrackDataModel.fromJson(tracksAlbumResponse.data);
+
+      return Success(data: tracksResponse);
+    } else if (tracksAlbumResponse is Failure) {
+      return Failure(error: tracksAlbumResponse.error);
+    } else {
+      return Failure(error: Exception("Something went wrong"));
+    }
   }
 }
