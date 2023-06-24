@@ -1,17 +1,29 @@
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
-import 'package:praxis_flutter_domain/use_cases/get_cached_fav_albums_use_case.dart';
-import 'package:praxis_flutter_domain/use_cases/get_random_song_list_usecase.dart';
-import 'package:praxis_flutter_domain/use_cases/insert_remove_fav_album_from_db_usecase.dart';
+import 'package:praxis_flutter_domain/use_cases/GetNewRefreshTokenUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/GetTrackListUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/search/GetSpotifyCategoriesUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/search/GetSearchQueryItemUseCase.dart';
+import 'package:praxis_flutter_domain/use_cases/GetLibraryFetchedAlbumUseCase.dart';
 
 @module
 abstract class UseCaseModule {
-  GetRandomSongListUseCase get getRandomSongListUseCase =>
-      GetRandomSongListUseCase(GetIt.instance.get());
+  GetNewRefreshTokenUseCase get getNewRefreshTokenUseCase =>
+      GetNewRefreshTokenUseCase(GetIt.I.get());
 
-  GetCachedFavAlbumUseCase get getCachedFavAlbumUseCase =>
-      GetCachedFavAlbumUseCase(GetIt.instance.get());
+  GetMultipleAlbumUseCase get getMultipleAlbumUseCase =>
+      GetMultipleAlbumUseCase(GetIt.I.get());
 
-  InsertRemoveFavAlbumFromDbUseCase get getInsertRemoveFavAlbumFromDbUseCase =>
-      InsertRemoveFavAlbumFromDbUseCase(GetIt.instance.get());
+  GetTrackListUseCase get getTrackListUseCase =>
+      GetTrackListUseCase(GetIt.I.get());
+
+  GetSpotifyCategoriesUseCase get getSpotifyCategoriesUseCase =>
+      GetSpotifyCategoriesUseCase(GetIt.I.get());
+
+  GetSearchQueryItemUseCase get getSearchQueryItemUseCase =>
+      GetSearchQueryItemUseCase(GetIt.I.get());
+
+  GetLibraryFetchedAlbumUseCase get getLibraryFetchedAlbumUseCase =>
+      GetLibraryFetchedAlbumUseCase(GetIt.I.get());
 }

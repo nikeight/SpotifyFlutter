@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
 import 'package:praxis_flutter/features/song_play/song_detail_widget.dart';
-import 'package:praxis_flutter/features/song_play/song_play_cubit.dart';
+import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
 
 class SongDetailScreen extends StatelessWidget {
-  final SongUiModel model;
+  final TrackUiModel trackUiModel;
 
-  const SongDetailScreen({Key? key, required this.model}) : super(key: key);
+  const SongDetailScreen(this.trackUiModel, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         lazy: true,
-        create: (_) => SongPlayCubit(),
-        child: BlocListener<SongPlayCubit, UiState<bool>>(
+        create: (context) => AudioPlayerManagerBloc()
+          ..add(LoadDataAndInitializePlayerEvent(trackUiModel: trackUiModel))
+          ..add(UpdateTrackTitleAndArtistEvent())
+          ..add(const AudioPlayerSeekPositionEvent(duration: Duration.zero))
+          ..add(AudioPlayerPauseEvent()),
+        child: BlocListener<AudioPlayerManagerBloc,
+                AudioPlayerManagerBlocState>(
+            /// In the Listener we will manage all the Out of State scope methods
+            /// Like SnackBar, Dialog showing and other events.
             listener: (context, state) {
               if (state is Success) {
                 final snackBar = SnackBar(
@@ -32,7 +39,7 @@ class SongDetailScreen extends StatelessWidget {
                       )
                     ],
                   ),
-                  duration: const Duration(seconds: 5),
+                  duration: const Duration(seconds: 2),
                   backgroundColor: const Color(0xff344D67),
                   elevation: 2,
                   margin: const EdgeInsets.only(
@@ -45,6 +52,6 @@ class SongDetailScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }
             },
-            child: SongPlayDetailWidget(song: model)));
+            child: SongPlayDetailWidget(trackUiModel)));
   }
 }

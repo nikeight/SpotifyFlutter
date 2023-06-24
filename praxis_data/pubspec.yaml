@@ -16,18 +16,20 @@ dependencies:
   injectable: ^1.5.3
   logger: ^1.1.0
   dio: ^4.0.6
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.1.1
   equatable: ^2.0.5
   firebase_core: ^1.21.1
   firebase_auth: ^3.7.0
   firebase_analytics: ^9.3.3
   firebase_in_app_messaging: ^0.6.0+23
   google_sign_in: ^5.4.1
+  json_annotation: ^4.8.1
   praxis_flutter_domain:
     path: ../praxis_flutter_domain
   sqflite: ^2.0.3+1
 
 dev_dependencies:
   flutter_lints: ^2.0.1
+  json_serializable: ^6.6.2
   injectable_generator: any
   build_runner: any

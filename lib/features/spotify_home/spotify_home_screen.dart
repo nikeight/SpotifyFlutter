@@ -1,47 +1,97 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:praxis_flutter/features/all_song/all_song_cubit.dart';
-import 'package:praxis_flutter/features/all_song/all_song_screen.dart';
-import 'package:praxis_flutter/features/all_song/all_song_screen_widget.dart';
-import 'package:praxis_flutter/features/fav_screen/all_fav_song_screen_widget.dart';
-import 'package:praxis_flutter/features/fav_screen/fav_album_cubit.dart';
-import 'package:praxis_flutter/features/fav_screen/fav_song_screen.dart';
-import 'package:praxis_flutter/models/ui_state.dart';
-import 'package:praxis_flutter/ui/model/song/ui_song.dart';
+import 'package:praxis_flutter/design_system/spotify_color.dart';
+import 'package:praxis_flutter/features/profile/spotify_profile_cubit.dart';
+import 'package:praxis_flutter/features/profile/spotify_profile_view.dart';
+import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host.dart';
+import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host_cubit.dart';
+import 'package:praxis_flutter/features/spotify_library/spotify_library_screen.dart';
+import 'package:praxis_flutter/navigation/NavigationState.dart';
+import 'package:praxis_flutter/navigation/bottom_navigation_cubit.dart';
 
-class SpotifyHomeScreen extends StatelessWidget {
-  const SpotifyHomeScreen({Key? key}) : super(key: key);
+class SpotifyHostScreen extends StatelessWidget {
+  const SpotifyHostScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AllSongCubit>(
-          create: (BuildContext context) => AllSongCubit(),
+        BlocProvider<BottomNavigationCubit>(
+          create: (BuildContext context) => BottomNavigationCubit(),
         ),
-        BlocProvider<FavAlbumsCubit>(
-          create: (BuildContext context) => FavAlbumsCubit(),
+        BlocProvider<SpotifyProfileCubit>(
+          create: (BuildContext context) => SpotifyProfileCubit(),
+        ),
+        BlocProvider<SpotifySearchHostCubit>(
+          create: (BuildContext context) => SpotifySearchHostCubit(),
         ),
       ],
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            bottom: const TabBar(
-              tabs: [
-                Tab(
-                  text: "All Songs",
+      child: Scaffold(
+        bottomNavigationBar:
+            BlocBuilder<BottomNavigationCubit, NavigationState>(
+          builder: (context, state) {
+            return BottomNavigationBar(
+              backgroundColor: spotifyBlack,
+              fixedColor: Colors.white,
+              type: BottomNavigationBarType.fixed,
+              currentIndex: state.index,
+              showUnselectedLabels: false,
+              unselectedItemColor: Colors.black,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.home,
+                    color: Colors.white,
+                  ),
+                  label: 'Home',
                 ),
-                Tab(
-                  text: "Fav Songs",
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.local_library,
+                    color: Colors.white,
+                  ),
+                  label: 'Library',
                 ),
               ],
-            ),
-            title: const Text('Spotify Clone'),
-            centerTitle: true,
-          ),
-          body: const TabBarView(
-            children: [AllSongScreenWidget(), AllFavSongScreenWidget()],
+              onTap: (index) {
+                switch (index) {
+                  case 0:
+                    BlocProvider.of<BottomNavigationCubit>(context)
+                        .getNavBarItem(NavigationBottomBarItems.PROFILE);
+                    break;
+                  case 1:
+                    BlocProvider.of<BottomNavigationCubit>(context)
+                        .getNavBarItem(NavigationBottomBarItems.SEARCH);
+                    break;
+                  case 2:
+                    BlocProvider.of<BottomNavigationCubit>(context)
+                        .getNavBarItem(NavigationBottomBarItems.LIBRARY);
+                    break;
+                }
+              },
+            );
+          },
+        ),
+        body: Align(
+          alignment: Alignment.center,
+          child: BlocBuilder<BottomNavigationCubit, NavigationState>(
+            builder: (context, state) {
+              switch (state.navbarItem) {
+                case NavigationBottomBarItems.PROFILE:
+                  return const SpotifyProfileScreen();
+                case NavigationBottomBarItems.SEARCH:
+                  return const SpotifySearchHostScreen();
+                case NavigationBottomBarItems.LIBRARY:
+                  return const SpotifyLibraryScreen();
+              }
+            },
           ),
         ),
       ),

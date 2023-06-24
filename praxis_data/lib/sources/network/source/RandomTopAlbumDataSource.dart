@@ -5,7 +5,7 @@ import 'package:praxis_data/models/album/model/dt_song.dart';
 import 'package:praxis_data/models/album/model/dt_song_list.dart';
 import 'package:praxis_data/sources/network/common/custom_api_client.dart';
 import 'package:praxis_data/sources/network/common/url.dart';
-import 'package:praxis_flutter_domain/entities/api_response.dart';
+import 'package:praxis_flutter_domain/utils/api_response.dart';
 
 @injectable
 class RandomTopAlbumDataSource {
@@ -16,11 +16,11 @@ class RandomTopAlbumDataSource {
   Future<ApiResponse<DtSongList>?> getTopRandomAlbums() async {
     try {
       final apiResponse = await customDioApiClient.getRequest(
-          URL.iTunesTopAlbumsUrl, null, null);
+          URL.iTunesTopAlbumsUrl, null, null,"");
       if (apiResponse != null) {
         var dtSongList = DtSongList([]);
         MusicResponse albumResponse =
-            MusicResponse.fromJson(json.decode(apiResponse));
+            MusicResponse.fromJson(json.decode(apiResponse as String));
         albumResponse.feed?.entry?.forEach((element) {
           var dtSongObject = DtSong(
               int.parse(element.id?.attributes?.imid ?? "0"),
