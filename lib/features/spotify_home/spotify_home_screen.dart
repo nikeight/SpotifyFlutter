@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:praxis_flutter/design_system/design_system_example_view.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/profile/spotify_profile_cubit.dart';
 import 'package:praxis_flutter/features/profile/spotify_profile_view.dart';

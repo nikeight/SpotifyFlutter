@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:praxis_flutter/features/song_play/song_carousel_host.dart';
 
 /*
    Search Component : Delegates the work for a Search Screen
