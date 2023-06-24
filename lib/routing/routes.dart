@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/features/song_list/SongListScreen.dart';
 import 'package:praxis_flutter/features/song_play/song_carousel_host.dart';
 import 'package:praxis_flutter/features/spotify_home/spotify_home_screen.dart';
+import 'package:praxis_flutter/features/spotify_search/search/spotify_search_screen.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 
 const rootRoute = '/';
@@ -14,8 +15,12 @@ const songCarouselHostPathRouteName = "songCarouselHostPathName";
 const trackListScreenRoute = "/$trackListScreenRouteName/:trackId";
 const trackListScreenRouteName = "trackListScreen";
 
+// Search Screen Routes Variable
+const searchScreenRoute = "/searchScreenRoute";
+const searchScreenRouteName = "/searchScreenRoutePathName";
+
 final praxisRoutes = GoRouter(
-  routes: [splashRoute(), songsCarouselHostRoute(), trackListRoute()],
+  routes: [splashRoute(), songsCarouselHostRoute(), trackListRoute(),searchRoute()],
 );
 
 GoRoute splashRoute() {
@@ -23,6 +28,13 @@ GoRoute splashRoute() {
     path: rootRoute,
     builder: (context, state) => const SpotifyHostScreen(),
   );
+}
+
+GoRoute searchRoute() {
+  return GoRoute(
+      path: searchScreenRoute,
+      name: searchScreenRouteName,
+      builder: (context, state) => const SpotifySearchScreen());
 }
 
 // It Takes us to the List of Tracks based on the Album,PlayList Clicked.

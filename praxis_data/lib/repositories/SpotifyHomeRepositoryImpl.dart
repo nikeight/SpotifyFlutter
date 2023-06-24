@@ -1,13 +1,9 @@
-import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:praxis_data/mapper/AlbumModellMapper.dart';
-import 'package:praxis_data/models/spotify_data_model/access_token/SpotifyAccessTokenResponse.dart';
 import 'package:praxis_data/models/spotify_data_model/album/SpotifyMultipleAlbumDataModel.dart';
 import 'package:praxis_data/models/spotify_data_model/album/TrackDataModel.dart';
 import 'package:praxis_data/sources/network/source/spotify_data_source.dart';
 import 'package:praxis_flutter_domain/entities/AlbumDm.dart';
-import 'package:praxis_flutter_domain/entities/ArtistDm.dart';
-import 'package:praxis_flutter_domain/entities/ItemDm.dart';
 import 'package:praxis_flutter_domain/entities/TrackDm.dart';
 import 'package:praxis_flutter_domain/repositories/SpotifyRepository.dart';
 import 'package:praxis_flutter_domain/utils/api_response.dart';
