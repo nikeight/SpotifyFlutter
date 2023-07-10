@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
-import 'package:praxis_flutter/features/profile/spotify_profile_cubit.dart';
-import 'package:praxis_flutter/features/profile/spotify_profile_view.dart';
+import 'package:praxis_flutter/features/spotify_min_player/miniplayer.dart';
 import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host.dart';
 import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host_cubit.dart';
 import 'package:praxis_flutter/features/spotify_library/spotify_library_screen.dart';
 import 'package:praxis_flutter/navigation/NavigationState.dart';
 import 'package:praxis_flutter/navigation/bottom_navigation_cubit.dart';
+
+import '../spotify_profile/spotify_profile_cubit.dart';
+import '../spotify_profile/spotify_profile_view.dart';
 
 class SpotifyHostScreen extends StatelessWidget {
   const SpotifyHostScreen({Key? key}) : super(key: key);
@@ -28,7 +30,7 @@ class SpotifyHostScreen extends StatelessWidget {
       ],
       child: Scaffold(
         bottomNavigationBar:
-            BlocBuilder<BottomNavigationCubit, NavigationState>(
+        BlocBuilder<BottomNavigationCubit, NavigationState>(
           builder: (context, state) {
             return BottomNavigationBar(
               backgroundColor: spotifyBlack,
@@ -83,14 +85,27 @@ class SpotifyHostScreen extends StatelessWidget {
           alignment: Alignment.center,
           child: BlocBuilder<BottomNavigationCubit, NavigationState>(
             builder: (context, state) {
-              switch (state.navbarItem) {
-                case NavigationBottomBarItems.PROFILE:
-                  return const SpotifyProfileScreen();
-                case NavigationBottomBarItems.SEARCH:
-                  return const SpotifySearchHostScreen();
-                case NavigationBottomBarItems.LIBRARY:
-                  return const SpotifyLibraryScreen();
-              }
+              return Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: state.navbarItem == NavigationBottomBarItems
+                              .PROFILE ? const SpotifyProfileScreen() : state
+                              .navbarItem == NavigationBottomBarItems.SEARCH
+                              ? const SpotifySearchHostScreen()
+                              : state.navbarItem ==
+                              NavigationBottomBarItems.LIBRARY
+                              ? const SpotifyLibraryScreen()
+                              : const CircularProgressIndicator(),
+                        ),
+                        const MiniPlayer()
+                      ],
+                    ),
+                  ),
+                ],
+              );
             },
           ),
         ),

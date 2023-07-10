@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
-import 'package:praxis_flutter/features/profile/spotify_profile_cubit.dart';
+import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/ui/component/HorizontalAlbumList.dart';
 import 'package:praxis_flutter/ui/component/RecentlyPlayedHorizontalCardWidget.dart';
-import '../../models/ui_state.dart';
-import '../song_list/SongListScreen.dart';
+import 'spotify_profile_cubit.dart';
 
 class SpotifyProfileScreen extends StatelessWidget {
   const SpotifyProfileScreen({Key? key}) : super(key: key);

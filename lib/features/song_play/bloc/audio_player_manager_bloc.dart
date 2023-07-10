@@ -140,11 +140,13 @@ class AudioPlayerManagerBloc
       audioHandler.mediaItem,
       onData: (MediaItem? mediaItem) {
         _listenToSkipState(event, emit);
-        return state.copyWith(
-          currentTrackDetailState: CurrentTrackDetailState(
-              mediaItem?.artist.toString() ?? "Loading  II",
-              mediaItem?.title.toString() ?? "Loading II"),
-        );
+        if (mediaItem != null) {
+          return state.copyWith(
+            currentTrackDetailState: CurrentTrackDetailState(
+                mediaItem.artist.toString(), mediaItem.title.toString()),
+          );
+        }
+        return state;
       },
     );
   }

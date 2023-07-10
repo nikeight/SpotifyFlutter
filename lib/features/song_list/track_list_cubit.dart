@@ -16,11 +16,10 @@ class TrackListCubit extends Cubit<UiState<TrackListState>> {
 
   TrackListCubit() : super(Initial()) {
     // Load the Tracks here
-    loadTrackList("");
+    loadTrackList("6jk3ucx33D7CLURgcfVFOT");
   }
 
   void loadTrackList(String tracksId) {
-    print("This is AlbumId Passed : $tracksId");
     getTracksUseCase.perform(
         handleMultipleAlbumResponse, error, complete, "string_param");
   }

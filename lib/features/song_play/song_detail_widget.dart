@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 
@@ -14,6 +15,14 @@ class SongPlayDetailWidget extends StatelessWidget {
         builder: (context, state) {
       return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.expand_circle_down_rounded),
+            iconSize: 32,
+            color: Colors.black,
+            onPressed: () {
+              context.pop();
+            },
+          ),
           automaticallyImplyLeading: false,
           backgroundColor: const Color(0xffE0DECA),
           title: const Text(

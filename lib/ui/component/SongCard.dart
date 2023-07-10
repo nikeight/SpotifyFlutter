@@ -23,7 +23,7 @@ class SongCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context
-            .pushNamed(songCarouselHostPathRouteName, params: {'index': index.toString()});
+            .pushNamed(songCarouselHostPathRouteName, pathParameters: {'index': index.toString()});
       },
       child: Align(
         alignment: Alignment.bottomLeft,
@@ -32,7 +32,7 @@ class SongCard extends StatelessWidget {
           child: Stack(
             children: [
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: NetworkImage("Song URl"),
                       fit: BoxFit.cover),

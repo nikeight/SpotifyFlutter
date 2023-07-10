@@ -30,8 +30,9 @@ class RecentlyPlayedHorizontalCardWidget extends StatelessWidget {
                 albumId: currentItem.albumId,
                 onTap: () {
                   // Navigate to the SongList Screen and pass the Album Id ->
-                  context
-                      .pushNamed(trackListScreenRouteName, params: {'trackId': currentItem.albumId.toString()});
+                  context.pushNamed(trackListScreenRouteName, pathParameters: {
+                    'trackId': currentItem.albumId.toString()
+                  });
                 });
           },
         ),

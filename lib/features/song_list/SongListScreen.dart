@@ -17,9 +17,6 @@ class SongListScreen extends StatelessWidget {
       create: (_) => TrackListCubit(),
       child: BlocBuilder<TrackListCubit, UiState<TrackListState>>(
           builder: (context, state) {
-        // Todo : Find the best way to call Cubit or else Use Bloc with Events.
-        TrackListCubit().loadTrackList(trackId ?? "");
-
         return state is Success
             ? ListView.builder(
                 itemCount: (state as Success).data.tracks.itemList.length,
@@ -33,11 +30,12 @@ class SongListScreen extends StatelessWidget {
                     isPlaying: false,
                     onTap: () {
                       // Navigate to the Song Carousel Host Screen
-                      context.goNamed(songCarouselHostPathRouteName,
+                      context.push(songCarouselHostPathRoute,
                           extra: (state as Success).data.tracks);
                     },
                   );
-                })
+                },
+              )
             : const Text("Failure");
       }),
     );
