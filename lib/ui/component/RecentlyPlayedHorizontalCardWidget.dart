@@ -5,6 +5,11 @@ import 'package:praxis_flutter/routing/routes.dart';
 
 import '../../models/AlbumUiModel.dart';
 
+/// Belongs to a Component :
+/// - Show case the Six recent played Album/Playlist or anything
+///
+/// Internally all the Six Recent Played things will be cached in the database
+
 class RecentlyPlayedHorizontalCardWidget extends StatelessWidget {
   final List<AlbumUiModel> recentlyPlayedAlbums;
 
@@ -14,11 +19,18 @@ class RecentlyPlayedHorizontalCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final gridItemViewHeight = MediaQuery.of(context).size.height / 12;
+    final gridItemViewWidth = MediaQuery.of(context).size.width / 2;
+
     return SizedBox(
+      height: gridItemViewHeight * 3,
+      width: MediaQuery.of(context).size.width,
       child: GridView.count(
-        childAspectRatio: 4.0,
+        childAspectRatio: (gridItemViewWidth / gridItemViewHeight),
         shrinkWrap: true,
         crossAxisCount: 2,
+        controller: ScrollController(keepScrollOffset: false),
         children: List.generate(
           recentlyPlayedAlbums.length,
           (index) {

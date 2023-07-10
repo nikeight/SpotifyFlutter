@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/spotify_min_player/miniplayer.dart';
 import 'package:praxis_flutter/features/spotify_min_player/spotify_mini_player_bloc.dart';
 import 'package:praxis_flutter/features/spotify_profile/spotify_profile_cubit.dart';
@@ -42,13 +43,17 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: navigationShell,
-            ),
-            const MiniPlayer()
-          ],
+        backgroundColor: spotifyBlack,
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: navigationShell,
+              ),
+              const MiniPlayer()
+            ],
+          ),
         ),
         bottomNavigationBar: NavigationBar(
           selectedIndex: navigationShell.currentIndex,
