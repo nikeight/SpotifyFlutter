@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:praxis_flutter/features/song_play/song_detail_screen.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
-import '../../models/ui_state.dart';
 
 /// A widget to host the Carousel for all the tacks in a Album
 /// Returns the SongPlay Screen where user can control the

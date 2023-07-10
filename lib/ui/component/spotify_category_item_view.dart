@@ -21,7 +21,7 @@ class SpotifyCategoryItemViewComponentWidget extends StatelessWidget {
       child: GestureDetector(
         // Take Us to the Search Screen
         onTap: () {
-          context.go(searchScreenRoute);
+          context.pushNamed(searchScreenRouteName);
           // context.go
         },
         child: Column(
