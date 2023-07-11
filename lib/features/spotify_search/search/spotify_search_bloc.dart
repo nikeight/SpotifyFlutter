@@ -17,6 +17,7 @@ part 'spotify_search_state.dart';
 class SpotifySearchBloc extends Bloc<SpotifySearchEvent, SpotifySearchState> {
   final getSearchItemListUseCase = GetIt.I.get<GetSearchQueryItemUseCase>();
   final searchItemUiMapper = GetIt.I.get<SearchItemUiMapper>();
+  final String queryValue = "";
 
   SpotifySearchBloc() : super(SpotifySearchInitial()) {
     on<SpotifySearchEvent>(
@@ -31,7 +32,9 @@ class SpotifySearchBloc extends Bloc<SpotifySearchEvent, SpotifySearchState> {
   }
 
   Future<void> _fetchSearchResults(
-      SpotifySearchEvent event, Emitter<SpotifySearchState> emit) async {
+    SpotifySearchEvent event,
+    Emitter<SpotifySearchState> emit,
+  ) async {
     getSearchItemListUseCase.perform((List<SearchItemDm>? response) {
       final List<SearchItemUiModel> searchQueryItemList = [];
       if (response != null && response.isNotEmpty) {

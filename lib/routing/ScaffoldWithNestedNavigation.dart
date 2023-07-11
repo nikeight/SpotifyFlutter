@@ -51,7 +51,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
               Expanded(
                 child: navigationShell,
               ),
-              const MiniPlayer()
+              const MiniPlayer(),
             ],
           ),
         ),

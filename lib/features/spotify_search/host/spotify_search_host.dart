@@ -12,11 +12,16 @@ class SpotifySearchHostScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemHeight = MediaQuery.of(context).size.height / 8;
+    final itemWidth = MediaQuery.of(context).size.width / 2;
+
     return BlocBuilder<SpotifySearchHostCubit, UiState<SpotifySearchHostState>>(
         builder: (context, state) {
       return state is Success
           ? Scaffold(
+              backgroundColor: spotifyBlack,
               appBar: AppBar(
+                backgroundColor: spotifyBlack,
                 title: const Text("Search"),
                 actions: [
                   IconButton(
@@ -29,21 +34,20 @@ class SpotifySearchHostScreen extends StatelessWidget {
               body: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                color: spotifyBlack,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextField(
+                      autocorrect: false,
+                      autofocus: false,
                       decoration: InputDecoration(
                           hintText: "What do you want to listen to?",
-                          focusColor: Colors.white,
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () => {
-                              // Clear Text
-                            },
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
+                          fillColor: Colors.white,
+                          focusColor: Colors.white,
                           // Add a search icon or button to the search bar
                           prefixIcon: IconButton(
                             icon: const Icon(Icons.search),
@@ -53,27 +57,31 @@ class SpotifySearchHostScreen extends StatelessWidget {
                           )),
                     ),
                     const SizedBox(height: 16),
-                    GridView.count(
-                      shrinkWrap: true,
-                      crossAxisCount: 2,
-                      children: List.generate(
-                        ((state as Success).data as SpotifySearchSuccessState)
-                            .fetchedCategoryList
-                            .length,
-                        (index) {
-                          var currentCategory = ((state as Success).data
-                                  as SpotifySearchSuccessState)
-                              .fetchedCategoryList[index];
-                          return SpotifyCategoryItemViewComponentWidget(
-                              category: currentCategory);
-                        },
+                    Expanded(
+                      child: GridView.count(
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        childAspectRatio: itemWidth / itemHeight,
+                        scrollDirection: Axis.vertical,
+                        children: List.generate(
+                          ((state as Success).data as SpotifySearchSuccessState)
+                              .fetchedCategoryList
+                              .length,
+                          (index) {
+                            var currentCategory = ((state as Success).data
+                                    as SpotifySearchSuccessState)
+                                .fetchedCategoryList[index];
+                            return SpotifyCategoryItemViewComponentWidget(
+                                category: currentCategory);
+                          },
+                        ),
                       ),
                     )
                   ],
                 ),
               ),
             )
-          : const Text("Loading Search Content");
+          : const Center(child: CircularProgressIndicator());
     });
   }
 }
