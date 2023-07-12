@@ -20,48 +20,62 @@ class SongListItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      color: spotifyWhiteGrey,
-      padding: const EdgeInsets.all(8),
-      height: 40,
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: onTap,
-            child: SizedBox(
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: GestureDetector(
+        onTap: onTap,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
               height: 60,
-              width: 100,
+              width: MediaQuery.of(context).size.width - 32,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.network(
                     imageUrl,
-                    width: 40,
-                    height: 40,
+                    width: 60,
+                    height: 60,
                   ),
                   const SizedBox(width: 8),
-                  Flexible(
-                    child: Container(
-                      padding: const EdgeInsets.only(right: 13.0),
-                      child: Text(
-                        songName,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 13.0,
-                          fontFamily: 'Roboto',
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                        ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            songName ?? "Null Track",
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              fontFamily: 'Roboto',
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          Text(
+                            artistName ?? "Null Artist",
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 13.0,
+                              fontFamily: 'Roboto',
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const Icon(Icons.graphic_eq_sharp, color: primaryGreenColor),
-                  const SizedBox(width: 8)
+                  const Icon(Icons.menu, color: primaryGreenColor),
                 ],
               ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

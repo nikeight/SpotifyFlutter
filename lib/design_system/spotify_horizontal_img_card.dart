@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
 
+/// A Component Used in the Recent Player Grid View
+// Todo : Make the Playing State Icon to the Right Most Side
 class SpotifyHorizontalImageCard extends StatelessWidget {
-
+  // Todo : Convert this to an Object
   final String imageUrl;
   final String label;
   final bool isPlaying;
@@ -18,45 +20,45 @@ class SpotifyHorizontalImageCard extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  // Todo : Use Media Query
-
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: spotifyLightGrey,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: GestureDetector(
-        onTap: onTap,
-        child: SizedBox(
-          height: 40,
-          width: 100,
+    return Expanded(
+      child: Card(
+        color: spotifyLightGrey,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: GestureDetector(
+          onTap: onTap,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.network(
                 imageUrl,
-                width: 40,
-                height: 40,
+                width: 60,
+                height: MediaQuery.of(context).size.height,
               ),
-              const SizedBox(width: 8),
               Flexible(
-                child: Container(
-                  padding: const EdgeInsets.only(right: 13.0),
-                  child:  Text(
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Text(
                     label,
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
-                    style:  const TextStyle(
+                    style: const TextStyle(
                       fontSize: 13.0,
                       fontFamily: 'Roboto',
-                      color:  Color(0xFF212121),
+                      color: Colors.white,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
                 ),
               ),
-              const Icon(Icons.graphic_eq_sharp, color: primaryGreenColor),
-              const SizedBox(width: 8)
+              const Padding(
+                  padding: EdgeInsets.all(8),
+                  child:
+                      Icon(Icons.graphic_eq_sharp, color: primaryGreenColor)),
             ],
           ),
         ),

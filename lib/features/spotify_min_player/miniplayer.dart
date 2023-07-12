@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/spotify_min_player/spotify_mini_player_bloc.dart';
 import 'package:praxis_flutter/routing/routes.dart';
 
@@ -11,6 +12,8 @@ class MiniPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final itemHeight = MediaQuery.of(context).size.height / 10;
+
     return BlocBuilder<SpotifyMiniPlayerBloc, SpotifyMiniPlayerEnableState>(
       builder: (context, state) {
         return Dismissible(
@@ -19,7 +22,7 @@ class MiniPlayer extends StatelessWidget {
           confirmDismiss: (DismissDirection dismissDirection) {
             if (dismissDirection == DismissDirection.up) {
               // Navigate to Audio Play Screen
-              context.go(songCarouselHostPathRoute);
+              context.push(songCarouselHostPathRoute);
             }
             return Future.value(false);
           },
@@ -30,15 +33,14 @@ class MiniPlayer extends StatelessWidget {
             ),
             elevation: 0,
             child: SizedBox(
-              height: 76.0,
+              height: itemHeight,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ListTile(
-                    dense: true,
                     onTap: () {
                       // Navigate to Audio Play Screen
-                      context.go(songCarouselHostPathRoute);
+                      context.push(songCarouselHostPathRoute);
                     },
                     title: Dismissible(
                       key: Key(state.trackTitle),
@@ -74,7 +76,7 @@ class MiniPlayer extends StatelessWidget {
                         ),
                         clipBehavior: Clip.antiAlias,
                         child: SizedBox.square(
-                          dimension: 40.0,
+                          dimension: 50.0,
                           child: Image(
                             fit: BoxFit.cover,
                             image: NetworkImage(
@@ -90,16 +92,17 @@ class MiniPlayer extends StatelessWidget {
                             ? const CircularProgressIndicator()
                             : true
                                 ? IconButton(
-                                    iconSize: 62,
+                                    iconSize: 50,
                                     onPressed: () {
                                       context
                                           .read<SpotifyMiniPlayerBloc>()
                                           .add(PlayMiniPlayerEvent());
                                     },
-                                    icon: const Icon(Icons.play_circle_fill),
+                                    icon: const Icon(Icons.play_circle_fill,
+                                        color: primaryGreenColor),
                                   )
                                 : IconButton(
-                                    iconSize: 62,
+                                    iconSize: 50,
                                     onPressed: () {
                                       context
                                           .read<SpotifyMiniPlayerBloc>()
@@ -110,15 +113,35 @@ class MiniPlayer extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Center(
-                    child: Slider(
-                      inactiveColor: Colors.transparent,
-                      // activeColor: Colors.white,
-                      value: state.currentProgressState.toDouble(),
-                      max: state.totalProgressValue.toDouble(),
-                      onChanged: (newPosition) {},
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      activeTrackColor: Theme.of(context).colorScheme.secondary,
+                      inactiveTrackColor: Colors.transparent,
+                      trackHeight: 0.5,
+                      thumbColor: Theme.of(context).colorScheme.secondary,
+                      thumbShape: const RoundSliderThumbShape(
+                        enabledThumbRadius: 1.0,
+                      ),
+                      overlayColor: Colors.transparent,
+                      overlayShape: const RoundSliderOverlayShape(
+                        overlayRadius: 2.0,
+                      ),
                     ),
-                  )
+                    child: Center(
+                      child: Slider(
+                        inactiveColor: Colors.transparent,
+                        value: 20,
+                        max: 100,
+                        onChanged: (newPosition) {
+                          // audioHandler.seek(
+                          //   Duration(
+                          //     seconds: newPosition.round(),
+                          //   ),
+                          // );
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

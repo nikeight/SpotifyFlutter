@@ -15,14 +15,17 @@ class SpotifyChipButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onChipClicked,
-      child: Chip(
-        avatar: CircleAvatar(
-          backgroundColor: isSelected ? primaryGreenColor : spotifyLightGrey,
-          radius: 16,
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: GestureDetector(
+        onTap: onChipClicked,
+        child: Chip(
+          avatar: CircleAvatar(
+            backgroundColor: isSelected ? primaryGreenColor : spotifyLightGrey,
+            radius: 16,
+          ),
+          label: Text(label),
         ),
-        label: Text(label),
       ),
     );
   }

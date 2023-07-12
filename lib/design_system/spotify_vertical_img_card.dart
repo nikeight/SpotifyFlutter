@@ -22,46 +22,59 @@ class SpotifyVerticalImageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    /// The Height and Width is temporary set
+    /// Todo : Needed to improve method or Calculation.
+    /// TO make it Pixel Perfect UI.
+
+    final itemHeight = MediaQuery.of(context).size.height / 3;
+    final itemWidth = MediaQuery.of(context).size.width / 2.5;
+
     return SizedBox(
-      height: 100,
-      width: 140,
+      height: itemHeight,
+      width: itemWidth,
       child: Card(
-        color: spotifyLightGrey,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          //set border radius more than 50% of height and width to make circle
-        ),
+        color: spotifyBlack,
         child: GestureDetector(
           onTap: onTap,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 imageUrl,
-                width: 120,
-                height: 140,
+                height: itemHeight / 1.7,
               ),
-              verticalSpaceSmall,
               Flexible(
                 child: Container(
-                  padding: const EdgeInsets.only(right: 13.0),
-                  child:  Text(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: Text(
                     label,
                     overflow: TextOverflow.ellipsis,
-                    style:  const TextStyle(
+                    style: const TextStyle(
                       fontSize: 13.0,
                       fontFamily: 'Roboto',
-                      color:  Color(0xFF212121),
+                      color: Colors.white,
                       fontWeight: FontWeight.normal,
                     ),
                   ),
                 ),
               ),
-              verticalSpaceSmall,
-              Text(artistName),
-              verticalSpaceSmall
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    artistName,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 13.0,
+                      fontFamily: 'Roboto',
+                      color: Colors.white,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

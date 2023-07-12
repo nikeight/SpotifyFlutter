@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 
@@ -11,6 +12,9 @@ class SongPlayDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return BlocBuilder<AudioPlayerManagerBloc, AudioPlayerManagerBlocState>(
         builder: (context, state) {
       return Scaffold(
@@ -24,7 +28,7 @@ class SongPlayDetailWidget extends StatelessWidget {
             },
           ),
           automaticallyImplyLeading: false,
-          backgroundColor: const Color(0xffE0DECA),
+          backgroundColor: spotifyWhiteGrey,
           title: const Text(
             "Testing Album",
             textAlign: TextAlign.justify,
@@ -40,10 +44,23 @@ class SongPlayDetailWidget extends StatelessWidget {
           ],
         ),
         body: Container(
-          color: const Color(0xffE0DECA),
+          color: spotifyWhiteGrey,
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             children: [
+              const SizedBox(height: 24),
+              SizedBox(
+                width: screenHeight * 0.4,
+                height: screenHeight * 0.4,
+                child: const FittedBox(
+                  fit: BoxFit.fill,
+                  child: Image(
+                    image: NetworkImage(
+                        "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b7fd92108782021.5fc5820ec90ba.png"),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
               Text(
                   state.audioPlayerStateModel.currentTrackDetailState
                           ?.trackTitle ??
@@ -58,19 +75,7 @@ class SongPlayDetailWidget extends StatelessWidget {
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.fade,
                   style: const TextStyle(color: Colors.black45, fontSize: 14)),
-              const SizedBox(height: 24),
-              const SizedBox(
-                width: 340,
-                height: 300,
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: Image(
-                    image: NetworkImage(
-                        "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b7fd92108782021.5fc5820ec90ba.png"),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
               Slider(
                 min: 0,
                 max: state.audioPlayerStateModel.currentProgressBarState
@@ -256,28 +261,30 @@ class SongPlayDetailWidget extends StatelessWidget {
                       icon: const Icon(Icons.library_music)),
                 ],
               ),
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                child: Container(
-                  height: 52,
-                  color: const Color(0xff6096B4),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Lyrics",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold)),
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.open_in_full_rounded,
-                              size: 18,
-                            ))
-                      ],
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8)),
+                  child: Container(
+                    color: const Color(0xff6096B4),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Lyrics",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.open_in_full_rounded,
+                                size: 18,
+                              ))
+                        ],
+                      ),
                     ),
                   ),
                 ),
