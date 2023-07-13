@@ -3,12 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
-import 'package:praxis_flutter/models/TrackUiModel.dart';
 
 class SongPlayDetailWidget extends StatelessWidget {
-  final TrackUiModel trackUiModel;
-
-  const SongPlayDetailWidget(this.trackUiModel, {Key? key}) : super(key: key);
+  const SongPlayDetailWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

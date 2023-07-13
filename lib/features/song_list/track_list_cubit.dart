@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:praxis_flutter/mapper/TracksUIMapper.dart';
 import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'package:praxis_flutter/models/ui_state.dart' as api_response;
+import 'package:praxis_flutter/services/AudioPlayerInvoke.dart';
 import 'package:praxis_flutter_domain/entities/TrackDm.dart';
 import 'package:praxis_flutter_domain/use_cases/GetTrackListUseCase.dart';
 
@@ -26,9 +27,13 @@ class TrackListCubit extends Cubit<UiState<TrackListState>> {
 
   void handleMultipleAlbumResponse(TrackDm? response) {
     if (response != null) {
+      /// Data has been loaded Successfully
+      /// Update the UI and the Update the Audio Player
+      final itemUiModelResponse = trackUIMapper.mapToUiModel(response);
+      AudioPlayerInvoke().initPlayer(songList: itemUiModelResponse.itemList);
       emit(
         Success(
-          data: TrackListState(trackUIMapper.mapToUiModel(response)),
+          data: TrackListState(itemUiModelResponse),
         ),
       );
     } else {

@@ -88,28 +88,26 @@ class MiniPlayer extends StatelessWidget {
                     ),
                     trailing: Stack(
                       children: [
-                        false
-                            ? const CircularProgressIndicator()
-                            : true
-                                ? IconButton(
-                                    iconSize: 50,
-                                    onPressed: () {
-                                      context
-                                          .read<SpotifyMiniPlayerBloc>()
-                                          .add(PlayMiniPlayerEvent());
-                                    },
-                                    icon: const Icon(Icons.play_circle_fill,
-                                        color: primaryGreenColor),
-                                  )
-                                : IconButton(
-                                    iconSize: 50,
-                                    onPressed: () {
-                                      context
-                                          .read<SpotifyMiniPlayerBloc>()
-                                          .add(PauseMiniPlayerEvent());
-                                    },
-                                    icon: const Icon(Icons.pause),
-                                  )
+                        state.isPlaying
+                            ? IconButton(
+                                iconSize: 50,
+                                onPressed: () {
+                                  context
+                                      .read<SpotifyMiniPlayerBloc>()
+                                      .add(PlayMiniPlayerEvent());
+                                },
+                                icon: const Icon(Icons.play_circle_fill,
+                                    color: primaryGreenColor),
+                              )
+                            : IconButton(
+                                iconSize: 50,
+                                onPressed: () {
+                                  context
+                                      .read<SpotifyMiniPlayerBloc>()
+                                      .add(PauseMiniPlayerEvent());
+                                },
+                                icon: const Icon(Icons.pause),
+                              )
                       ],
                     ),
                   ),
@@ -130,8 +128,8 @@ class MiniPlayer extends StatelessWidget {
                     child: Center(
                       child: Slider(
                         inactiveColor: Colors.transparent,
-                        value: 20,
-                        max: 100,
+                        value: state.currentProgressState.toDouble() ?? 0.0,
+                        max: state.totalProgressValue.toDouble() ?? 100.00,
                         onChanged: (newPosition) {
                           // audioHandler.seek(
                           //   Duration(

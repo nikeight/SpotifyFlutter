@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:rxdart/rxdart.dart';
 
 class MyAudioHandler extends BaseAudioHandler {
   final _player = AudioPlayer();
@@ -38,8 +39,6 @@ class MyAudioHandler extends BaseAudioHandler {
       tag: mediaItem,
     );
   }
-
-  /// Add support for the Play and Pause Features
 
   @override
   Future<void> play() => _player.play();
@@ -140,6 +139,11 @@ class MyAudioHandler extends BaseAudioHandler {
       queue.add(items.toList());
     });
   }
+
+  @override
+  final BehaviorSubject<double> volume = BehaviorSubject.seeded(1.0);
+  @override
+  final BehaviorSubject<double> speed = BehaviorSubject.seeded(1.0);
 
   @override
   Future<void> stop() async {
