@@ -276,4 +276,9 @@ class AudioPlayerManagerBloc
       );
     }
   }
+
+  @override
+  Future<void> close() {
+    return super.close();
+  }
 }

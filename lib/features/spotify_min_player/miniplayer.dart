@@ -68,7 +68,7 @@ class MiniPlayer extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     leading: Hero(
-                      tag: 'currentArtwork',
+                      tag: 'track-cover',
                       child: Card(
                         elevation: 8,
                         shape: RoundedRectangleBorder(

@@ -46,14 +46,17 @@ class SongPlayDetailWidget extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              SizedBox(
-                width: screenHeight * 0.4,
-                height: screenHeight * 0.4,
-                child: const FittedBox(
-                  fit: BoxFit.fill,
-                  child: Image(
-                    image: NetworkImage(
-                        "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b7fd92108782021.5fc5820ec90ba.png"),
+              Hero(
+                tag: "track-cover",
+                child: SizedBox(
+                  width: screenHeight * 0.4,
+                  height: screenHeight * 0.4,
+                  child: const FittedBox(
+                    fit: BoxFit.fill,
+                    child: Image(
+                      image: NetworkImage(
+                          "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b7fd92108782021.5fc5820ec90ba.png"),
+                    ),
                   ),
                 ),
               ),

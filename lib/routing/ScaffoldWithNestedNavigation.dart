@@ -37,10 +37,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
           create: (BuildContext context) => SpotifySearchHostCubit(),
         ),
         BlocProvider<SpotifyMiniPlayerBloc>(
-          create: (BuildContext context) => SpotifyMiniPlayerBloc()
-            ..add(PauseMiniPlayerEvent())
-            ..add(UpdateMiniPlayerCurrentProgressStateEvent()),
-        ),
+            create: (BuildContext context) => SpotifyMiniPlayerBloc()),
       ],
       child: Scaffold(
         backgroundColor: spotifyBlack,

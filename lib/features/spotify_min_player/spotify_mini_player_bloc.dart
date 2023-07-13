@@ -20,17 +20,16 @@ class SpotifyMiniPlayerBloc
     on<SwipeToPreviousMiniPlayerEvent>(
         (event, emit) => _previousAudio(event, emit));
     on<UpdateMiniPlayerEvent>((event, emit) => _updateUi(event, emit));
-    on<UpdateMiniPlayerCurrentProgressStateEvent>(
-        (event, emit) => _listenToSeekProgressState(event, emit));
+
+    _listenForMediaItemChange();
+    _listenForPlayPauseState();
+    _listenToSeekProgressState();
   }
 
   final _audioPlayerHandler = GetIt.I.get<AudioHandler>();
 
   // Handled ✅
-  Future<void> _listenToSeekProgressState(
-    UpdateMiniPlayerCurrentProgressStateEvent event,
-    Emitter<SpotifyMiniPlayerEnableState> emit,
-  ) async {
+  Future<void> _listenToSeekProgressState() async {
     AudioService.position.listen(
       (Duration currentPosition) {
         add(UpdateMiniPlayerEvent(state.copyWith(
@@ -60,7 +59,42 @@ class SpotifyMiniPlayerBloc
     if (event is PauseMiniPlayerEvent) {
       _audioPlayerHandler.pause();
     }
+  }
 
+  void _listenForMediaItemChange() {
+    _audioPlayerHandler.mediaItem.listen(
+      (mediaItem) {
+        if (mediaItem != null) {
+          add(
+            UpdateMiniPlayerEvent(
+              state.copyWith(
+                trackArtist: mediaItem.artist.toString(),
+                trackTitle: mediaItem.title.toString(),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  // Swipe Next ✅
+  void _nextAudio(
+    SwipeToNextMiniPlayerEvent event,
+    Emitter<SpotifyMiniPlayerEnableState> emit,
+  ) {
+    _audioPlayerHandler.skipToNext();
+  }
+
+  // Swipe Previous ✅
+  void _previousAudio(
+    SwipeToPreviousMiniPlayerEvent event,
+    Emitter<SpotifyMiniPlayerEnableState> emit,
+  ) {
+    _audioPlayerHandler.skipToPrevious();
+  }
+
+  void _listenForPlayPauseState() {
     // Attaching Listener
     _audioPlayerHandler.playbackState.listen((playbackState) {
       final isPlaying = playbackState.playing;
@@ -81,33 +115,5 @@ class SpotifyMiniPlayerBloc
         add(UpdateMiniPlayerEvent(state.copyWith(isPlaying: false)));
       }
     });
-
-    emit.forEach(
-      _audioPlayerHandler.mediaItem,
-      onData: (MediaItem? mediaItem) {
-        if (mediaItem != null) {
-          return state.copyWith(
-              trackArtist: mediaItem.artist.toString(),
-              trackTitle: mediaItem.title.toString());
-        }
-        return state;
-      },
-    );
-  }
-
-  // Swipe Next ✅
-  void _nextAudio(
-    SwipeToNextMiniPlayerEvent event,
-    Emitter<SpotifyMiniPlayerEnableState> emit,
-  ) {
-    _audioPlayerHandler.skipToNext();
-  }
-
-  // Swipe Previous ✅
-  void _previousAudio(
-    SwipeToPreviousMiniPlayerEvent event,
-    Emitter<SpotifyMiniPlayerEnableState> emit,
-  ) {
-    _audioPlayerHandler.skipToPrevious();
   }
 }
