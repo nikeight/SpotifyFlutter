@@ -40,4 +40,8 @@ class SpotifyCarouselHostCubit extends Cubit<SpotifyCarouselHostState> {
       emit(SpotifyCarouselHostState(state.trackItemList, currentPlayingIndex));
     });
   }
+
+  void skipToPreviousTrack() => _audioHandler.skipToPrevious();
+
+  void skipToNextTrack() => _audioHandler.skipToNext();
 }

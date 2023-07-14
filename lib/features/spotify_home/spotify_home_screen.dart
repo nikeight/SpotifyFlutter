@@ -100,7 +100,7 @@ class SpotifyHostScreen extends StatelessWidget {
                               ? const SpotifyLibraryScreen()
                               : const CircularProgressIndicator(),
                         ),
-                        const MiniPlayer()
+                        const StateFulMiniPlayer()
                       ],
                     ),
                   ),

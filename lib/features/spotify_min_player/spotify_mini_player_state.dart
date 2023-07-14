@@ -1,44 +1,55 @@
 part of 'spotify_mini_player_bloc.dart';
 
 class SpotifyMiniPlayerEnableState {
+  final bool isMiniPlayerIdle;
   final bool isPlaying;
+  final bool isLoading;
   final String trackTitle;
   final String trackArtist;
   final String trackCoverUrl;
   final int currentProgressState;
   final int totalProgressValue;
 
-  SpotifyMiniPlayerEnableState(
-    this.isPlaying,
-    this.trackTitle,
-    this.trackArtist,
-    this.trackCoverUrl,
-    this.currentProgressState,
-    this.totalProgressValue,
-  );
+  SpotifyMiniPlayerEnableState({
+    required this.isMiniPlayerIdle,
+    required this.isPlaying,
+    required this.isLoading,
+    required this.trackTitle,
+    required this.trackArtist,
+    required this.trackCoverUrl,
+    required this.currentProgressState,
+    required this.totalProgressValue,
+  });
 
   factory SpotifyMiniPlayerEnableState.initial() => SpotifyMiniPlayerEnableState(
-      false,
-      "Track Null",
-      "Artist Null",
-      "https://i.pinimg.com/736x/1c/22/bd/1c22bd48c7aa98182ba78d7ce55030b0.jpg",
-      0,
-      0);
+      isMiniPlayerIdle: true,
+      isPlaying: false,
+      isLoading: false,
+      trackTitle: "Track Null",
+      trackArtist: "Artist Null",
+      trackCoverUrl:
+          "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b7fd92108782021.5fc5820ec90ba.png",
+      currentProgressState: 0,
+      totalProgressValue: 0);
 
   SpotifyMiniPlayerEnableState copyWith(
-      {bool? isPlaying,
+      {bool? isMiniPlayerIdle,
+      bool? isPlaying,
+      bool? isLoading,
       String? trackTitle,
       String? trackArtist,
       String? trackCoverUrl =
-          "https://i.pinimg.com/736x/1c/22/bd/1c22bd48c7aa98182ba78d7ce55030b0.jpg",
+          "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b7fd92108782021.5fc5820ec90ba.png",
       int? currentProgressState,
       int? totalProgressValue}) {
     return SpotifyMiniPlayerEnableState(
-        isPlaying ?? false,
-        trackTitle ?? "Track Null",
-        trackArtist ?? "Artist Null",
-        trackCoverUrl ?? "https:google.com",
-        currentProgressState ?? 0,
-        totalProgressValue ?? 0);
+        isMiniPlayerIdle: isMiniPlayerIdle ?? true,
+        isPlaying: isPlaying ?? false,
+        isLoading: isLoading ?? false,
+        trackTitle: trackTitle ?? "Track Null",
+        trackArtist: trackArtist ?? "Artist Null",
+        trackCoverUrl: trackCoverUrl ?? "https:google.com",
+        currentProgressState: currentProgressState ?? 0,
+        totalProgressValue: totalProgressValue ?? 0);
   }
 }

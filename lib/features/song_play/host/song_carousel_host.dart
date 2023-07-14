@@ -31,7 +31,20 @@ class SongCarouselHost extends StatelessWidget {
                     itemCount: state.trackItemList.length ?? 0,
                     controller: pageController,
                     scrollDirection: Axis.horizontal,
-                    onPageChanged: (index) {},
+                    onPageChanged: (int page) {
+                      var currentPage = pageController.page ?? 0;
+                      if (page > currentPage) {
+                        // Swiped Left
+                        context
+                            .read<SpotifyCarouselHostCubit>()
+                            .skipToNextTrack();
+                      } else {
+                        // Swiped Right
+                        context
+                            .read<SpotifyCarouselHostCubit>()
+                            .skipToPreviousTrack();
+                      }
+                    },
                     itemBuilder: (BuildContext context, int index) {
                       return const SongDetailScreen();
                     },

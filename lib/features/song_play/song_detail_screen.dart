@@ -14,7 +14,7 @@ class SongDetailScreen extends StatelessWidget {
         create: (context) => AudioPlayerManagerBloc()
           ..add(UpdateTrackTitleAndArtistEvent())
           ..add(const AudioPlayerSeekPositionEvent(duration: Duration.zero))
-          ..add(AudioPlayerPauseEvent()),
+          ..add(AudioPlayerPlayEvent()),
         child: BlocListener<AudioPlayerManagerBloc,
                 AudioPlayerManagerBlocState>(
 

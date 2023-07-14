@@ -36,8 +36,12 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
         BlocProvider<SpotifySearchHostCubit>(
           create: (BuildContext context) => SpotifySearchHostCubit(),
         ),
-        BlocProvider<SpotifyMiniPlayerBloc>(
-            create: (BuildContext context) => SpotifyMiniPlayerBloc()),
+        // BlocProvider<SpotifyMiniPlayerBloc>(
+        //   create: (BuildContext context) => SpotifyMiniPlayerBloc()
+        //     ..add(CheckForProcessStateEvent())
+        //     ..add(UpdateMiniPlayerArtistAndTrackDetails())
+        //     ..add(PauseMiniPlayerEvent()),
+        // ),
       ],
       child: Scaffold(
         backgroundColor: spotifyBlack,
@@ -48,7 +52,7 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
               Expanded(
                 child: navigationShell,
               ),
-              const MiniPlayer(),
+              const StateFulMiniPlayer(),
             ],
           ),
         ),
