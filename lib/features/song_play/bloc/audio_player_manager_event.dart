@@ -7,17 +7,6 @@ abstract class AudioPlayerManagerEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// Load Data at the Initial Steps
-// Pass the Track Details to Bloc
-class LoadDataAndInitializePlayerEvent extends AudioPlayerManagerEvent {
-  final TrackUiModel trackUiModel;
-
-  const LoadDataAndInitializePlayerEvent({required this.trackUiModel});
-
-  @override
-  List<Object?> get props => [trackUiModel];
-}
-
 // This will update the whole UI at each other Event
 class UpdateCompleteUiEvent extends AudioPlayerManagerEvent {
   final AudioPlayerManagerBlocState audioPlayerManagerBlocState;

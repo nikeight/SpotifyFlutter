@@ -17,9 +17,18 @@ class $ImagesGen {
       const AssetGenImage('images/spotify_clone_card_bg_img.jpeg');
 }
 
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/spotify_logo.png
+  AssetGenImage get spotifyLogo =>
+      const AssetGenImage('assets/images/spotify_logo.png');
+}
+
 class Assets {
   Assets._();
 
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $ImagesGen images = $ImagesGen();
 }
 

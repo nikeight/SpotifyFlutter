@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/features/song_list/SongListScreen.dart';
-import 'package:praxis_flutter/features/song_play/song_carousel_host.dart';
+import 'package:praxis_flutter/features/song_play/host/song_carousel_host.dart';
 import 'package:praxis_flutter/features/spotify_home/spotify_home_screen.dart';
 import 'package:praxis_flutter/features/spotify_library/spotify_library_screen.dart';
 import 'package:praxis_flutter/features/spotify_profile/spotify_profile_view.dart';
@@ -118,8 +118,7 @@ GoRoute songsCarouselHostRoute() {
     name: songCarouselHostPathRouteName,
     parentNavigatorKey: _rootNavigationKey,
     builder: (context, state) {
-      TrackUiModel trackUiModel = state.extra as TrackUiModel;
-      return SongCarouselHost(trackUiModel: trackUiModel);
+      return const SongCarouselHost();
     },
   );
 }

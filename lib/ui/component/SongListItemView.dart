@@ -12,7 +12,7 @@ class SongListItemView extends StatelessWidget {
       {Key? key,
       this.imageUrl =
           "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b7fd92108782021.5fc5820ec90ba.png",
-      this.songName = "song Name",
+      required this.songName,
       required this.artistName,
       required this.isPlaying,
       required this.onTap})

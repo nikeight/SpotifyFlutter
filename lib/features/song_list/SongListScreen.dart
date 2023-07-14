@@ -8,6 +8,7 @@ import 'package:praxis_flutter/design_system/spotify_text_input.dart';
 import 'package:praxis_flutter/features/song_list/track_list_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/routing/routes.dart';
+import 'package:praxis_flutter/services/AudioPlayerInvoke.dart';
 import 'package:praxis_flutter/ui/component/SongListItemView.dart';
 
 class SongListScreen extends StatelessWidget {
@@ -199,13 +200,13 @@ class SongListScreen extends StatelessWidget {
                                       .tracks
                                       .itemList[index];
                                   return SongListItemView(
+                                    songName: currentItem.trackName.toString(),
                                     artistName: currentItem.artist.toString(),
                                     isPlaying: false,
                                     onTap: () {
-                                      // Navigate to the Song Carousel Host Screen
-                                      context.push(songCarouselHostPathRoute,
-                                          extra:
-                                              (state as Success).data.tracks);
+                                      /// NEW Updates, Clicking on item will play the Song
+                                      /// Touching Mini Player will open the Song Carousel Host
+                                      AudioPlayerInvoke().startPlayer(index: index);
                                     },
                                   );
                                 },
@@ -237,16 +238,15 @@ class SongListScreen extends StatelessWidget {
 Widget itemListBuilder(state) => ListView.builder(
       itemCount: (state as Success).data.tracks.itemList.length,
       itemBuilder: (context, index) {
-        var currentItem = (state as Success).data.tracks.itemList[index];
+        var currentItem = (state).data.tracks.itemList[index];
         return SongListItemView(
 // imageUrl: currentItem.thumbnailUrl,
-// songName: currentItem.durationInMs.toString(),
+          songName: currentItem.trackName.toString(),
           artistName: currentItem.artist.toString(),
           isPlaying: false,
           onTap: () {
 // Navigate to the Song Carousel Host Screen
-            context.push(songCarouselHostPathRoute,
-                extra: (state as Success).data.tracks);
+            context.push(songCarouselHostPathRoute, extra: (state).data.tracks);
           },
         );
       },

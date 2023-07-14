@@ -4,9 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:get_it/get_it.dart';
-import 'package:praxis_flutter/mapper/AlbumUIMapper.dart';
-import 'package:praxis_flutter/models/TrackUiModel.dart';
-import 'package:praxis_flutter_domain/use_cases/GetMultipleAlbumUseCase.dart';
 
 part 'audio_player_manager_event.dart';
 
@@ -19,7 +16,6 @@ class AudioPlayerManagerBloc
           AudioPlayerManagerBlocState.initial(),
         ) {
     // Reacting to Different Events
-    on<LoadDataAndInitializePlayerEvent>(_loadAndInitializeAudioPlayerState);
     on<UpdateCompleteUiEvent>(_updateCompleteUi);
     on<UpdateTrackTitleAndArtistEvent>(_listenToCurrentTrackArtistState);
     on<AudioPlayerPlayEvent>(_listenToPlayBackState);
@@ -32,8 +28,6 @@ class AudioPlayerManagerBloc
   }
 
   final audioHandler = GetIt.I.get<AudioHandler>();
-  final getMultipleAlbumsUseCase = GetIt.I.get<GetMultipleAlbumUseCase>();
-  final getAlbumUiMapper = GetIt.I.get<AlbumUiMapper>();
 
   // Handled ✅
   // Update the Whole State
@@ -42,28 +36,6 @@ class AudioPlayerManagerBloc
     Emitter<AudioPlayerManagerBlocState> emit,
   ) {
     emit(event.audioPlayerManagerBlocState);
-  }
-
-  // Handled ✅
-  Future<void> _loadAndInitializeAudioPlayerState(
-    LoadDataAndInitializePlayerEvent event,
-    Emitter<AudioPlayerManagerBlocState> emit,
-  ) async {
-    print("ActualState - Loading ${(state).audioPlayerStateModel}");
-    final getTrackItems = event.trackUiModel.itemList;
-    final mediaItemList = getTrackItems
-        .map(
-          (e) => MediaItem(
-              id: e.itemId,
-              title: e.trackName,
-              artist: e.artist,
-              duration: const Duration(seconds: 30),
-              // Extra Parameters takes the source for the Audio File.
-              extras: {'url': e.hrefMp3}),
-        )
-        .toList();
-
-    await audioHandler.addQueueItems(mediaItemList);
   }
 
   // Handled ✅
@@ -307,7 +279,6 @@ class AudioPlayerManagerBloc
 
   @override
   Future<void> close() {
-    audioHandler.stop();
     return super.close();
   }
 }
