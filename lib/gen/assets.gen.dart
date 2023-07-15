@@ -29,7 +29,7 @@ class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
-  static const $ImagesGen images = $ImagesGen();
+  static const $ImagesGen image = $ImagesGen();
 }
 
 class AssetGenImage {
