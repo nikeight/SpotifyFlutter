@@ -43,47 +43,47 @@ inspired from [Praxis Flutter](https://github.com/mutualmobile/PraxisFlutter).
 
 #### New Look
 
-    <table style="width:100%">
-      <tr>
-        <th>Working Video</th>
-      </tr>
-      <tr>
-        <td><img src = "art/milestone-one-working-video.mov" width=240/></td> 
-      </tr>
-    </table> 
+<table style="width:100%">
+<tr>
+<th>Working Video</th>
+</tr>
+<tr>
+<td><img src = "art/milestone-one-working-video.mov" width=240/></td> 
+</tr>
+</table> 
 
-    <table style="width:100%">
-      <tr>
-        <th>Profile Screen with Mini Player</th>
-        <th>Song List Screen</th> 
-        <th>Main Player Screen</th>
-        <th>Search Screen</th>
-        <th>Library Screen</th>
-        <th>Android Notification Player</th>
-      </tr>
-      <tr>
-        <td><img src = "art/profile_screen.png" width=240/></td> 
-        <td><img src = "art/song_list_screen.png" width=240/></td>
-        <td><img src = "art/main_player_screen.png" width=240/></td>
-        <td><img src = "art/search_screen.png" width=240/></td>
-        <td><img src = "art/library_screen.png" width=240/></td>
-      </tr>
-    </table> 
+<table style="width:100%">
+<tr>
+<th>Profile Screen with Mini Player</th>
+<th>Song List Screen</th> 
+<th>Main Player Screen</th>
+<th>Search Screen</th>
+<th>Library Screen</th>
+<th>Android Notification Player</th>
+</tr>
+<tr>
+<td><img src = "art/profile_screen.png" width=240/></td> 
+<td><img src = "art/song_list_screen.png" width=240/></td>
+<td><img src = "art/main_player_screen.png" width=240/></td>
+<td><img src = "art/search_screen.png" width=240/></td>
+<td><img src = "art/library_screen.png" width=240/></td>
+</tr>
+</table> 
 
 ### Old Look
 
-    <table style="width:100%">
-    <tr>
-    <th>AllSong Screen</th>
-    <th>Favourite Screen</th> 
-    <th>SongDetail Screen</th>
-    </tr>
-    <tr>
-    <td><img src = "art/spotify_flutter_all_song_screen.png" width=240/></td> 
-    <td><img src = "art/spotify_flutter_fav_screen_with_snackbar.png" width=240/></td>
-    <td><img src = "art/spotify_flutter_song_detail_screen.png" width=240/></td>
-    </tr>
-    </table>
+<table style="width:100%">
+<tr>
+<th>AllSong Screen</th>
+<th>Favourite Screen</th> 
+<th>SongDetail Screen</th>
+</tr>
+<tr>
+<td><img src = "art/spotify_flutter_all_song_screen.png" width=240/></td> 
+<td><img src = "art/spotify_flutter_fav_screen_with_snackbar.png" width=240/></td>
+<td><img src = "art/spotify_flutter_song_detail_screen.png" width=240/></td>
+</tr>
+</table>
 
 ### New Features :
 
