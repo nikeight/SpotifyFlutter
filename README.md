@@ -1,6 +1,6 @@
 ## SpotifyClone - Flutter
 
-  <p align="left"> A Flutter clean-architecture project that uses BLoC and Dio with best practices. Includes unit tests for each layer. Project is still in WIP 🚧</p>
+  <p align="left"> Clean-architecture Flutter project that uses BLoC/Cubit and Dio with best practices.The project is still in WIP 🚧</p>
 
   <p align="left">
       <a href = "https://github.com/Solido/awesome-flutter">
@@ -43,8 +43,9 @@ inspired from [Praxis Flutter](https://github.com/mutualmobile/PraxisFlutter).
 
 #### New Look
 
-- App Working Video: 
-<video src="art/milestone-one-working-video.mov"></video>
+https://github.com/nikeight/SpotifyFlutter/assets/52085669/973dfd99-aeec-4aa0-8352-e2a5a13f4c96
+
+<br>
 
 <table style="width:100%">
 <tr>
@@ -87,7 +88,7 @@ inspired from [Praxis Flutter](https://github.com/mutualmobile/PraxisFlutter).
 </tr>
 </table>
 
-### New Features :
+### 🆕 New Features :
 
 - Audio Player Integrated
 - New Screens integrated
