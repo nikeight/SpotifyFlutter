@@ -1,17 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:praxis_flutter/features/song_list/SongListScreen.dart';
+import 'package:praxis_flutter/features/song_list/song_list_screen.dart';
 import 'package:praxis_flutter/features/song_play/host/song_carousel_host.dart';
-import 'package:praxis_flutter/features/spotify_home/spotify_home_screen.dart';
 import 'package:praxis_flutter/features/spotify_library/spotify_library_screen.dart';
 import 'package:praxis_flutter/features/spotify_profile/spotify_profile_view.dart';
 import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host.dart';
-import 'package:praxis_flutter/features/spotify_search/search/spotify_search_bloc.dart';
 import 'package:praxis_flutter/features/spotify_search/search/spotify_search_screen.dart';
 import 'package:praxis_flutter/features/spotify_splash/SpotifySplashScreen.dart';
-import 'package:praxis_flutter/models/TrackUiModel.dart';
 import 'ScaffoldWithNestedNavigation.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
