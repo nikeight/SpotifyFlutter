@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/design_system/spotify_text.dart';
-import 'package:praxis_flutter/design_system/spotify_text_input.dart';
 import 'package:praxis_flutter/features/song_list/track_list_cubit.dart';
 import 'package:praxis_flutter/models/ui_state.dart';
 import 'package:praxis_flutter/routing/routes.dart';
