@@ -1,82 +1,61 @@
-part of 'audio_player_manager_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class AudioPlayerManagerBlocState {
-  final AudioPlayerStateModel audioPlayerStateModel;
+part 'audio_player_manager_state.freezed.dart';
 
-  factory AudioPlayerManagerBlocState.initial() => AudioPlayerManagerBlocState(
-          audioPlayerStateModel: AudioPlayerStateModel(
-        currentTrackDetailState:
-            CurrentTrackDetailState("Loading..", "Loading.."),
-        currentProgressBarState: CurrentProgressBarState(0, 30),
-        currentPlayerPlayPauseBtnState:
-            CurrentPlayerPlayPauseBtnState(false, false, true),
-        audioPlayerOtherBtnState:
-            AudioPlayerOtherBtnState(false, false, false, false),
-      ));
-
-  AudioPlayerManagerBlocState({required this.audioPlayerStateModel});
-
-  AudioPlayerManagerBlocState copyWith({
-    CurrentTrackDetailState? currentTrackDetailState,
-    CurrentProgressBarState? currentProgressBarState,
-    CurrentPlayerPlayPauseBtnState? currentPlayerPlayPauseBtnState,
-    AudioPlayerOtherBtnState? audioPlayerOtherBtnState,
-  }) =>
-      AudioPlayerManagerBlocState(
-        audioPlayerStateModel: AudioPlayerStateModel(
-            currentTrackDetailState: currentTrackDetailState ??
-                this.audioPlayerStateModel.currentTrackDetailState,
-            currentProgressBarState: currentProgressBarState ??
-                this.audioPlayerStateModel.currentProgressBarState,
-            currentPlayerPlayPauseBtnState: currentPlayerPlayPauseBtnState ??
-                this.audioPlayerStateModel.currentPlayerPlayPauseBtnState,
-            audioPlayerOtherBtnState: audioPlayerOtherBtnState ??
-                this.audioPlayerStateModel.audioPlayerOtherBtnState),
-      );
+@freezed
+class AudioPlayerManagerBlocState with _$AudioPlayerManagerBlocState {
+  factory AudioPlayerManagerBlocState(
+      {required AudioPlayerStateModel audioPlayerStateModel}) =
+  _AudioPlayerManagerBlocState;
 }
 
-class AudioPlayerStateModel {
-  CurrentTrackDetailState? currentTrackDetailState;
-  CurrentProgressBarState? currentProgressBarState;
-  CurrentPlayerPlayPauseBtnState? currentPlayerPlayPauseBtnState;
-  AudioPlayerOtherBtnState? audioPlayerOtherBtnState;
-
-  AudioPlayerStateModel({
-    this.currentTrackDetailState,
-    this.currentProgressBarState,
-    this.currentPlayerPlayPauseBtnState,
-    this.audioPlayerOtherBtnState,
-  });
+@freezed
+class AudioPlayerStateModel with _$AudioPlayerStateModel {
+  factory AudioPlayerStateModel(
+      {required CurrentTrackDetailState? currentTrackDetailState,
+        required CurrentProgressBarState? currentProgressBarState,
+        required CurrentPlayerPlayPauseBtnState? currentPlayerPlayPauseBtnState,
+        required AudioPlayerOtherBtnState?
+        audioPlayerOtherBtnState}) = _AudioPlayerStateModel;
 }
 
-class CurrentTrackDetailState {
-  String artistName;
-  String trackTitle;
+@freezed
+class CurrentTrackDetailState with _$CurrentTrackDetailState {
 
-  CurrentTrackDetailState(this.artistName, this.trackTitle);
+  factory CurrentTrackDetailState({
+    @Default('') String artistName,
+    @Default('') String trackTitle,
+  }) = _CurrentTrackDetailState;
+
 }
 
-class CurrentProgressBarState {
-  int currentProgress;
-  int totalProgress;
+@freezed
+class CurrentProgressBarState with _$CurrentProgressBarState {
 
-  CurrentProgressBarState(this.currentProgress, this.totalProgress);
+  factory CurrentProgressBarState({
+    @Default(0) int currentProgress,
+    @Default(30) int totalProgress
+  }) = _CurrentProgressBarState;
+
 }
 
-class CurrentPlayerPlayPauseBtnState {
-  bool isPlaying;
-  bool isPaused;
-  bool isLoading;
+@freezed
+class CurrentPlayerPlayPauseBtnState with _$CurrentPlayerPlayPauseBtnState {
 
-  CurrentPlayerPlayPauseBtnState(this.isPlaying, this.isPaused, this.isLoading);
+  factory CurrentPlayerPlayPauseBtnState({
+    @Default(false) bool isPlaying,
+    @Default(false) bool isPaused,
+    @Default(false) bool isLoading,
+  }) = _CurrentPlayerPlayPauseBtnState;
 }
 
-class AudioPlayerOtherBtnState {
-  bool isNextTrackAvailable;
-  bool isPrevTrackAvailable;
-  bool isRepeatModeEnabled;
-  bool isShuffleModeEnabled;
+@freezed
+class AudioPlayerOtherBtnState with _$AudioPlayerOtherBtnState {
 
-  AudioPlayerOtherBtnState(this.isNextTrackAvailable, this.isPrevTrackAvailable,
-      this.isRepeatModeEnabled, this.isShuffleModeEnabled);
+  factory AudioPlayerOtherBtnState({
+    @Default(false) bool isNextTrackAvailable,
+    @Default(false) bool isPrevTrackAvailable,
+    @Default(false) bool isRepeatModeEnabled,
+    @Default(false) bool isShuffleModeEnabled,
+  }) = _AudioPlayerOtherBtnState;
 }
