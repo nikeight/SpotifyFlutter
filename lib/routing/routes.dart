@@ -11,7 +11,6 @@ import 'package:praxis_flutter/features/spotify_splash/SpotifySplashScreen.dart'
 import 'ScaffoldWithNestedNavigation.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>();
-final _shellNavigationKey = GlobalKey<NavigatorState>();
 final _profileNavigationKey = GlobalKey<NavigatorState>(debugLabel: "profile");
 final _searchNavigationKey = GlobalKey<NavigatorState>(debugLabel: "search");
 final _libraryNavigationKey = GlobalKey<NavigatorState>(debugLabel: "library");
@@ -37,7 +36,6 @@ final praxisRoutes = GoRouter(
   debugLogDiagnostics: true,
   routes: [
     splashRoute(),
-    songsCarouselHostRoute(),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return ScaffoldWithNestedNavigation(navigationShell: navigationShell);
@@ -97,6 +95,7 @@ final praxisRoutes = GoRouter(
         ),
       ],
     ),
+    songsCarouselHostRoute(),
   ],
 );
 

@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_bloc.dart';
+import 'package:praxis_flutter/features/song_play/bloc/audio_player_manager_state.dart';
 
 class SongPlayDetailWidget extends StatelessWidget {
   const SongPlayDetailWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return BlocBuilder<AudioPlayerManagerBloc, AudioPlayerManagerBlocState>(

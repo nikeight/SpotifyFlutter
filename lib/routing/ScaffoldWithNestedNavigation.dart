@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
 import 'package:praxis_flutter/features/spotify_min_player/miniplayer.dart';
-import 'package:praxis_flutter/features/spotify_min_player/spotify_mini_player_bloc.dart';
 import 'package:praxis_flutter/features/spotify_profile/spotify_profile_cubit.dart';
 import 'package:praxis_flutter/features/spotify_search/host/spotify_search_host_cubit.dart';
 
@@ -36,12 +35,6 @@ class ScaffoldWithNestedNavigation extends StatelessWidget {
         BlocProvider<SpotifySearchHostCubit>(
           create: (BuildContext context) => SpotifySearchHostCubit(),
         ),
-        // BlocProvider<SpotifyMiniPlayerBloc>(
-        //   create: (BuildContext context) => SpotifyMiniPlayerBloc()
-        //     ..add(CheckForProcessStateEvent())
-        //     ..add(UpdateMiniPlayerArtistAndTrackDetails())
-        //     ..add(PauseMiniPlayerEvent()),
-        // ),
       ],
       child: Scaffold(
         backgroundColor: spotifyBlack,

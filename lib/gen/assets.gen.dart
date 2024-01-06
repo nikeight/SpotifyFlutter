@@ -5,7 +5,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
 
@@ -15,6 +15,9 @@ class $ImagesGen {
   /// File path: images/spotify_clone_card_bg_img.jpeg
   AssetGenImage get spotifyCloneCardBgImg =>
       const AssetGenImage('images/spotify_clone_card_bg_img.jpeg');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [spotifyCloneCardBgImg];
 }
 
 class $AssetsImagesGen {
@@ -23,13 +26,16 @@ class $AssetsImagesGen {
   /// File path: assets/images/spotify_logo.png
   AssetGenImage get spotifyLogo =>
       const AssetGenImage('assets/images/spotify_logo.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [spotifyLogo];
 }
 
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
-  static const $ImagesGen image = $ImagesGen();
+  static const $ImagesGen images = $ImagesGen();
 }
 
 class AssetGenImage {
@@ -87,6 +93,17 @@ class AssetGenImage {
       filterQuality: filterQuality,
       cacheWidth: cacheWidth,
       cacheHeight: cacheHeight,
+    );
+  }
+
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
     );
   }
 

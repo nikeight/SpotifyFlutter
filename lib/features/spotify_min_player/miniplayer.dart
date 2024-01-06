@@ -1,10 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:praxis_flutter/design_system/spotify_color.dart';
-import 'package:praxis_flutter/features/spotify_min_player/spotify_mini_player_bloc.dart';
 import 'package:praxis_flutter/routing/routes.dart';
 
 class StateFulMiniPlayer extends StatefulWidget {
@@ -112,8 +110,7 @@ class StateFulMiniPlayerState extends State<StateFulMiniPlayer> {
                             snapshot.data?.processingState ==
                                             AudioProcessingState.loading ||
                                         processingState ==
-                                            AudioProcessingState.buffering ??
-                                    false
+                                            AudioProcessingState.buffering
                                 ? const CircularProgressIndicator()
                                 : snapshot.data?.playing ?? false
                                     ? IconButton(
